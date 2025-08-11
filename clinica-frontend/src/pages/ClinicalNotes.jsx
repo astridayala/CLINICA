@@ -1,6 +1,6 @@
 import React from 'react'
 <i class="fa-solid fa-magnifying-glass"></i>
-import { FaCaretDown, FaChevronLeft, FaChevronRight, FaGlasses, FaSearch, FaPlus } from 'react-icons/fa'
+import { FaSearch, FaPlus } from 'react-icons/fa'
 
 export default function ClinicalNotes() {
   return (
@@ -12,7 +12,7 @@ export default function ClinicalNotes() {
                 <div className="hidden md:block text-sm pr-15">Buscar paciente...</div>
                 <FaSearch className="text-md" />
               </button>
-              <button className="flex transition grow items-center justify-center gap-3 rounded-md p-3 text-md font-semibold hover:bg-[#49bbc7] bg-[#83D6DD] md:flex-none md:justify-start md:p-2 md:px-3">
+              <button className="flex transition grow items-center justify-center gap-3 rounded-md p-3 text-md font-semibold hover:bg-[#2c88cb] bg-[#1D6BAC] md:flex-none md:justify-start md:p-2 md:px-3 text-[#FFFFFF]">
                 <FaPlus className='text-md' />
                 <div className="hidden md:block pr-0.5 text-sm">Crear Paciente</div>
               </button>

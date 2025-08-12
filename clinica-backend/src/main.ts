@@ -28,15 +28,18 @@ async function bootstrap() {
   
   // Configura Swagger
   const config = new DocumentBuilder()
-    .setTitle('PixelFactory Analytics API')
-    .setDescription('API para el sistema de analítica web de PixelFactory')
+    .setTitle('Clinica API')
+    .setDescription('API para una clinica dental')
     .setVersion('1.0')
     .addBearerAuth()
     .addTag('auth', 'Endpoints de autenticación')
     .addTag('users', 'Endpoints de usuarios')
-    .addTag('sites', 'Endpoints de sitios web')
-    .addTag('events', 'Endpoints de eventos')
-    .addTag('analytics', 'Endpoints de analíticas')
+    .addTag('patients', 'Endpoints de pacientes')
+    .addTag('treatments', 'Endpoints de tratamientos')
+    .addTag('medical-record', 'Endpoints de historial')
+    .addTag('procedures', 'Endpoints para procedimientos')
+    .addTag('payments', 'Endpoints para pagos')
+    .addTag('conditions', 'Endpoints para condiciones')
     .build();
   
   const document = SwaggerModule.createDocument(app, config);

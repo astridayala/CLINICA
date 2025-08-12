@@ -30,6 +30,4 @@ export class User {
 
     @CreateDateColumn()
     createdAt: Date;
-
-    //Relación con historial
 }

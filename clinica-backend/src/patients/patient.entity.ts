@@ -1,11 +1,11 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { MedicalRecord } from "src/medical-record/medical-record.entity";
+import { MedicalRecord } from "src/medical_record/medical_record.entity";
 
 /**
  * Entidad Paciente
  * Representa a todos los paciente del sistema
  */
-@Entity('patients')
+@Entity('patient')
 export class Patient {
     @PrimaryGeneratedColumn('uuid')
     id: string;

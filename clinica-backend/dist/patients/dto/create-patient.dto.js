@@ -16,7 +16,7 @@ const typeorm_1 = require("typeorm");
 class CreatePatientDto {
     name;
     lastname;
-    celular;
+    phone;
     email;
     birthDate;
     gender;
@@ -41,7 +41,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({ example: '+50312234556', description: 'Celular del paciente' }),
     (0, class_validator_1.IsPhoneNumber)('SV', { message: 'El celular debe ser un número válido de El Salvador' }),
     __metadata("design:type", String)
-], CreatePatientDto.prototype, "celular", void 0);
+], CreatePatientDto.prototype, "phone", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)({ example: 'astriayala@gmail.com', description: 'Email del paciente' }),
@@ -60,7 +60,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'patient',
-        description: 'Sexo del paciente',
+        description: 'Genero del paciente',
         enum: ['femenino', 'masculino'],
         default: 'masculino'
     }),

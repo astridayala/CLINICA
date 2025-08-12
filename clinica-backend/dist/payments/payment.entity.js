@@ -16,16 +16,17 @@ let Payment = class Payment {
     id;
     procedure;
     date;
+    amount;
     createdAt;
 };
 exports.Payment = Payment;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
 ], Payment.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => procedure_entity_1.Procedure, procedure => procedure.payments, { onDelete: 'CASCADE' }),
-    (0, typeorm_1.JoinColumn)({ name: 'procedure-id' }),
+    (0, typeorm_1.OneToOne)(() => procedure_entity_1.Procedure, procedure => procedure.payment, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.JoinColumn)({ name: 'procedure_id' }),
     __metadata("design:type", procedure_entity_1.Procedure)
 ], Payment.prototype, "procedure", void 0);
 __decorate([
@@ -33,10 +34,14 @@ __decorate([
     __metadata("design:type", Date)
 ], Payment.prototype, "date", void 0);
 __decorate([
+    (0, typeorm_1.Column)('decimal', { precision: 10, scale: 2 }),
+    __metadata("design:type", Number)
+], Payment.prototype, "amount", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], Payment.prototype, "createdAt", void 0);
 exports.Payment = Payment = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)('payment')
 ], Payment);
 //# sourceMappingURL=payment.entity.js.map

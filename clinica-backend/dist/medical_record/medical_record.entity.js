@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MedicalRecord = void 0;
 const patient_entity_1 = require("../patients/patient.entity");
 const typeorm_1 = require("typeorm");
-const medical_record_condition_entity_1 = require("../medical-record-conditions/medical-record-condition.entity");
+const medical_record_condition_entity_1 = require("../medical_record_conditions/medical_record_condition.entity");
 const treatment_entity_1 = require("../treatments/treatment.entity");
 let MedicalRecord = class MedicalRecord {
     id;
@@ -23,7 +23,7 @@ let MedicalRecord = class MedicalRecord {
 };
 exports.MedicalRecord = MedicalRecord;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", Number)
 ], MedicalRecord.prototype, "id", void 0);
 __decorate([
@@ -43,6 +43,6 @@ __decorate([
     __metadata("design:type", Date)
 ], MedicalRecord.prototype, "createdAt", void 0);
 exports.MedicalRecord = MedicalRecord = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)('medical_record')
 ], MedicalRecord);
-//# sourceMappingURL=medical-record.entity.js.map
+//# sourceMappingURL=medical_record.entity.js.map

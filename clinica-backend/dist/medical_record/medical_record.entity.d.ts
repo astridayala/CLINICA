@@ -1,5 +1,5 @@
 import { Patient } from "src/patients/patient.entity";
-import { MedicalRecordCondition } from "src/medical-record-conditions/medical-record-condition.entity";
+import { MedicalRecordCondition } from "src/medical_record_conditions/medical_record_condition.entity";
 import { Treatment } from "src/treatments/treatment.entity";
 export declare class MedicalRecord {
     id: number;

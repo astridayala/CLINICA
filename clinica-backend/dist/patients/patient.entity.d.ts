@@ -1,4 +1,4 @@
-import { MedicalRecord } from "src/medical-record/medical-record.entity";
+import { MedicalRecord } from "src/medical_record/medical_record.entity";
 export declare class Patient {
     id: string;
     name: string;

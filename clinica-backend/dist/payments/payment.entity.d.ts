@@ -1,7 +1,8 @@
 import { Procedure } from "src/procedures/procedure.entity";
 export declare class Payment {
-    id: number;
+    id: string;
     procedure: Procedure;
     date: Date;
+    amount: number;
     createdAt: Date;
 }

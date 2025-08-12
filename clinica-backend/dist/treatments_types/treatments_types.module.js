@@ -14,4 +14,4 @@ exports.TreatmentsTypesModule = TreatmentsTypesModule;
 exports.TreatmentsTypesModule = TreatmentsTypesModule = __decorate([
     (0, common_1.Module)({})
 ], TreatmentsTypesModule);
-//# sourceMappingURL=treatments-types.module.js.map
+//# sourceMappingURL=treatments_types.module.js.map

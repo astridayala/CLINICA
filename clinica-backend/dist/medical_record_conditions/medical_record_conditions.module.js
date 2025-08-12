@@ -14,4 +14,4 @@ exports.MedicalRecordConditionsModule = MedicalRecordConditionsModule;
 exports.MedicalRecordConditionsModule = MedicalRecordConditionsModule = __decorate([
     (0, common_1.Module)({})
 ], MedicalRecordConditionsModule);
-//# sourceMappingURL=medical-record-conditions.module.js.map
+//# sourceMappingURL=medical_record_conditions.module.js.map

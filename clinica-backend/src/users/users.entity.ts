@@ -6,7 +6,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeor
  * Representa a los usuarios del sistema de analítica
  * Roles disponibles: admin, doctor
  */
-@Entity('users')
+@Entity('user')
 export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;

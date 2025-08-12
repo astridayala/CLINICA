@@ -1,19 +1,24 @@
-import { MedicalRecord } from "src/medical-record/medical-record.entity";
-import { TreatmentType } from "src/treatments-types/treatment-type.entity";
+import { MedicalRecord } from "src/medical_record/medical_record.entity";
+import { TreatmentType } from "src/treatments_types/treatment_type.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Procedure } from "src/procedures/procedure.entity";
+import { TreatmentStatus } from "src/treatment_statuses/treatment_status.entity";
 
-@Entity()
+/**
+ * Entidad tratamientos
+ * Representa a todos los tratamientos que existen en el sistema y se aplican al paciente
+ */
+@Entity('treatment')
 export class Treatment {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: number;
 
     @ManyToOne(() => MedicalRecord, record => record.treatments, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'medical-record-id' })
+    @JoinColumn({ name: 'medical_record_id' })
     medicalRecord: MedicalRecord;
 
     @ManyToOne(() => TreatmentType, type => type.treatments)
-    @JoinColumn({ name: 'treatment-type-id' })
+    @JoinColumn({ name: 'treatment_type_id' })
     treatmentType: TreatmentType
 
     @Column('decimal', { precision: 10, scale: 2 })
@@ -22,15 +27,12 @@ export class Treatment {
     @Column()
     startDate: Date;
 
-    @Column({
-        name: 'treatment-data',
-        type: 'enum',
-        enum: ['activo, finalizado']
-    })
-    status: string
-
     @OneToMany(() => Procedure, procedure => procedure.treatment, { cascade: true })
     procedures: Procedure[];
+
+    @ManyToOne(() => TreatmentStatus, status => status.treatments)
+    @JoinColumn({ name: 'status_id' })
+    status: TreatmentStatus;
 
     @CreateDateColumn()
     createdAt: Date;

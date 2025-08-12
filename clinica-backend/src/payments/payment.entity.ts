@@ -1,17 +1,24 @@
 import { Procedure } from "src/procedures/procedure.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+/**
+ * Entidad Payments
+ * Representa el pago que se realiza para un procedimiento específico
+ */
+@Entity('payment')
 export class Payment {
-    @PrimaryGeneratedColumn()
-    id:number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-    @ManyToOne(() => Procedure, procedure => procedure.payments, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'procedure-id' })
+    @OneToOne(() => Procedure, procedure => procedure.payment, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'procedure_id' })
     procedure: Procedure;
 
     @Column({ type: 'date' })
     date: Date;
+
+    @Column('decimal', { precision: 10, scale: 2 })
+    amount: number;
 
     @CreateDateColumn()
     createdAt: Date;

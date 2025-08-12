@@ -1,4 +1,4 @@
-import { MedicalRecordCondition } from "src/medical-record-conditions/medical-record-condition.entity";
+import { MedicalRecordCondition } from "src/medical_record_conditions/medical_record_condition.entity";
 export declare class Condition {
     id: number;
     name: string;

@@ -18,17 +18,17 @@ let Procedure = class Procedure {
     treatment;
     date;
     description;
-    payments;
+    payment;
     createdAt;
 };
 exports.Procedure = Procedure;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
 ], Procedure.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => treatment_entity_1.Treatment, treatment => treatment.procedures, { onDelete: 'CASCADE' }),
-    (0, typeorm_1.JoinColumn)({ name: 'treatment-id' }),
+    (0, typeorm_1.JoinColumn)({ name: 'treatment_id' }),
     __metadata("design:type", treatment_entity_1.Treatment)
 ], Procedure.prototype, "treatment", void 0);
 __decorate([
@@ -40,14 +40,14 @@ __decorate([
     __metadata("design:type", String)
 ], Procedure.prototype, "description", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => payment_entity_1.Payment, payment => payment.procedure, { cascade: true }),
-    __metadata("design:type", Array)
-], Procedure.prototype, "payments", void 0);
+    (0, typeorm_1.OneToOne)(() => payment_entity_1.Payment, payment => payment.procedure, { cascade: true }),
+    __metadata("design:type", payment_entity_1.Payment)
+], Procedure.prototype, "payment", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], Procedure.prototype, "createdAt", void 0);
 exports.Procedure = Procedure = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)('procedure')
 ], Procedure);
 //# sourceMappingURL=procedure.entity.js.map

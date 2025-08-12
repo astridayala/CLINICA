@@ -19,7 +19,7 @@ let TreatmentType = class TreatmentType {
 };
 exports.TreatmentType = TreatmentType;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", Number)
 ], TreatmentType.prototype, "id", void 0);
 __decorate([
@@ -31,6 +31,6 @@ __decorate([
     __metadata("design:type", Array)
 ], TreatmentType.prototype, "treatments", void 0);
 exports.TreatmentType = TreatmentType = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)('treatment_type')
 ], TreatmentType);
-//# sourceMappingURL=treatment-type.entity.js.map
+//# sourceMappingURL=treatment_type.entity.js.map

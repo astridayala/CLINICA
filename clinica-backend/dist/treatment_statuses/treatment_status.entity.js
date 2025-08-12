@@ -9,48 +9,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
-const class_transformer_1 = require("class-transformer");
+exports.TreatmentStatus = void 0;
+const treatment_entity_1 = require("../treatments/treatment.entity");
 const typeorm_1 = require("typeorm");
-let User = class User {
+let TreatmentStatus = class TreatmentStatus {
     id;
-    email;
     name;
-    role;
-    password;
-    createdAt;
+    color;
+    orderPriority;
+    treatments;
 };
-exports.User = User;
+exports.TreatmentStatus = TreatmentStatus;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
-    __metadata("design:type", String)
-], User.prototype, "id", void 0);
+    __metadata("design:type", Number)
+], TreatmentStatus.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
-], User.prototype, "email", void 0);
+], TreatmentStatus.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ length: 7, unique: true }),
     __metadata("design:type", String)
-], User.prototype, "name", void 0);
+], TreatmentStatus.prototype, "color", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: 'enum',
-        enum: ['admin', 'doctor'],
-        default: 'doctor'
-    }),
-    __metadata("design:type", String)
-], User.prototype, "role", void 0);
+    (0, typeorm_1.Column)({ default: 1 }),
+    __metadata("design:type", Number)
+], TreatmentStatus.prototype, "orderPriority", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    (0, class_transformer_1.Exclude)(),
-    __metadata("design:type", String)
-], User.prototype, "password", void 0);
-__decorate([
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Date)
-], User.prototype, "createdAt", void 0);
-exports.User = User = __decorate([
-    (0, typeorm_1.Entity)('user')
-], User);
-//# sourceMappingURL=users.entity.js.map
+    (0, typeorm_1.OneToMany)(() => treatment_entity_1.Treatment, treatment => treatment.status),
+    __metadata("design:type", Array)
+], TreatmentStatus.prototype, "treatments", void 0);
+exports.TreatmentStatus = TreatmentStatus = __decorate([
+    (0, typeorm_1.Entity)('treatment_status')
+], TreatmentStatus);
+//# sourceMappingURL=treatment_status.entity.js.map

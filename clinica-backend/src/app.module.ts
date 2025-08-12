@@ -6,13 +6,14 @@ import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { PatientModule } from './patients/patients.module';
-import { MedicalRecordModule } from './medical-record/medical-record.module';
+import { MedicalRecordModule } from './medical_record/medical_record.module';
 import { ConditionsModule } from './conditions/condition.module';
-import { MedicalRecordConditionsModule } from './medical-record-conditions/medical-record-conditions.module';
-import { TreatmentsTypesModule } from './treatments-types/treatments-types.module';
+import { MedicalRecordConditionsModule } from './medical_record_conditions/medical_record_conditions.module';
+import { TreatmentsTypesModule } from './treatments_types/treatments_types.module';
 import { TreatmentsModule } from './treatments/treatments.module';
 import { ProceduresModule } from './procedures/procedures.module';
 import { PaymentsModule } from './payments/payments.module';
+import { TreatmentStatusesModule } from './treatment_statuses/treatment_statuses.module';
 
 /**
  * Módulo principal de la aplicación
@@ -39,6 +40,7 @@ import { PaymentsModule } from './payments/payments.module';
     TreatmentsModule,
     ProceduresModule,
     PaymentsModule,
+    TreatmentStatusesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

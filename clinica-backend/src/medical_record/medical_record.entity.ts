@@ -1,15 +1,15 @@
 import { Patient } from "src/patients/patient.entity";
 import { CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { MedicalRecordCondition } from "src/medical-record-conditions/medical-record-condition.entity";
+import { MedicalRecordCondition } from "src/medical_record_conditions/medical_record_condition.entity";
 import { Treatment } from "src/treatments/treatment.entity";
 
 /**
  * Entidad Historial Medico
  * Representa a todos los historiales de los pacientes
  */
-@Entity()
+@Entity('medical_record')
 export class MedicalRecord {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id:number;
     
     @OneToOne(() => Patient, patient => patient.medicalRecord)

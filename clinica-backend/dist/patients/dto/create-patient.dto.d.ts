@@ -1,7 +1,7 @@
 export declare class CreatePatientDto {
     name: string;
     lastname: string;
-    celular?: string;
+    phone?: string;
     email?: string;
     birthDate: string;
     gender: string;

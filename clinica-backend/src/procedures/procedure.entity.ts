@@ -1,14 +1,14 @@
 import { Payment } from "src/payments/payment.entity";
 import { Treatment } from "src/treatments/treatment.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity('procedure')
 export class Procedure {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @ManyToOne(() => Treatment, treatment => treatment.procedures, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'treatment-id' })
+    @JoinColumn({ name: 'treatment_id' })
     treatment: Treatment;
 
     @Column({ type: 'date' })
@@ -17,9 +17,9 @@ export class Procedure {
     @Column({ type: 'text' })
     description: string;
 
-    @OneToMany(() => Payment, payment => payment.procedure, { cascade: true })
-    payments: Payment[];
-    
+    @OneToOne(() => Payment, payment => payment.procedure, { cascade: true })
+    payment: Payment;
+
     @CreateDateColumn()
     createdAt: Date;
 }

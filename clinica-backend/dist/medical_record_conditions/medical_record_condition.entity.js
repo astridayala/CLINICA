@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MedicalRecordCondition = void 0;
 const condition_entity_1 = require("../conditions/condition.entity");
-const medical_record_entity_1 = require("../medical-record/medical-record.entity");
+const medical_record_entity_1 = require("../medical_record/medical_record.entity");
 const typeorm_1 = require("typeorm");
 let MedicalRecordCondition = class MedicalRecordCondition {
     id;
@@ -20,20 +20,20 @@ let MedicalRecordCondition = class MedicalRecordCondition {
 };
 exports.MedicalRecordCondition = MedicalRecordCondition;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", Number)
 ], MedicalRecordCondition.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => medical_record_entity_1.MedicalRecord, record => record.conditions, { onDelete: 'CASCADE' }),
-    (0, typeorm_1.JoinColumn)({ name: 'medical-record-id' }),
+    (0, typeorm_1.JoinColumn)({ name: 'medical_record_id' }),
     __metadata("design:type", medical_record_entity_1.MedicalRecord)
 ], MedicalRecordCondition.prototype, "medicalRecord", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => condition_entity_1.Condition, condition => condition.medicalRecordConditions, { onDelete: 'CASCADE' }),
-    (0, typeorm_1.JoinColumn)({ name: 'condition-id' }),
+    (0, typeorm_1.JoinColumn)({ name: 'condition_id' }),
     __metadata("design:type", condition_entity_1.Condition)
 ], MedicalRecordCondition.prototype, "condition", void 0);
 exports.MedicalRecordCondition = MedicalRecordCondition = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)('medical_record_condition')
 ], MedicalRecordCondition);
-//# sourceMappingURL=medical-record-condition.entity.js.map
+//# sourceMappingURL=medical_record_condition.entity.js.map

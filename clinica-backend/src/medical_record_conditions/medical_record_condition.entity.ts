@@ -1,17 +1,21 @@
 import { Condition } from "src/conditions/condition.entity";
-import { MedicalRecord } from "src/medical-record/medical-record.entity";
+import { MedicalRecord } from "src/medical_record/medical_record.entity";
 import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+/**
+ * Entidad condiciones de historiales
+ * Representa la relacion entre los historiales y las condiciones/padecimientos de los pacientes
+ */
+@Entity('medical_record_condition')
 export class MedicalRecordCondition {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: number;
 
     @ManyToOne(() => MedicalRecord, record => record.conditions, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'medical-record-id' })
+    @JoinColumn({ name: 'medical_record_id' })
     medicalRecord: MedicalRecord;
 
     @ManyToOne(() => Condition, condition => condition.medicalRecordConditions, { onDelete: 'CASCADE' })
-    @JoinColumn({ name:'condition-id' })
+    @JoinColumn({ name:'condition_id' })
     condition: Condition;
 }

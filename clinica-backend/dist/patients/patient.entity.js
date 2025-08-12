@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Patient = void 0;
 const typeorm_1 = require("typeorm");
-const medical_record_entity_1 = require("../medical-record/medical-record.entity");
+const medical_record_entity_1 = require("../medical_record/medical_record.entity");
 let Patient = class Patient {
     id;
     name;
@@ -70,6 +70,6 @@ __decorate([
     __metadata("design:type", Date)
 ], Patient.prototype, "createdAt", void 0);
 exports.Patient = Patient = __decorate([
-    (0, typeorm_1.Entity)('patients')
+    (0, typeorm_1.Entity)('patient')
 ], Patient);
 //# sourceMappingURL=patient.entity.js.map

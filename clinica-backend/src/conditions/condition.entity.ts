@@ -1,13 +1,13 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { MedicalRecordCondition } from "src/medical-record-conditions/medical-record-condition.entity";
+import { MedicalRecordCondition } from "src/medical_record_conditions/medical_record_condition.entity";
 
 /**
  * Entidad Historial Medico
  * Representa a todos los historiales de los pacientes
  */
-@Entity()
+@Entity('condition')
 export class Condition {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: number;
 
     @Column({ unique: true })

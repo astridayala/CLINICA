@@ -23,10 +23,11 @@ async function bootstrap() {
         .addTag('users', 'Endpoints de usuarios')
         .addTag('patients', 'Endpoints de pacientes')
         .addTag('treatments', 'Endpoints de tratamientos')
-        .addTag('medical-record', 'Endpoints de historial')
+        .addTag('medical_record', 'Endpoints de historial')
         .addTag('procedures', 'Endpoints para procedimientos')
         .addTag('payments', 'Endpoints para pagos')
         .addTag('conditions', 'Endpoints para condiciones')
+        .addTag('treatment_statuses', 'Endpoints para los estados de los tratamientos')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api/docs', app, document);

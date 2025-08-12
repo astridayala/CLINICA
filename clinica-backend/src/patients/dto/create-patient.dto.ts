@@ -20,7 +20,7 @@ export class CreatePatientDto {
     @IsOptional()
     @ApiProperty({ example: '+50312234556', description: 'Celular del paciente' })
     @IsPhoneNumber('SV', { message: 'El celular debe ser un número válido de El Salvador' })
-    celular?: string;
+    phone?: string;
 
     @IsOptional()
     @ApiProperty({ example: 'astriayala@gmail.com', description: 'Email del paciente' })
@@ -37,7 +37,7 @@ export class CreatePatientDto {
 
     @ApiProperty({
         example: 'patient',
-        description: 'Sexo del paciente',
+        description: 'Genero del paciente',
         enum: ['femenino', 'masculino'],
         default: 'masculino'
     })

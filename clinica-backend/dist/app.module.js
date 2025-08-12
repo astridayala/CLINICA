@@ -15,13 +15,14 @@ const database_module_1 = require("./database/database.module");
 const users_module_1 = require("./users/users.module");
 const auth_module_1 = require("./auth/auth.module");
 const patients_module_1 = require("./patients/patients.module");
-const medical_record_module_1 = require("./medical-record/medical-record.module");
+const medical_record_module_1 = require("./medical_record/medical_record.module");
 const condition_module_1 = require("./conditions/condition.module");
-const medical_record_conditions_module_1 = require("./medical-record-conditions/medical-record-conditions.module");
-const treatments_types_module_1 = require("./treatments-types/treatments-types.module");
+const medical_record_conditions_module_1 = require("./medical_record_conditions/medical_record_conditions.module");
+const treatments_types_module_1 = require("./treatments_types/treatments_types.module");
 const treatments_module_1 = require("./treatments/treatments.module");
 const procedures_module_1 = require("./procedures/procedures.module");
 const payments_module_1 = require("./payments/payments.module");
+const treatment_statuses_module_1 = require("./treatment_statuses/treatment_statuses.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -42,6 +43,7 @@ exports.AppModule = AppModule = __decorate([
             treatments_module_1.TreatmentsModule,
             procedures_module_1.ProceduresModule,
             payments_module_1.PaymentsModule,
+            treatment_statuses_module_1.TreatmentStatusesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

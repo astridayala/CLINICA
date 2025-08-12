@@ -1,10 +1,10 @@
 import { Payment } from "src/payments/payment.entity";
 import { Treatment } from "src/treatments/treatment.entity";
 export declare class Procedure {
-    id: number;
+    id: string;
     treatment: Treatment;
     date: Date;
     description: string;
-    payments: Payment[];
+    payment: Payment;
     createdAt: Date;
 }

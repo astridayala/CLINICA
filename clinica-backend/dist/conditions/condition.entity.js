@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Condition = void 0;
 const typeorm_1 = require("typeorm");
-const medical_record_condition_entity_1 = require("../medical-record-conditions/medical-record-condition.entity");
+const medical_record_condition_entity_1 = require("../medical_record_conditions/medical_record_condition.entity");
 let Condition = class Condition {
     id;
     name;
@@ -19,7 +19,7 @@ let Condition = class Condition {
 };
 exports.Condition = Condition;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", Number)
 ], Condition.prototype, "id", void 0);
 __decorate([
@@ -31,6 +31,6 @@ __decorate([
     __metadata("design:type", Array)
 ], Condition.prototype, "medicalRecordConditions", void 0);
 exports.Condition = Condition = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)('condition')
 ], Condition);
 //# sourceMappingURL=condition.entity.js.map

@@ -9,7 +9,7 @@ import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity('medical_record_condition')
 export class MedicalRecordCondition {
     @PrimaryGeneratedColumn('uuid')
-    id: number;
+    id: string;
 
     @ManyToOne(() => MedicalRecord, record => record.conditions, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'medical_record_id' })

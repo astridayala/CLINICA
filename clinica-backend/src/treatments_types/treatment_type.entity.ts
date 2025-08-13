@@ -8,7 +8,7 @@ import { Treatment } from "src/treatments/treatment.entity";
 @Entity('treatment_type')
 export class TreatmentType {
     @PrimaryGeneratedColumn('uuid')
-    id: number
+    id: string;
 
     @Column({ unique: true })
     name: string;

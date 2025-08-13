@@ -8,7 +8,7 @@ import { MedicalRecordCondition } from "src/medical_record_conditions/medical_re
 @Entity('condition')
 export class Condition {
     @PrimaryGeneratedColumn('uuid')
-    id: number;
+    id: string;
 
     @Column({ unique: true })
     name: string;

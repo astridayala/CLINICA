@@ -10,7 +10,7 @@ import { Treatment } from "src/treatments/treatment.entity";
 @Entity('medical_record')
 export class MedicalRecord {
     @PrimaryGeneratedColumn('uuid')
-    id:number;
+    id: string;
     
     @OneToOne(() => Patient, patient => patient.medicalRecord)
     patient: Patient;

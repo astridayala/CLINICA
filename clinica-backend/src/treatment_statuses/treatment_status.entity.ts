@@ -8,13 +8,10 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 @Entity('treatment_status')
 export class TreatmentStatus {
     @PrimaryGeneratedColumn('uuid')
-    id:number;
+    id: string;
 
     @Column({ unique: true })
     name: string
-
-    @Column({ length: 7, unique: true })
-    color: string;
 
     @Column({ default: 1 })
     orderPriority: number;

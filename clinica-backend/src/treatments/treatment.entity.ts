@@ -11,7 +11,7 @@ import { TreatmentStatus } from "src/treatment_statuses/treatment_status.entity"
 @Entity('treatment')
 export class Treatment {
     @PrimaryGeneratedColumn('uuid')
-    id: number;
+    id: string;
 
     @ManyToOne(() => MedicalRecord, record => record.treatments, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'medical_record_id' })

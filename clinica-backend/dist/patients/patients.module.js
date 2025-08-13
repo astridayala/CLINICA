@@ -10,13 +10,17 @@ exports.PatientModule = void 0;
 const common_1 = require("@nestjs/common");
 const patients_service_1 = require("./patients.service");
 const patients_controller_1 = require("./patients.controller");
+const typeorm_1 = require("@nestjs/typeorm");
+const patient_entity_1 = require("./patient.entity");
 let PatientModule = class PatientModule {
 };
 exports.PatientModule = PatientModule;
 exports.PatientModule = PatientModule = __decorate([
     (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([patient_entity_1.Patient])],
         providers: [patients_service_1.PatientsService],
-        controllers: [patients_controller_1.PatientsController]
+        controllers: [patients_controller_1.PatientsController],
+        exports: [patients_service_1.PatientsService]
     })
 ], PatientModule);
 //# sourceMappingURL=patients.module.js.map

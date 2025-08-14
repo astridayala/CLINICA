@@ -1,8 +1,7 @@
 import { Treatment } from "src/treatments/treatment.entity";
 export declare class TreatmentStatus {
-    id: number;
+    id: string;
     name: string;
-    color: string;
     orderPriority: number;
     treatments: Treatment[];
 }

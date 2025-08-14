@@ -21,7 +21,7 @@ let MedicalRecordCondition = class MedicalRecordCondition {
 exports.MedicalRecordCondition = MedicalRecordCondition;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], MedicalRecordCondition.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => medical_record_entity_1.MedicalRecord, record => record.conditions, { onDelete: 'CASCADE' }),

@@ -36,10 +36,9 @@ export class CreatePatientDto {
     birthDate: string;
 
     @ApiProperty({
-        example: 'patient',
+        example: 'femenino',
         description: 'Genero del paciente',
         enum: ['femenino', 'masculino'],
-        default: 'masculino'
     })
     @IsEnum(['femenino', 'masculino'], { message: 'El sexo debe ser masculino o femenino' })
     @IsNotEmpty({ message: 'El sexo es requerido' })

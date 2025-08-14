@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Patient } from './patient.entity';
 import { Repository } from 'typeorm';
 import { CreatePatientDto } from './dto/create-patient.dto';
-import { REDIRECT_METADATA } from '@nestjs/common/constants';
+import { MedicalRecordService } from 'src/medical_record/medical_record.service';
 
 /**
  * Servicio para gestionar a los pacientes
@@ -14,6 +14,9 @@ export class PatientsService {
     constructor(
         @InjectRepository(Patient)
         private patientsRepository: Repository<Patient>,
+
+        private medicalRecordService: MedicalRecordService,
+
     ) {}
 
     /**
@@ -22,7 +25,13 @@ export class PatientsService {
      * @returns El paciente creado
      */
     async create(createPatientDto: CreatePatientDto): Promise<Patient> {
-        const newPatient = this. patientsRepository.create(createPatientDto)
+        const newPatient = this.patientsRepository.create(createPatientDto);
+        const savedPatient = await this.patientsRepository.save(newPatient);
+
+        await this.medicalRecordService.create({
+            patientId: savedPatient.id
+        });
+
         return this.patientsRepository.save(newPatient);
     }
 

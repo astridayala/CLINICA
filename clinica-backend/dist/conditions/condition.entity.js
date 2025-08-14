@@ -20,7 +20,7 @@ let Condition = class Condition {
 exports.Condition = Condition;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], Condition.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ unique: true }),

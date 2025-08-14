@@ -35,7 +35,6 @@ export class Patient {
     address: string
 
     @OneToOne(() => MedicalRecord, record => record.patient, { cascade:true })
-    @JoinColumn()
     medicalRecord: MedicalRecord;
 
     @CreateDateColumn()

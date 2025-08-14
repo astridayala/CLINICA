@@ -24,7 +24,7 @@ let MedicalRecord = class MedicalRecord {
 exports.MedicalRecord = MedicalRecord;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], MedicalRecord.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => patient_entity_1.Patient, patient => patient.medicalRecord),

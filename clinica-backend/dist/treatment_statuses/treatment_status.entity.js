@@ -15,23 +15,18 @@ const typeorm_1 = require("typeorm");
 let TreatmentStatus = class TreatmentStatus {
     id;
     name;
-    color;
     orderPriority;
     treatments;
 };
 exports.TreatmentStatus = TreatmentStatus;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], TreatmentStatus.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], TreatmentStatus.prototype, "name", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ length: 7, unique: true }),
-    __metadata("design:type", String)
-], TreatmentStatus.prototype, "color", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: 1 }),
     __metadata("design:type", Number)

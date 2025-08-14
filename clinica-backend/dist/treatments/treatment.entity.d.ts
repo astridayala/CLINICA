@@ -3,7 +3,7 @@ import { TreatmentType } from "src/treatments_types/treatment_type.entity";
 import { Procedure } from "src/procedures/procedure.entity";
 import { TreatmentStatus } from "src/treatment_statuses/treatment_status.entity";
 export declare class Treatment {
-    id: number;
+    id: string;
     medicalRecord: MedicalRecord;
     treatmentType: TreatmentType;
     totalPrice: number;

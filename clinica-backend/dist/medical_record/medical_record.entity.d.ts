@@ -2,7 +2,7 @@ import { Patient } from "src/patients/patient.entity";
 import { MedicalRecordCondition } from "src/medical_record_conditions/medical_record_condition.entity";
 import { Treatment } from "src/treatments/treatment.entity";
 export declare class MedicalRecord {
-    id: number;
+    id: string;
     patient: Patient;
     conditions: MedicalRecordCondition[];
     treatments: Treatment[];

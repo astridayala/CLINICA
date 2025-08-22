@@ -12,74 +12,74 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TreatmentsController = void 0;
+exports.PaymentsController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const roles_guard_1 = require("../common/guards/roles.guard");
-const treatments_service_1 = require("./treatments.service");
-const create_treatment_dto_1 = require("./dto/create-treatment.dto");
-let TreatmentsController = class TreatmentsController {
-    treatmentsService;
-    constructor(treatmentsService) {
-        this.treatmentsService = treatmentsService;
+const payments_service_1 = require("./payments.service");
+const create_payments_dto_1 = require("./dto/create-payments.dto");
+let PaymentsController = class PaymentsController {
+    paymentsService;
+    constructor(paymentsService) {
+        this.paymentsService = paymentsService;
     }
-    create(createTreatmentDto) {
-        return this.treatmentsService.create(createTreatmentDto);
+    create(createPaymentsDto) {
+        return this.paymentsService.create(createPaymentsDto);
     }
     findAll() {
-        return this.treatmentsService.findAll();
+        return this.paymentsService.findAll();
     }
     findOne(id) {
-        return this.treatmentsService.findOne(id);
+        return this.paymentsService.findOne(id);
     }
     remove(id) {
-        return this.treatmentsService.remove(id);
+        return this.paymentsService.remove(id);
     }
 };
-exports.TreatmentsController = TreatmentsController;
+exports.PaymentsController = PaymentsController;
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Crea un tratamiento' }),
-    (0, swagger_1.ApiResponse)({ status: 201, description: 'Tratamiento creado exitosamente' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Crea un nuevo pago' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Pago creado exitosamente' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_treatment_dto_1.CreateTreatmentDto]),
+    __metadata("design:paramtypes", [create_payments_dto_1.CreatePaymentsDto]),
     __metadata("design:returntype", void 0)
-], TreatmentsController.prototype, "create", null);
+], PaymentsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Obtener todos los tratamientos' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista de tratamientos' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Obtener todos los pagos' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista de los pagos' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], TreatmentsController.prototype, "findAll", null);
+], PaymentsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Obtiene los tratamientos por su ID' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Tratamiento obtenido' }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: 'Tratamiento no encontrado' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Obtiene el pago por su ID' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Pago obtenido' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Pago no encontrado' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], TreatmentsController.prototype, "findOne", null);
+], PaymentsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Elimina un tratamiento' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Tratamiento eliminado exitosamente' }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: 'Tratamiento no encontrado' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Pago eliminado exitosamente' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Pago no encontrado' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], TreatmentsController.prototype, "remove", null);
-exports.TreatmentsController = TreatmentsController = __decorate([
-    (0, swagger_1.ApiTags)('treatments'),
+], PaymentsController.prototype, "remove", null);
+exports.PaymentsController = PaymentsController = __decorate([
+    (0, swagger_1.ApiTags)('payments'),
     (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.Controller)('treatments'),
+    (0, common_1.Controller)('payments'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
-    __metadata("design:paramtypes", [treatments_service_1.TreatmentsService])
-], TreatmentsController);
-//# sourceMappingURL=treatments.controller.js.map
+    __metadata("design:paramtypes", [payments_service_1.PaymentsService])
+], PaymentsController);
+//# sourceMappingURL=payments.controller.js.map

@@ -10,13 +10,18 @@ exports.TreatmentsModule = void 0;
 const common_1 = require("@nestjs/common");
 const treatments_service_1 = require("./treatments.service");
 const treatments_controller_1 = require("./treatments.controller");
+const typeorm_1 = require("@nestjs/typeorm");
+const treatment_entity_1 = require("./treatment.entity");
+const treatment_status_entity_1 = require("../treatment_statuses/treatment_status.entity");
 let TreatmentsModule = class TreatmentsModule {
 };
 exports.TreatmentsModule = TreatmentsModule;
 exports.TreatmentsModule = TreatmentsModule = __decorate([
     (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([treatment_entity_1.Treatment, treatment_status_entity_1.TreatmentStatus])],
         providers: [treatments_service_1.TreatmentsService],
-        controllers: [treatments_controller_1.TreatmentsController]
+        controllers: [treatments_controller_1.TreatmentsController],
+        exports: [treatments_service_1.TreatmentsService]
     })
 ], TreatmentsModule);
 //# sourceMappingURL=treatments.module.js.map

@@ -1,0 +1,62 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Payment } from './payment.entity';
+import { Repository } from 'typeorm';
+import { CreatePaymentsDto } from './dto/create-payments.dto';
+
+/**
+ * Servicio para gestionar los pagos
+ * Proporciona metodos para crear, buscar, actualizar y eliminar los pagos
+ */
+@Injectable()
+export class PaymentsService {
+    constructor(
+        @InjectRepository(Payment)
+        private paymentsRepository: Repository<Payment>
+    ) {}
+
+    /**
+     * Crea un nuevo pago
+     * @param createPaymentsDto - DTO del pago
+     * @returns El pago creado
+     */
+    async create(createPaymentsDto: CreatePaymentsDto): Promise<Payment> {
+        const newPayment = this.paymentsRepository.create(createPaymentsDto)
+
+        return this.paymentsRepository.save(newPayment)
+    }
+
+    /**
+     * Busca todos los pagos
+     * @returns Lista de pagos
+     */
+    async findAll(): Promise<Payment[]> {
+        return this.paymentsRepository.find()
+    }
+
+    /**
+     * Busca un pago por su ID
+     * @param id - ID del pago
+     * @returns El pago encontrado
+     */
+    async findOne(id: string): Promise<Payment> {
+        const payment = await this.paymentsRepository.findOne({ where: { id } })
+
+        if (!payment) {
+            throw new NotFoundException(`Pago con ${id} no encontrado`)
+        }
+
+        return payment;
+    }
+
+    /**
+     * Elimina un pago
+     * @param id - ID del pago
+     * @returns true si se elimina correctamente
+     */
+    async remove(id: string): Promise<boolean> {
+        const payment = await this.findOne(id)
+        await this.paymentsRepository.remove(payment);
+        return true;
+    }
+}

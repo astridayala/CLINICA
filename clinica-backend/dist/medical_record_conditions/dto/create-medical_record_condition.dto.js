@@ -23,6 +23,7 @@ __decorate([
         example: 'f1d8a1d2-3b4e-4c5a-9a7f-1b2c3d4e5f6a',
     }),
     (0, class_validator_1.IsUUID)(),
+    (0, class_validator_1.IsNotEmpty)({ message: 'El ID es requerido' }),
     __metadata("design:type", String)
 ], CreateMedicalRecordConditionDto.prototype, "medicalRecordId", void 0);
 __decorate([
@@ -31,6 +32,7 @@ __decorate([
         example: 'a3b2c1d4-e5f6-4a7b-9c8d-2f1e3d4b5a6c',
     }),
     (0, class_validator_1.IsUUID)(),
+    (0, class_validator_1.IsNotEmpty)({ message: 'El ID es requerido' }),
     __metadata("design:type", String)
 ], CreateMedicalRecordConditionDto.prototype, "conditionId", void 0);
 //# sourceMappingURL=create-medical_record_condition.dto.js.map

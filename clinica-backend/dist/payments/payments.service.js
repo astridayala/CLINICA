@@ -12,40 +12,40 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TreatmentStatusesService = void 0;
+exports.PaymentsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const treatment_status_entity_1 = require("./treatment_status.entity");
+const payment_entity_1 = require("./payment.entity");
 const typeorm_2 = require("typeorm");
-let TreatmentStatusesService = class TreatmentStatusesService {
-    treatmentStatusRepository;
-    constructor(treatmentStatusRepository) {
-        this.treatmentStatusRepository = treatmentStatusRepository;
+let PaymentsService = class PaymentsService {
+    paymentsRepository;
+    constructor(paymentsRepository) {
+        this.paymentsRepository = paymentsRepository;
     }
-    async create(createTreatmentStatusDto) {
-        const newTreatmentStatus = this.treatmentStatusRepository.create(createTreatmentStatusDto);
-        return this.treatmentStatusRepository.save(newTreatmentStatus);
+    async create(createPaymentsDto) {
+        const newPayment = this.paymentsRepository.create(createPaymentsDto);
+        return this.paymentsRepository.save(newPayment);
     }
     async findAll() {
-        return this.treatmentStatusRepository.find();
+        return this.paymentsRepository.find();
     }
     async findOne(id) {
-        const treatmentStatus = await this.treatmentStatusRepository.findOne({ where: { id } });
-        if (!treatmentStatus) {
-            throw new common_1.NotFoundException(`Estado de tratamiento ${id} no encontrado`);
+        const payment = await this.paymentsRepository.findOne({ where: { id } });
+        if (!payment) {
+            throw new common_1.NotFoundException(`Pago con ${id} no encontrado`);
         }
-        return treatmentStatus;
+        return payment;
     }
     async remove(id) {
-        const treatmentStatus = await this.findOne(id);
-        await this.treatmentStatusRepository.remove(treatmentStatus);
+        const payment = await this.findOne(id);
+        await this.paymentsRepository.remove(payment);
         return true;
     }
 };
-exports.TreatmentStatusesService = TreatmentStatusesService;
-exports.TreatmentStatusesService = TreatmentStatusesService = __decorate([
+exports.PaymentsService = PaymentsService;
+exports.PaymentsService = PaymentsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(treatment_status_entity_1.TreatmentStatus)),
+    __param(0, (0, typeorm_1.InjectRepository)(payment_entity_1.Payment)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
-], TreatmentStatusesService);
-//# sourceMappingURL=treatment_statuses.service.js.map
+], PaymentsService);
+//# sourceMappingURL=payments.service.js.map

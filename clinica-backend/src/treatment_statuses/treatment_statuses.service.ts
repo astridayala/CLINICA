@@ -43,7 +43,7 @@ export class TreatmentStatusesService {
         const treatmentStatus = await this.treatmentStatusRepository.findOne({ where: { id } })
         
         if (!treatmentStatus) {
-            throw new NotFoundException(`Estado de tratamiendo ${id} no encontrado`)
+            throw new NotFoundException(`Estado de tratamiento ${id} no encontrado`)
         }
 
         return treatmentStatus;

@@ -24,7 +24,7 @@ export class Treatment {
     @Column('decimal', { precision: 10, scale: 2 })
     totalPrice: number;
 
-    @Column()
+    @Column({ type: 'date' })
     startDate: Date;
 
     @OneToMany(() => Procedure, procedure => procedure.treatment, { cascade: true })
@@ -34,6 +34,6 @@ export class Treatment {
     @JoinColumn({ name: 'status_id' })
     status: TreatmentStatus;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 }

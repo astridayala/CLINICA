@@ -7,7 +7,7 @@ import { CreateConditionDto } from './dto/create-condition.dto';
 
 /**
  * Controlador de los padecimientos
- * Maneja endpoints para crear, obtener y elimianr padecimientos
+ * Maneja endpoints para crear, obtener y eliminar padecimientos
  */
 @ApiTags('conditions')
 @ApiBearerAuth()

@@ -28,6 +28,7 @@ __decorate([
 ], MedicalRecord.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => patient_entity_1.Patient, patient => patient.medicalRecord),
+    (0, typeorm_1.JoinColumn)({ name: 'patient_id' }),
     __metadata("design:type", patient_entity_1.Patient)
 ], MedicalRecord.prototype, "patient", void 0);
 __decorate([
@@ -39,7 +40,7 @@ __decorate([
     __metadata("design:type", Array)
 ], MedicalRecord.prototype, "treatments", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
+    (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)
 ], MedicalRecord.prototype, "createdAt", void 0);
 exports.MedicalRecord = MedicalRecord = __decorate([

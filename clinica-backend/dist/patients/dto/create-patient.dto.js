@@ -59,10 +59,9 @@ __decorate([
 ], CreatePatientDto.prototype, "birthDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 'patient',
+        example: 'femenino',
         description: 'Genero del paciente',
         enum: ['femenino', 'masculino'],
-        default: 'masculino'
     }),
     (0, class_validator_1.IsEnum)(['femenino', 'masculino'], { message: 'El sexo debe ser masculino o femenino' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'El sexo es requerido' }),

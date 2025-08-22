@@ -39,7 +39,7 @@ async function bootstrap() {
     .addTag('conditions', 'Endpoints para condiciones')
     .addTag('treatments', 'Endpoints de tratamientos')
     .addTag('treatment_types', 'Endpoints para los tipos de tratamientos')
-    .addTag('treatment_statuses', 'Endpoints para los estados de los tratamientos')
+    .addTag('treatment_statuses', 'Endpoints para los estados de los tratamientos (admin)')
     .addTag('procedures', 'Endpoints para procedimientos')
     .addTag('payments', 'Endpoints para pagos')
     .build();

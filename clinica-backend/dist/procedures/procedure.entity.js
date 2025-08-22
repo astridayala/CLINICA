@@ -44,7 +44,7 @@ __decorate([
     __metadata("design:type", payment_entity_1.Payment)
 ], Procedure.prototype, "payment", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
+    (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)
 ], Procedure.prototype, "createdAt", void 0);
 exports.Procedure = Procedure = __decorate([

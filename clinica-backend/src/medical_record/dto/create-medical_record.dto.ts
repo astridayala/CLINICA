@@ -1,8 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsArray, IsOptional, IsUUID, ValidateNested } from "class-validator";
-import { CreateMedicalRecordConditionDto } from "src/medical_record_conditions/dto/create-medical_record_condition.dto";
-import { CreateTreatmentDto } from "src/treatments/dto/create-treatment.dto";
+import { IsUUID } from "class-validator";
 
 /**
  * DTO para la creación de historiales medicos
@@ -15,27 +12,4 @@ export class CreateMedicalRecordDto {
     })
     @IsUUID()
     patientId: string;
-
-    @ApiProperty({ 
-        description: 'Lista de padecimientos medicos del paciente',
-        type: [CreateMedicalRecordConditionDto],
-        required: false, 
-    })
-    @IsOptional()
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => CreateMedicalRecordConditionDto)
-    conditions?: CreateMedicalRecordConditionDto[];
-
-    @ApiProperty({
-        description: 'Lista de tratamientos del historial',
-        type: [CreateTreatmentDto],
-        required: false
-    })
-    @IsOptional()
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => CreateTreatmentDto)
-    treatments?: CreateTreatmentDto[];
-
 }

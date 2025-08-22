@@ -62,11 +62,10 @@ __decorate([
 ], Patient.prototype, "address", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => medical_record_entity_1.MedicalRecord, record => record.patient, { cascade: true }),
-    (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", medical_record_entity_1.MedicalRecord)
 ], Patient.prototype, "medicalRecord", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
+    (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)
 ], Patient.prototype, "createdAt", void 0);
 exports.Patient = Patient = __decorate([

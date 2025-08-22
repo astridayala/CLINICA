@@ -45,7 +45,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Treatment.prototype, "totalPrice", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ type: 'date' }),
     __metadata("design:type", Date)
 ], Treatment.prototype, "startDate", void 0);
 __decorate([
@@ -58,7 +58,7 @@ __decorate([
     __metadata("design:type", treatment_status_entity_1.TreatmentStatus)
 ], Treatment.prototype, "status", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
+    (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)
 ], Treatment.prototype, "createdAt", void 0);
 exports.Treatment = Treatment = __decorate([

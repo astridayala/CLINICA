@@ -4,6 +4,7 @@ import { Patient } from './patient.entity';
 import { Repository } from 'typeorm';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { MedicalRecordService } from 'src/medical_record/medical_record.service';
+import { MedicalRecord } from 'src/medical_record/medical_record.entity';
 
 /**
  * Servicio para gestionar a los pacientes
@@ -24,17 +25,21 @@ export class PatientsService {
      * @param createPatientDto - Datos del paciente a crear
      * @returns El paciente creado
      */
-    async create(createPatientDto: CreatePatientDto): Promise<Patient> {
+
+    async create(createPatientDto: CreatePatientDto): Promise<any> {
         const newPatient = this.patientsRepository.create(createPatientDto);
         const savedPatient = await this.patientsRepository.save(newPatient);
 
-        await this.medicalRecordService.create({
-            patientId: savedPatient.id
+        const medicalRecord = await this.medicalRecordService.create({
+            patientId: savedPatient.id,
         });
 
-        return this.patientsRepository.save(newPatient);
+        return {
+            ...savedPatient,
+            medicalRecordId: medicalRecord.id,
+        };
     }
-
+    
     /**
      * Obtienen todos los pacientes
      * @returns Lista de pacientes creados

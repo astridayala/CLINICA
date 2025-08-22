@@ -17,14 +17,24 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const patient_entity_1 = require("./patient.entity");
 const typeorm_2 = require("typeorm");
+const medical_record_service_1 = require("../medical_record/medical_record.service");
 let PatientsService = class PatientsService {
     patientsRepository;
-    constructor(patientsRepository) {
+    medicalRecordService;
+    constructor(patientsRepository, medicalRecordService) {
         this.patientsRepository = patientsRepository;
+        this.medicalRecordService = medicalRecordService;
     }
     async create(createPatientDto) {
         const newPatient = this.patientsRepository.create(createPatientDto);
-        return this.patientsRepository.save(newPatient);
+        const savedPatient = await this.patientsRepository.save(newPatient);
+        const medicalRecord = await this.medicalRecordService.create({
+            patientId: savedPatient.id,
+        });
+        return {
+            ...savedPatient,
+            medicalRecordId: medicalRecord.id,
+        };
     }
     async findAll() {
         return this.patientsRepository.find();
@@ -41,6 +51,7 @@ exports.PatientsService = PatientsService;
 exports.PatientsService = PatientsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(patient_entity_1.Patient)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        medical_record_service_1.MedicalRecordService])
 ], PatientsService);
 //# sourceMappingURL=patients.service.js.map

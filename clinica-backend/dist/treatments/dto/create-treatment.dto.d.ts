@@ -1,3 +1,7 @@
 export declare class CreateTreatmentDto {
-    gender: string;
+    medicalRecordId: string;
+    treatmentTypeId: string;
+    totalPrice: number;
+    startDate: string;
+    statusId: string;
 }

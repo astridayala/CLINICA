@@ -12,12 +12,15 @@ const patients_service_1 = require("./patients.service");
 const patients_controller_1 = require("./patients.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const patient_entity_1 = require("./patient.entity");
+const medical_record_module_1 = require("../medical_record/medical_record.module");
 let PatientModule = class PatientModule {
 };
 exports.PatientModule = PatientModule;
 exports.PatientModule = PatientModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([patient_entity_1.Patient])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([patient_entity_1.Patient]),
+            medical_record_module_1.MedicalRecordModule
+        ],
         providers: [patients_service_1.PatientsService],
         controllers: [patients_controller_1.PatientsController],
         exports: [patients_service_1.PatientsService]

@@ -37,7 +37,7 @@ export class Patient {
     @OneToOne(() => MedicalRecord, record => record.patient, { cascade:true })
     medicalRecord: MedicalRecord;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
     
 }

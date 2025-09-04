@@ -20,7 +20,6 @@ let Treatment = class Treatment {
     medicalRecord;
     treatmentType;
     totalPrice;
-    startDate;
     procedures;
     status;
     createdAt;
@@ -44,10 +43,6 @@ __decorate([
     (0, typeorm_1.Column)('decimal', { precision: 10, scale: 2 }),
     __metadata("design:type", Number)
 ], Treatment.prototype, "totalPrice", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'date' }),
-    __metadata("design:type", Date)
-], Treatment.prototype, "startDate", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => procedure_entity_1.Procedure, procedure => procedure.treatment, { cascade: true }),
     __metadata("design:type", Array)

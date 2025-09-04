@@ -1,5 +1,5 @@
 import { Patient } from "src/patients/patient.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { MedicalRecordCondition } from "src/medical_record_conditions/medical_record_condition.entity";
 import { Treatment } from "src/treatments/treatment.entity";
 

@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreatePatientDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const typeorm_1 = require("typeorm");
 class CreatePatientDto {
@@ -49,13 +50,11 @@ __decorate([
     __metadata("design:type", String)
 ], CreatePatientDto.prototype, "email", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '31/12/2000', description: 'Fecha de nacimiento (dd/mm/yyyy)' }),
+    (0, swagger_1.ApiProperty)({ example: '2000-12-31', description: 'Fecha de nacimiento (YYYY-MM-DD)' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'La fecha de nacimiento es requerida' }),
-    (0, class_validator_1.IsString)({ message: 'La fecha debe ser una cadena de texto' }),
-    (0, class_validator_1.Matches)(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/, {
-        message: 'La fecha debe tener el formato dd/mm/yyyy',
-    }),
-    __metadata("design:type", String)
+    (0, class_validator_1.IsDate)({ message: 'La fecha de nacimiento debe ser una fecha válida' }),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
 ], CreatePatientDto.prototype, "birthDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({

@@ -26,7 +26,12 @@ let TreatmentsService = class TreatmentsService {
         this.treatmentStatusRepository = treatmentStatusRepository;
     }
     async create(createTreatmentDto) {
-        const newTreatment = this.treatmentRepository.create(createTreatmentDto);
+        const { medicalRecordId, treatmentTypeId, totalPrice } = createTreatmentDto;
+        const newTreatment = this.treatmentRepository.create({
+            totalPrice,
+            medicalRecord: { id: medicalRecordId },
+            treatmentType: { id: treatmentTypeId },
+        });
         const activeStatus = await this.treatmentStatusRepository.findOne({
             where: { name: 'Activo' },
         });
@@ -37,19 +42,35 @@ let TreatmentsService = class TreatmentsService {
         return this.treatmentRepository.save(newTreatment);
     }
     async findAll() {
-        return this.treatmentRepository.find();
+        return await this.treatmentRepository.find({
+            relations: [
+                'medicalRecord',
+                'treatmentType'
+            ],
+            order: { createdAt: 'DESC' },
+        });
     }
     async findOne(id) {
-        const treatment = await this.treatmentRepository.findOne({ where: { id } });
+        const treatment = await this.treatmentRepository.findOne({
+            where: { id },
+            relations: [
+                'medicalRecord',
+                'treatmentType',
+                'procedures',
+                'procedures.payment'
+            ],
+        });
         if (!treatment) {
-            throw new common_1.NotFoundException(`Tratamiento ${id} no encontrado`);
+            throw new common_1.NotFoundException(`El tratamiento con id ${id} no existe`);
         }
         return treatment;
     }
     async remove(id) {
-        const treatment = await this.findOne(id);
-        await this.treatmentRepository.remove(treatment);
-        return true;
+        const result = await this.treatmentRepository.delete(id);
+        if (result.affected === 0) {
+            throw new common_1.NotFoundException(`El tratamiento con id ${id} no existe`);
+        }
+        return { message: `El tratamiento con id ${id} fue eliminado correctamente` };
     }
 };
 exports.TreatmentsService = TreatmentsService;

@@ -4,7 +4,6 @@ import { Patient } from './patient.entity';
 import { Repository } from 'typeorm';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { MedicalRecordService } from 'src/medical_record/medical_record.service';
-import { MedicalRecord } from 'src/medical_record/medical_record.entity';
 
 /**
  * Servicio para gestionar a los pacientes

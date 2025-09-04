@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString, IsUUID, Matches } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDate, IsNotEmpty, IsNumber, IsUUID } from "class-validator";
 
 /**
  * DTO para la creacion de pagos
@@ -15,14 +16,12 @@ export class CreatePaymentsDto {
     procedureId: string;
 
     @ApiProperty({
-        description: 'Fecha de pago (dd/mm/yyyy)',
-        example: '21/08/2025'
+        description: 'Fecha del pago (YYYY-MM-DD)',
+        example: '2025-08-21',
     })
     @IsNotEmpty({ message: 'La fecha de pago es requerida' })
-    @IsString({ message: 'La fecha debe ser una cadena de texto' })
-    @Matches(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/, {
-        message: 'La fecha debe tener el formato dd/mm/yyyy',
-    })
+    @IsDate({ message: 'La fecha de pago debe ser una fecha válida' })
+    @Type(() => Date)
     date: string;
 
     @ApiProperty({

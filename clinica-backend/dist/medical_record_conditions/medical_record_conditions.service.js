@@ -34,7 +34,13 @@ let MedicalRecordConditionsService = class MedicalRecordConditionsService {
         return this.medicalRecordConditionRepository.find();
     }
     async findOne(id) {
-        const medicalRecordCondition = await this.medicalRecordConditionRepository.findOne({ where: { id } });
+        const medicalRecordCondition = await this.medicalRecordConditionRepository.findOne({
+            where: { id },
+            relations: [
+                'medicalRecord.patient',
+                'condition'
+            ]
+        });
         if (!medicalRecordCondition) {
             throw new common_1.NotFoundException(`La relacion ${id} entre historial y condicion no encontrado`);
         }

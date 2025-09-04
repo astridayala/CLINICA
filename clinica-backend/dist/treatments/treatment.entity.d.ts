@@ -7,7 +7,6 @@ export declare class Treatment {
     medicalRecord: MedicalRecord;
     treatmentType: TreatmentType;
     totalPrice: number;
-    startDate: Date;
     procedures: Procedure[];
     status: TreatmentStatus;
     createdAt: Date;

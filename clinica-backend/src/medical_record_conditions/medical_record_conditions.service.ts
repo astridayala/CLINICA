@@ -45,7 +45,13 @@ export class MedicalRecordConditionsService {
      * @returns La relacion entre historial y condicion
      */
     async findOne(id: string): Promise<MedicalRecordCondition> {
-        const medicalRecordCondition = await this.medicalRecordConditionRepository.findOne({ where: { id } })
+        const medicalRecordCondition = await this.medicalRecordConditionRepository.findOne({ 
+            where: { id },
+            relations: [
+                'medicalRecord.patient',
+                'condition'
+            ] 
+        })
 
         if(!medicalRecordCondition) {
             throw new NotFoundException(`La relacion ${id} entre historial y condicion no encontrado`)

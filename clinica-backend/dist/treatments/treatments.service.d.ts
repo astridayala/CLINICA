@@ -9,5 +9,7 @@ export declare class TreatmentsService {
     create(createTreatmentDto: CreateTreatmentDto): Promise<Treatment>;
     findAll(): Promise<Treatment[]>;
     findOne(id: string): Promise<Treatment>;
-    remove(id: string): Promise<boolean>;
+    remove(id: string): Promise<{
+        message: string;
+    }>;
 }

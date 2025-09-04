@@ -39,14 +39,33 @@ let MedicalRecordService = class MedicalRecordService {
         return this.medicalRecordRepository.save(newMedicalRecord);
     }
     async findOne(id) {
-        const medicalRecord = await this.medicalRecordRepository.findOne({ where: { id } });
+        const medicalRecord = await this.medicalRecordRepository.findOne({
+            where: { id },
+            relations: [
+                'patient',
+                'conditions',
+                'conditions.condition',
+                'treatments',
+                'treatments.treatmentType',
+                'treatments.status',
+                'treatments.procedures',
+                'treatments.procedures.payment',
+            ],
+        });
         if (!medicalRecord) {
             throw new common_1.NotFoundException(`Historial Medico ${id} no encontrado`);
         }
         return medicalRecord;
     }
     async findAll() {
-        return this.medicalRecordRepository.find();
+        const medicalRecord = await this.medicalRecordRepository.find({
+            relations: ['patient'],
+            order: { createdAt: 'DESC' },
+        });
+        if (!medicalRecord || medicalRecord.length === 0) {
+            throw new common_1.NotFoundException('No hay historiales médicos registrados');
+        }
+        return medicalRecord;
     }
 };
 exports.MedicalRecordService = MedicalRecordService;

@@ -6,5 +6,7 @@ export declare class TreatmentsController {
     create(createTreatmentDto: CreateTreatmentDto): Promise<import("./treatment.entity").Treatment>;
     findAll(): Promise<import("./treatment.entity").Treatment[]>;
     findOne(id: string): Promise<import("./treatment.entity").Treatment>;
-    remove(id: string): Promise<boolean>;
+    remove(id: string): Promise<{
+        message: string;
+    }>;
 }

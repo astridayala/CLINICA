@@ -3,7 +3,7 @@ export declare class CreatePatientDto {
     lastname: string;
     phone?: string;
     email?: string;
-    birthDate: string;
+    birthDate: Date;
     gender: string;
     address?: string;
     createdAt: Date;

@@ -23,23 +23,34 @@ let PaymentsService = class PaymentsService {
         this.paymentsRepository = paymentsRepository;
     }
     async create(createPaymentsDto) {
-        const newPayment = this.paymentsRepository.create(createPaymentsDto);
+        const { procedureId, date, amount } = createPaymentsDto;
+        const [day, month, year] = date.split('/');
+        const paymentDate = new Date(+year, +month - 1, +day);
+        const newPayment = this.paymentsRepository.create({
+            date: paymentDate,
+            amount,
+            procedure: { id: procedureId }
+        });
         return this.paymentsRepository.save(newPayment);
     }
     async findAll() {
         return this.paymentsRepository.find();
     }
     async findOne(id) {
-        const payment = await this.paymentsRepository.findOne({ where: { id } });
-        if (!payment) {
-            throw new common_1.NotFoundException(`Pago con ${id} no encontrado`);
-        }
+        const payment = await this.paymentsRepository.findOne({
+            where: { id },
+            relations: ['procedure']
+        });
+        if (!payment)
+            throw new common_1.NotFoundException(`Pago con id ${id} no encontrado`);
         return payment;
     }
     async remove(id) {
-        const payment = await this.findOne(id);
-        await this.paymentsRepository.remove(payment);
-        return true;
+        const payment = await this.paymentsRepository.delete(id);
+        if (payment.affected === 0) {
+            throw new common_1.NotFoundException(`Pago con id ${id} no encontrado`);
+        }
+        return { message: `El pago con id ${id} fue eliminado correctamente` };
     }
 };
 exports.PaymentsService = PaymentsService;

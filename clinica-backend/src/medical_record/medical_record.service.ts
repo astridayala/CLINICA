@@ -46,13 +46,25 @@ export class MedicalRecordService {
      * @returns El historial medico encontrado
      */
     async findOne(id: string): Promise<MedicalRecord> {
-        const medicalRecord = await this.medicalRecordRepository.findOne({ where: { id } })
+        const medicalRecord = await this.medicalRecordRepository.findOne({
+            where: { id },
+            relations: [
+                'patient',
+                'conditions',
+                'conditions.condition',
+                'treatments',
+                'treatments.treatmentType',   
+                'treatments.status',         
+                'treatments.procedures',
+                'treatments.procedures.payment',
+            ],
+        });
 
-        if(!medicalRecord) {
-            throw new NotFoundException(`Historial Medico ${id} no encontrado`)
+        if (!medicalRecord) {
+            throw new NotFoundException(`Historial Medico ${id} no encontrado`);
         }
 
-        return medicalRecord;
+        return medicalRecord; // ya cumple con el ResponseDto
     }
 
     /**
@@ -60,7 +72,15 @@ export class MedicalRecordService {
      * @returns Lista de historiales
      */
     async findAll(): Promise<MedicalRecord[]> {
-        return this.medicalRecordRepository.find()
-    }
+        const medicalRecord = await this.medicalRecordRepository.find({
+            relations: ['patient'],
+            order: { createdAt: 'DESC' },
+        });
 
+        if (!medicalRecord || medicalRecord.length === 0) {
+            throw new NotFoundException('No hay historiales médicos registrados');
+        }
+
+        return medicalRecord;
+    }
 }

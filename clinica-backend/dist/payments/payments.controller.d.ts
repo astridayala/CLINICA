@@ -6,5 +6,7 @@ export declare class PaymentsController {
     create(createPaymentsDto: CreatePaymentsDto): Promise<import("./payment.entity").Payment>;
     findAll(): Promise<import("./payment.entity").Payment[]>;
     findOne(id: string): Promise<import("./payment.entity").Payment>;
-    remove(id: string): Promise<boolean>;
+    remove(id: string): Promise<{
+        message: string;
+    }>;
 }

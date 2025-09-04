@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Patient = void 0;
 const typeorm_1 = require("typeorm");
 const medical_record_entity_1 = require("../medical_record/medical_record.entity");
+const appointments_entity_1 = require("../appointments/appointments.entity");
 let Patient = class Patient {
     id;
     name;
@@ -22,6 +23,7 @@ let Patient = class Patient {
     gender;
     address;
     medicalRecord;
+    appointments;
     createdAt;
 };
 exports.Patient = Patient;
@@ -64,6 +66,10 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => medical_record_entity_1.MedicalRecord, record => record.patient, { cascade: true }),
     __metadata("design:type", medical_record_entity_1.MedicalRecord)
 ], Patient.prototype, "medicalRecord", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => appointments_entity_1.Appointment, appointment => appointment.patient),
+    __metadata("design:type", Array)
+], Patient.prototype, "appointments", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)

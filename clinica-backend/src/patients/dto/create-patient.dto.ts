@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Matches } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString } from "class-validator";
 import { CreateDateColumn } from "typeorm";
 
 /**
@@ -27,13 +28,11 @@ export class CreatePatientDto {
     @IsEmail({}, { message: 'Debe proporcionar un email válido' })
     email?: string
 
-    @ApiProperty({ example: '31/12/2000', description: 'Fecha de nacimiento (dd/mm/yyyy)' })
+    @ApiProperty({ example: '2000-12-31', description: 'Fecha de nacimiento (YYYY-MM-DD)' })
     @IsNotEmpty({ message: 'La fecha de nacimiento es requerida' })
-    @IsString({ message: 'La fecha debe ser una cadena de texto' })
-    @Matches(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/, {
-        message: 'La fecha debe tener el formato dd/mm/yyyy',
-    })
-    birthDate: string;
+    @IsDate({ message: 'La fecha de nacimiento debe ser una fecha válida' })
+    @Type(() => Date)  
+    birthDate: Date;
 
     @ApiProperty({
         example: 'femenino',

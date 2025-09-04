@@ -30,6 +30,7 @@ async function bootstrap() {
         .addTag('treatment_statuses', 'Endpoints para los estados de los tratamientos (admin)')
         .addTag('procedures', 'Endpoints para procedimientos')
         .addTag('payments', 'Endpoints para pagos')
+        .addTag('appointments', 'Endpoints para als citas')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api/docs', app, document);

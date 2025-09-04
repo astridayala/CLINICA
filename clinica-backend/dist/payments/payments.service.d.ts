@@ -7,5 +7,7 @@ export declare class PaymentsService {
     create(createPaymentsDto: CreatePaymentsDto): Promise<Payment>;
     findAll(): Promise<Payment[]>;
     findOne(id: string): Promise<Payment>;
-    remove(id: string): Promise<boolean>;
+    remove(id: string): Promise<{
+        message: string;
+    }>;
 }

@@ -31,7 +31,9 @@ export class ProceduresService {
      * @returns Lista de procedimientos
      */
     async findAll(): Promise<Procedure[]> {
-        return this.procedureRepository.find()
+        return this.procedureRepository.find({ 
+            relations: ['payment']
+        })
     }
 
     /**
@@ -40,7 +42,10 @@ export class ProceduresService {
      * @returns El procedimiento encontrado
      */
     async findOne(id: string): Promise<Procedure> {
-        const procedure = await this.procedureRepository.findOne({ where: { id } })
+        const procedure = await this.procedureRepository.findOne({ 
+            where: { id },
+            relations: ['payment']
+        })
 
         if (!procedure) {
             throw new NotFoundException(`Procedimiento ${id} no encontrado`)

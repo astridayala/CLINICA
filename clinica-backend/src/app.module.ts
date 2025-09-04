@@ -14,6 +14,7 @@ import { TreatmentsModule } from './treatments/treatments.module';
 import { ProceduresModule } from './procedures/procedures.module';
 import { PaymentsModule } from './payments/payments.module';
 import { TreatmentStatusesModule } from './treatment_statuses/treatment_statuses.module';
+import { AppointmentsModule } from './appointments/appointments.module';
 
 /**
  * Módulo principal de la aplicación
@@ -41,6 +42,7 @@ import { TreatmentStatusesModule } from './treatment_statuses/treatment_statuses
     ProceduresModule,
     PaymentsModule,
     TreatmentStatusesModule,
+    AppointmentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

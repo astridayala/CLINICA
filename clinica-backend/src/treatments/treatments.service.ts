@@ -25,7 +25,12 @@ export class TreatmentsService {
      * @returns El tratamiento creado
      */
     async create(createTreatmentDto: CreateTreatmentDto): Promise<Treatment> {
-        const newTreatment = this.treatmentRepository.create(createTreatmentDto)
+        const { medicalRecordId, treatmentTypeId, totalPrice } = createTreatmentDto;
+        const newTreatment = this.treatmentRepository.create({
+            totalPrice,
+            medicalRecord: { id: medicalRecordId },
+            treatmentType: { id: treatmentTypeId },      
+        })
 
         const activeStatus = await this.treatmentStatusRepository.findOne({
             where: { name: 'Activo' },
@@ -45,7 +50,13 @@ export class TreatmentsService {
      * @returns Lista de tratamientos
      */
     async findAll(): Promise<Treatment[]> {
-        return this.treatmentRepository.find();
+        return await this.treatmentRepository.find({
+            relations: [
+                'medicalRecord',
+                'treatmentType'
+            ],
+            order: { createdAt: 'DESC' },
+        });
     }
 
     /**
@@ -54,10 +65,18 @@ export class TreatmentsService {
      * @returns El tratamiento encontrado
      */
     async findOne(id: string): Promise<Treatment> {
-        const treatment = await this.treatmentRepository.findOne({ where: { id } })
+        const treatment = await this.treatmentRepository.findOne({
+            where: { id },
+            relations: [
+                'medicalRecord',
+                'treatmentType',
+                'procedures',
+                'procedures.payment'
+            ],
+        });
 
         if (!treatment) {
-            throw new NotFoundException(`Tratamiento ${id} no encontrado`)
+            throw new NotFoundException(`El tratamiento con id ${id} no existe`);
         }
 
         return treatment;
@@ -68,9 +87,13 @@ export class TreatmentsService {
      * @param id - ID del tratamiento
      * @returns true si se elimino correctamente
      */
-    async remove(id: string): Promise<boolean> {
-        const treatment =  await this.findOne(id)
-        await this.treatmentRepository.remove(treatment);
-        return true;
+    async remove(id: string): Promise<{ message: string }> {
+        const result = await this.treatmentRepository.delete(id);
+
+        if (result.affected === 0) {
+            throw new NotFoundException(`El tratamiento con id ${id} no existe`);
+        }
+
+        return { message: `El tratamiento con id ${id} fue eliminado correctamente` }
     }
 }

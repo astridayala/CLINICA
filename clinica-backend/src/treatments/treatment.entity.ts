@@ -24,9 +24,6 @@ export class Treatment {
     @Column('decimal', { precision: 10, scale: 2 })
     totalPrice: number;
 
-    @Column({ type: 'date' })
-    startDate: Date;
-
     @OneToMany(() => Procedure, procedure => procedure.treatment, { cascade: true })
     procedures: Procedure[];
 

@@ -21,9 +21,17 @@ export class PaymentsService {
      * @returns El pago creado
      */
     async create(createPaymentsDto: CreatePaymentsDto): Promise<Payment> {
-        const newPayment = this.paymentsRepository.create(createPaymentsDto)
+        const { procedureId, date, amount } = createPaymentsDto;
+        const [day, month, year] = date.split('/');
+        const paymentDate = new Date(+year, +month - 1, +day);
 
-        return this.paymentsRepository.save(newPayment)
+        const newPayment = this.paymentsRepository.create({
+            date: paymentDate,
+            amount,
+            procedure: { id: procedureId }
+        });
+
+        return this.paymentsRepository.save(newPayment);
     }
 
     /**
@@ -40,11 +48,12 @@ export class PaymentsService {
      * @returns El pago encontrado
      */
     async findOne(id: string): Promise<Payment> {
-        const payment = await this.paymentsRepository.findOne({ where: { id } })
+        const payment = await this.paymentsRepository.findOne({
+            where: { id },
+            relations: ['procedure']
+        });
 
-        if (!payment) {
-            throw new NotFoundException(`Pago con ${id} no encontrado`)
-        }
+        if (!payment) throw new NotFoundException(`Pago con id ${id} no encontrado`);
 
         return payment;
     }
@@ -54,9 +63,13 @@ export class PaymentsService {
      * @param id - ID del pago
      * @returns true si se elimina correctamente
      */
-    async remove(id: string): Promise<boolean> {
-        const payment = await this.findOne(id)
-        await this.paymentsRepository.remove(payment);
-        return true;
+    async remove(id: string): Promise<{ message: string }> {
+        const payment = await this.paymentsRepository.delete(id);
+
+        if (payment.affected === 0) {
+            throw new NotFoundException(`Pago con id ${id} no encontrado`);
+        }
+
+        return { message: `El pago con id ${id} fue eliminado correctamente` };
     }
 }

@@ -23,19 +23,19 @@ let AppointmentsService = class AppointmentsService {
         this.appointmentsRepository = appointmentsRepository;
     }
     async create(createAppointmentsDto) {
-        const { patientId, startTime, endTime, notes } = createAppointmentsDto;
+        const { patientId, start, end, description } = createAppointmentsDto;
         const newAppointment = this.appointmentsRepository.create({
             patient: { id: patientId },
-            startTime,
-            endTime,
-            notes
+            start,
+            end,
+            description
         });
         return this.appointmentsRepository.save(newAppointment);
     }
     async findAll() {
         return await this.appointmentsRepository.find({
             relations: ['patient'],
-            order: { startTime: 'ASC' }
+            order: { start: 'ASC' }
         });
     }
     async findOne(id) {
@@ -52,7 +52,7 @@ let AppointmentsService = class AppointmentsService {
         const appointments = await this.appointmentsRepository.find({
             where: { patient: { id: patientId } },
             relations: ['patient'],
-            order: { startTime: 'ASC' }
+            order: { start: 'ASC' }
         });
         if (!appointments || appointments.length === 0) {
             throw new common_1.NotFoundException(`No se encontraron citas para el paciente con id ${patientId}`);

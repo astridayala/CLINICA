@@ -22,7 +22,7 @@ export class CreateAppointmentsDto {
         { message: 'La fecha debe tener el formato YYYY-MM-DD HH:mm en 24 horas' },
     )
     @Type(() => Date)
-    startTime: Date;
+    start: Date;
 
     @ApiProperty({
         example: '2025-09-03 11:00',
@@ -34,10 +34,10 @@ export class CreateAppointmentsDto {
         { message: 'La fecha debe tener el formato YYYY-MM-DD HH:mm en 24 horas' },
     )
     @Type(() => Date)
-    endTime: Date;
+    end: Date;
 
     @IsOptional()
     @ApiProperty({ example: 'Retiro de brackets', description: 'Informacion adicional necesaria' })
     @IsString({ message: 'La dirección debe ser una cadena de texto' })
-    notes?: string
+    description?: string
 }

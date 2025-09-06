@@ -15,9 +15,9 @@ const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class CreateAppointmentsDto {
     patientId;
-    startTime;
-    endTime;
-    notes;
+    start;
+    end;
+    description;
 }
 exports.CreateAppointmentsDto = CreateAppointmentsDto;
 __decorate([
@@ -35,7 +35,7 @@ __decorate([
     (0, class_validator_1.Matches)(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La fecha debe tener el formato YYYY-MM-DD HH:mm en 24 horas' }),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
-], CreateAppointmentsDto.prototype, "startTime", void 0);
+], CreateAppointmentsDto.prototype, "start", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '2025-09-03 11:00',
@@ -45,11 +45,11 @@ __decorate([
     (0, class_validator_1.Matches)(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La fecha debe tener el formato YYYY-MM-DD HH:mm en 24 horas' }),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
-], CreateAppointmentsDto.prototype, "endTime", void 0);
+], CreateAppointmentsDto.prototype, "end", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)({ example: 'Retiro de brackets', description: 'Informacion adicional necesaria' }),
     (0, class_validator_1.IsString)({ message: 'La dirección debe ser una cadena de texto' }),
     __metadata("design:type", String)
-], CreateAppointmentsDto.prototype, "notes", void 0);
+], CreateAppointmentsDto.prototype, "description", void 0);
 //# sourceMappingURL=appointments.dto.js.map

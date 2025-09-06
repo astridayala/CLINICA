@@ -19,13 +19,13 @@ export class Appointment {
     patient: Patient;
 
     @Column({ name: 'start_time', type: 'date' })
-    startTime: Date
+    start: Date
 
     @Column({ name: 'end_time', type: 'date' })
-    endTime: Date
+    end: Date
 
     @Column({ nullable: true, name: 'notes' })
-    notes: string
+    description: string
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;

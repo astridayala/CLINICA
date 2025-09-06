@@ -5,9 +5,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { FaNotesMedical, FaRegCalendar, FaHeartbeat } from 'react-icons/fa'
 
 const links = [
-    { name: 'Clínica Dental Ayala', href: '/', icon: FaHeartbeat },
-    { name: 'Agenda', href: '/', icon: FaRegCalendar },
-    { name: 'Historiales Clínicos', href: '/clinicalNotes', icon: FaNotesMedical }
+    { name: 'Clínica Dental Ayala', icon: FaHeartbeat },
+    { name: 'Agenda', href: 'agenda', icon: FaRegCalendar },
+    { name: 'Historiales Clínicos', href: 'clinicalNotes', icon: FaNotesMedical }
 ]
 
 export default function NavLinks() {

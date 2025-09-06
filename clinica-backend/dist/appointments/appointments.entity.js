@@ -15,9 +15,9 @@ const typeorm_1 = require("typeorm");
 let Appointment = class Appointment {
     id;
     patient;
-    startTime;
-    endTime;
-    notes;
+    start;
+    end;
+    description;
     createdAt;
 };
 exports.Appointment = Appointment;
@@ -33,15 +33,15 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ name: 'start_time', type: 'date' }),
     __metadata("design:type", Date)
-], Appointment.prototype, "startTime", void 0);
+], Appointment.prototype, "start", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'end_time', type: 'date' }),
     __metadata("design:type", Date)
-], Appointment.prototype, "endTime", void 0);
+], Appointment.prototype, "end", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true, name: 'notes' }),
     __metadata("design:type", String)
-], Appointment.prototype, "notes", void 0);
+], Appointment.prototype, "description", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)

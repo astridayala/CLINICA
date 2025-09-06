@@ -21,12 +21,12 @@ export class AppointmentsService {
      * @returns La cita creada
      */
     async create(createAppointmentsDto: CreateAppointmentsDto): Promise<Appointment> {
-        const { patientId, startTime, endTime, notes } = createAppointmentsDto;
+        const { patientId, start, end, description } = createAppointmentsDto;
         const newAppointment = this.appointmentsRepository.create({
             patient: { id: patientId },
-            startTime,
-            endTime,
-            notes
+            start,
+            end,
+            description
         })
 
         return this.appointmentsRepository.save(newAppointment)
@@ -39,7 +39,7 @@ export class AppointmentsService {
     async findAll(): Promise<Appointment[]> {
         return await this.appointmentsRepository.find({ 
             relations: ['patient'],
-            order: { startTime: 'ASC' } 
+            order: { start: 'ASC' } 
         })
     }
 
@@ -68,7 +68,7 @@ export class AppointmentsService {
         const appointments = await this.appointmentsRepository.find({
             where: { patient: { id: patientId } },
             relations: ['patient'],
-            order: { startTime: 'ASC' }
+            order: { start: 'ASC' }
         });
 
         if (!appointments || appointments.length === 0) {

@@ -10,7 +10,7 @@ export default function ClinicalNotes() {
             <div className='flex gap-4 items-center'>
               <button className="flex transition grow items-center justify-center gap-2 rounded-md border-[2px] p-3 text-md font-semibold hover:bg-[#eeeef1] text-[#BBB8C1] md:flex-none md:justify-start md:p-2 md:px-3">
                 <div className="hidden md:block text-sm pr-15">Buscar paciente...</div>
-                <FaSearch className="text-md" />
+                <FaSearch className="" />
               </button>
               <button className="flex transition grow items-center justify-center gap-3 rounded-md p-3 text-md font-semibold hover:bg-[#2c88cb] bg-[#1D6BAC] md:flex-none md:justify-start md:p-2 md:px-3 text-[#FFFFFF]">
                 <FaPlus className='text-md' />

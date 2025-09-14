@@ -1,15 +1,14 @@
 import React from 'react'
-import { FaCaretDown, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
-import Calendar from '../components/Calendar'
+import Calendario from '../components/Calendario'
 
-const IndexPage = () => {
+const Agenda = () => {
   return (
     <div className='flex flex-col h-full px-3 py-3 md:px-2 gap-0.5'>
       <div className='flex-grow rounded-md bg-[#F7F2FA] overflow-auto'>
-        <Calendar/>
+        <Calendario/>
       </div>
     </div>
   )
 }
 
-export default IndexPage
+export default Agenda

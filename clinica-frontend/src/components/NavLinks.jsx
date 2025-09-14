@@ -6,8 +6,8 @@ import { FaNotesMedical, FaRegCalendar, FaHeartbeat } from 'react-icons/fa'
 
 const links = [
     { name: 'Clínica Dental Ayala', icon: FaHeartbeat },
-    { name: 'Agenda', href: 'agenda', icon: FaRegCalendar },
-    { name: 'Historiales Clínicos', href: 'clinicalNotes', icon: FaNotesMedical }
+    { name: 'Agenda', href: '/agenda', icon: FaRegCalendar },
+    { name: 'Historiales Clínicos', href: '/clinicalNotes', icon: FaNotesMedical }
 ]
 
 export default function NavLinks() {
@@ -28,7 +28,7 @@ export default function NavLinks() {
                             'flex h-[45px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold transition md:flex-none md:justify-start md:p-2 md:px-3',
                             {
                                 // Estilo permanente para "Clínica Dental Ayala"
-                                'bg-[#1D6BAC] text-[#fff]': isAyala,
+                                'bg-[#1D6BAC] text-white': isAyala,
 
                                 // Estilo para link activo (si no es Ayala)
                                 'bg-[#a2ceee] text-[#1D6BAC]': isActive && !isAyala,

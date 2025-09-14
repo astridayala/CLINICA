@@ -19,7 +19,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get('DB_PASSWORD', 'astri'),
         database: configService.get('DB_DATABASE', 'clinica-db'),
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') !== 'production', // Solo para desarrollo
+        synchronize: configService.get('NODE_ENV') !== 'production',
         logging: configService.get('NODE_ENV') !== 'production',
       }),
     }),

@@ -23,7 +23,12 @@ let ProceduresService = class ProceduresService {
         this.procedureRepository = procedureRepository;
     }
     async create(createProceduresDto) {
-        const newProcedure = this.procedureRepository.create(createProceduresDto);
+        const { treatmentId, date, description } = createProceduresDto;
+        const newProcedure = this.procedureRepository.create({
+            treatment: { id: treatmentId },
+            date,
+            description,
+        });
         return this.procedureRepository.save(newProcedure);
     }
     async findAll() {

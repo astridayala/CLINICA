@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString } from "class-validator";
+import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Matches } from "class-validator";
 import { CreateDateColumn } from "typeorm";
 
 /**
@@ -16,12 +16,18 @@ export class CreatePatientDto {
     @ApiProperty({ example: 'Ayala Ayala', description: 'Apellidos del paciente' })
     @IsString({ message: 'El Apellido debe ser una cadena de texto' })
     @IsNotEmpty({ message: 'El Apellido es requerido' })
-    lastname: string;
+    lastName: string;
 
     @IsOptional()
-    @ApiProperty({ example: '+50312234556', description: 'Celular del paciente' })
-    @IsPhoneNumber('SV', { message: 'El celular debe ser un número válido de El Salvador' })
+    @ApiProperty({
+        example: '+(503) 23568956',
+        description: 'Celular del paciente en formato +(503) 23568956',
+    })
+    @Matches(/^\+\(503\)\s\d{8}$/, {
+        message: 'El celular debe tener el formato +(503) 12345678',
+    })
     phone?: string;
+
 
     @IsOptional()
     @ApiProperty({ example: 'astriayala@gmail.com', description: 'Email del paciente' })
@@ -47,7 +53,4 @@ export class CreatePatientDto {
     @ApiProperty({ example: 'km 12 ½ carretera al Puerto de La Libertad, calle nueva a Comasagua, Santa Tecla, La Libertad', description: 'Dirección del paciente' })
     @IsString({ message: 'La dirección debe ser una cadena de texto' })
     address?: string
-
-    @CreateDateColumn({ name: 'created_at' })
-    createdAt: Date;
 }

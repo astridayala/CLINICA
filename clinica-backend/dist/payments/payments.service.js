@@ -24,8 +24,12 @@ let PaymentsService = class PaymentsService {
     }
     async create(createPaymentsDto) {
         const { procedureId, date, amount } = createPaymentsDto;
-        const [day, month, year] = date.split('/');
-        const paymentDate = new Date(+year, +month - 1, +day);
+        const [year, month, day] = date.split('/').map(Number);
+        if (isNaN(year) || isNaN(month) || isNaN(day) ||
+            year < 1900 || month < 1 || month > 12 || day < 1 || day > 31) {
+            throw new Error('La fecha contiene valores inválidos');
+        }
+        const paymentDate = new Date(year, month - 1, day);
         const newPayment = this.paymentsRepository.create({
             date: paymentDate,
             amount,

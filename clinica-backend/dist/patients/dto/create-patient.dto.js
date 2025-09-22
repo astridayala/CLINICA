@@ -13,16 +13,14 @@ exports.CreatePatientDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
-const typeorm_1 = require("typeorm");
 class CreatePatientDto {
     name;
-    lastname;
+    lastName;
     phone;
     email;
     birthDate;
     gender;
     address;
-    createdAt;
 }
 exports.CreatePatientDto = CreatePatientDto;
 __decorate([
@@ -36,11 +34,16 @@ __decorate([
     (0, class_validator_1.IsString)({ message: 'El Apellido debe ser una cadena de texto' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'El Apellido es requerido' }),
     __metadata("design:type", String)
-], CreatePatientDto.prototype, "lastname", void 0);
+], CreatePatientDto.prototype, "lastName", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, swagger_1.ApiProperty)({ example: '+50312234556', description: 'Celular del paciente' }),
-    (0, class_validator_1.IsPhoneNumber)('SV', { message: 'El celular debe ser un número válido de El Salvador' }),
+    (0, swagger_1.ApiProperty)({
+        example: '+(503) 23568956',
+        description: 'Celular del paciente en formato +(503) 23568956',
+    }),
+    (0, class_validator_1.Matches)(/^\+\(503\)\s\d{8}$/, {
+        message: 'El celular debe tener el formato +(503) 12345678',
+    }),
     __metadata("design:type", String)
 ], CreatePatientDto.prototype, "phone", void 0);
 __decorate([
@@ -72,8 +75,4 @@ __decorate([
     (0, class_validator_1.IsString)({ message: 'La dirección debe ser una cadena de texto' }),
     __metadata("design:type", String)
 ], CreatePatientDto.prototype, "address", void 0);
-__decorate([
-    (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
-    __metadata("design:type", Date)
-], CreatePatientDto.prototype, "createdAt", void 0);
 //# sourceMappingURL=create-patient.dto.js.map

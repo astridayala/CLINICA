@@ -1,9 +1,10 @@
 import React from 'react'
-import { Router, BrowserRouter, Routes, Route } from 'react-router'
+import { Router, BrowserRouter, Routes, Route } from 'react-router-dom'
 import ClinicalNotes from './pages/ClinicalNotes'
 import Layout from './layout/Layout'
 import LogIn from './pages/LogIn'
 import Agenda from './pages/Agenda'
+import PatientDetail from './pages/PatientDetail'
 
 const App  = () => {
   return (
@@ -13,6 +14,8 @@ const App  = () => {
           <Route element={<Layout />}>
             <Route path= "/agenda" element={<Agenda />} />
             <Route path="/clinicalNotes" element={<ClinicalNotes />} />
+
+            <Route path="/patients/:id" element={<PatientDetail />} />
           </Route>
         </Routes>
     </BrowserRouter>

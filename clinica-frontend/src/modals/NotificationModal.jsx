@@ -29,7 +29,7 @@ export default function NotificationModal({ type, message, onClose }) {
   const bgColor = type === 'success' ? 'bg-green-100 border-green-500' : 'bg-red-100 border-red-500';
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center z-50 pointer-events-none">
+    <div className="fixed inset-0 flex justify-center items-center z-50 pointer-events-none bg-black/10 backdrop-brightness-90">
       <div className={`flex flex-col items-center justify-center ${bgColor} border rounded-lg shadow-lg p-6 transform transition-all duration-300 
         ${visible ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}>
         {icon}

@@ -27,13 +27,13 @@ export default function Calendario() {
   ];
 
   const [events, setEvents] = useState([
-    { id: 1, title: 'Astrid Ayala', start: parseEventDate('2025-09-10 09:00'), end: parseEventDate('2025-09-10 10:00'), description: 'Cambio de hules' },
-    { id: 2, title: 'Astrid Ayala', start: parseEventDate('2025-09-10 16:30'), end: parseEventDate('2025-09-10 17:45'), description: 'Cambio de hules' },
-    { id: 3, title: 'Astrid Ayala', start: parseEventDate('2025-09-07 09:00'), end: parseEventDate('2025-09-07 10:00'), description: 'Cambio de hules' },
-    { id: 7, title: 'Astrid Ayala', start: parseEventDate('2025-09-07 16:30'), end: parseEventDate('2025-09-07 17:45'), description: 'Cambio de hules' },
-    { id: 4, title: 'Astrid Ayala', start: parseEventDate('2025-09-13 09:00'), end: parseEventDate('2025-09-13 10:00'), description: 'Cambio de hules' },
-    { id: 5, title: 'Astrid Ayala', start: parseEventDate('2025-09-13 16:30'), end: parseEventDate('2025-09-13 17:45'), description: 'Cambio de hules' },
-    { id: 6, title: 'Astrid Ayala', start: parseEventDate('2025-09-10 12:30'), end: parseEventDate('2025-09-10 13:45'), description: 'Cambio de hules' },
+    { id: 1, title: 'Astrid Ayala', start: parseEventDate('2025-09-21 09:00'), end: parseEventDate('2025-09-21 10:00'), description: 'Cambio de hules' },
+    { id: 2, title: 'Astrid Ayala', start: parseEventDate('2025-09-23 16:30'), end: parseEventDate('2025-09-23 17:45'), description: 'Cambio de hules' },
+    { id: 3, title: 'Astrid Ayala', start: parseEventDate('2025-09-25 09:00'), end: parseEventDate('2025-09-25 10:00'), description: 'Cambio de hules' },
+    { id: 7, title: 'Astrid Ayala', start: parseEventDate('2025-09-22 16:30'), end: parseEventDate('2025-09-22 17:45'), description: 'Cambio de hules' },
+    { id: 4, title: 'Astrid Ayala', start: parseEventDate('2025-09-26 09:00'), end: parseEventDate('2025-09-26 10:00'), description: 'Cambio de hules' },
+    { id: 5, title: 'Astrid Ayala', start: parseEventDate('2025-09-24 13:30'), end: parseEventDate('2025-09-24 14:45'), description: 'Cambio de hules' },
+    { id: 6, title: 'Astrid Ayala', start: parseEventDate('2025-09-27 12:30'), end: parseEventDate('2025-09-27 13:45'), description: 'Cambio de hules' },
 
   ]);
 
@@ -48,7 +48,7 @@ export default function Calendario() {
     setNotification({ type, message, id: Date.now() }); // id único para forzar re-render
   };
 
-    const handleSelectEvent = event => setSelectedEvent(event);
+  const handleSelectEvent = event => setSelectedEvent(event);
   const closeDetailModal = () => setSelectedEvent(null);
   const closeCreateModal = () => setSlotInfo(null);
 

@@ -45,7 +45,7 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
     }
 
     if (phone && !/^\+\(503\)\s\d{8}$/.test(phone)) {
-        return "El celular debe ser válido de El Salvador (+503) XXXXXXXX.";
+        return "El celular debe ser válido de El Salvador +(503) XXXXXXXX.";
     }
 
 
@@ -85,7 +85,7 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
   return (
     <>
       {/* MODAL */}
-      <div className="fixed inset-0 flex justify-center items-center z-50">
+      <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/10 backdrop-brightness-90">
         <div
           ref={modalRef}
           className="bg-[#fbf8fc] rounded-lg p-6 w-[500px] max-w-full shadow-xl"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Select from 'react-select';
-import NotificationModal from './NotificationModal'; // archivo aparte
+import NotificationModal from './NotificationModal';
 
 export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, onSave }) {
   const [selectedPaciente, setSelectedPaciente] = useState(null);
@@ -82,7 +82,7 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
 
   return (
     <>
-      <div className="fixed inset-0 flex justify-center items-center z-50">
+      <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/10 backdrop-brightness-90">
         {/* Modal */}
         <div
           ref={modalRef}

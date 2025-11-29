@@ -1,0 +1,139 @@
+import React, { useState, useEffect } from "react";
+import Select from "react-select";
+import NotificationModal from "./NotificationModal";
+import api from "../scripts/axiosConfig"; // Asegúrate de que esta ruta sea correcta
+
+export default function CreateConditionModal({ medicalRecordId,existingConditions = [], onClose, onSave }) {
+  const [conditionsList, setConditionsList] = useState([]);
+  const [selectedCondition, setSelectedCondition] = useState(null);
+  const [notification, setNotification] = useState({ show: false, type: "", message: "" });
+  const [isSaving, setIsSaving] = useState(false);
+
+  // 1. Cargar lista de padecimientos desde el Backend
+  useEffect(() => {
+    const fetchConditions = async () => {
+      try {
+        const response = await api.get('/conditions');
+        
+        // Mapeamos la respuesta para react-select
+        // Value se queda tal cual (UUID string)
+        const options = response.data.map(c => ({
+          value: c.id,
+          label: c.name
+        }));
+
+        const availableOptions = options.filter(option => 
+            !existingConditions.includes(option.label)
+        );
+        
+        setConditionsList(availableOptions);
+      } catch (error) {
+        console.error("Error al cargar padecimientos:", error);
+      }
+    };
+    fetchConditions();
+  }, [existingConditions]);
+
+  const showNotification = (type, message) => {
+    setNotification({ show: true, type, message });
+    setTimeout(() => setNotification({ show: false, type, message: '' }), 2500);
+  };
+
+  // 2. Guardar la relación en el Backend
+  const handleSave = async () => {
+    if (!selectedCondition) {
+      showNotification("error", "Seleccione un padecimiento");
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      // CORRECCIÓN: Enviamos los IDs directos (UUIDs son strings), NO usamos Number()
+      const payload = {
+        medicalRecordId: medicalRecordId,
+        conditionId: selectedCondition.value
+      };
+
+      console.log("Enviando payload:", payload);
+
+      // Hacemos la petición POST
+      await api.post('/medical-record-conditions', payload);
+
+      // Actualizamos la vista del padre visualmente
+      onSave(selectedCondition.label);
+      
+      showNotification("success", "Padecimiento agregado correctamente");
+
+      setTimeout(() => {
+        onClose();
+      }, 1000);
+
+    } catch (error) {
+      console.error("Error al guardar la condición:", error);
+
+      // Intentamos obtener el mensaje específico del error "Bad Request"
+      let errorMsg = "Error al guardar el padecimiento";
+      if (error.response && error.response.data && error.response.data.message) {
+         const serverMsg = error.response.data.message;
+         // Si el servidor devuelve un array de errores, mostramos el primero
+         errorMsg = Array.isArray(serverMsg) ? serverMsg[0] : serverMsg;
+      }
+
+      showNotification("error", errorMsg);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <>
+      <div 
+        className="fixed inset-0 flex justify-center items-center z-50 bg-black/10 backdrop-brightness-90" 
+        onClick={onClose}
+      >
+        <div 
+          className="bg-[#fbf8fc] rounded-lg p-6 w-[400px] max-w-full shadow-xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h2 className="text-xl font-bold mb-4 text-center">Agregar Antecedente</h2>
+
+          <label className="block mb-2 text-sm font-medium">Padecimiento:</label>
+          <Select
+            options={conditionsList}
+            value={selectedCondition}
+            onChange={setSelectedCondition}
+            isSearchable
+            placeholder="Buscar..."
+            className="mb-6 text-sm"
+            noOptionsMessage={() => "No hay padecimientos disponibles"}
+          />
+
+          <div className="flex justify-end gap-3">
+            <button 
+              onClick={onClose} 
+              disabled={isSaving}
+              className="px-4 py-2 bg-[#db0000] hover:bg-[#940808] rounded-md text-white font-medium"
+            >
+              Cancelar
+            </button>
+            <button 
+              onClick={handleSave} 
+              disabled={isSaving}
+              className={`px-4 py-2 rounded-md text-white font-medium ${isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#1D6BAC] hover:bg-[#52a3de]'}`}
+            >
+              {isSaving ? "Guardando..." : "Guardar"}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {notification.show && (
+        <NotificationModal 
+          type={notification.type} 
+          message={notification.message} 
+        />
+      )}
+    </>
+  );
+}

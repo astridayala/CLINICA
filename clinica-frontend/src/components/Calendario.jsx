@@ -1,77 +1,77 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Calendar, dayjsLocalizer, Views } from "react-big-calendar";
 import dayjs from "dayjs";
-import { Temporal } from "@js-temporal/polyfill";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import CustomToolbar from './custom/CustomToolbar';
 import AppointmentDetailModal from '../modals/AppointmentDetailModal';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import NotificationModal from '../modals/NotificationModal';
+import api from '../scripts/axiosConfig';
 
 const localizer = dayjsLocalizer(dayjs);
-
-function parseEventDate(dateStr, zone = 'America/El_Salvador') {
-  const [datePart, timePart] = dateStr.split(' ');
-  const timeWithSeconds = timePart && timePart.includes(':') ? `${timePart}:00` : '00:00:00';
-  const zdt = Temporal.ZonedDateTime.from(`${datePart}T${timeWithSeconds}[${zone}]`);
-  return new Date(zdt.epochMilliseconds);
-}
 
 export default function Calendario() {
   const calendarRef = useRef(null);
 
-  const pacientes = [
-    { id: 1, nombre: 'Astrid Ayala' },
-    { id: 2, nombre: 'Juan Pérez' },
-    { id: 3, nombre: 'Marta López' },
-  ];
-
-  const [events, setEvents] = useState([
-    { id: 1, title: 'Astrid Ayala', start: parseEventDate('2025-09-21 09:00'), end: parseEventDate('2025-09-21 10:00'), description: 'Cambio de hules' },
-    { id: 2, title: 'Astrid Ayala', start: parseEventDate('2025-09-23 16:30'), end: parseEventDate('2025-09-23 17:45'), description: 'Cambio de hules' },
-    { id: 3, title: 'Astrid Ayala', start: parseEventDate('2025-09-25 09:00'), end: parseEventDate('2025-09-25 10:00'), description: 'Cambio de hules' },
-    { id: 7, title: 'Astrid Ayala', start: parseEventDate('2025-09-22 16:30'), end: parseEventDate('2025-09-22 17:45'), description: 'Cambio de hules' },
-    { id: 4, title: 'Astrid Ayala', start: parseEventDate('2025-09-26 09:00'), end: parseEventDate('2025-09-26 10:00'), description: 'Cambio de hules' },
-    { id: 5, title: 'Astrid Ayala', start: parseEventDate('2025-09-24 13:30'), end: parseEventDate('2025-09-24 14:45'), description: 'Cambio de hules' },
-    { id: 6, title: 'Astrid Ayala', start: parseEventDate('2025-09-27 12:30'), end: parseEventDate('2025-09-27 13:45'), description: 'Cambio de hules' },
-
-  ]);
-
+  const [pacientes, setPacientes] = useState([]); 
+  const [events, setEvents] = useState([]);
   const [view, setView] = useState(Views.WEEK);
   const [date, setDate] = useState(new Date());
   const [slotInfo, setSlotInfo] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [notification, setNotification] = useState(null);
 
-  // Función universal para mostrar notificaciones
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Cargar Pacientes
+        const patientsResponse = await api.get('/patients');
+        const loadedPatients = patientsResponse.data.map(p => ({
+          id: p.id,
+          nombre: `${p.name} ${p.lastName}` 
+        }));
+        setPacientes(loadedPatients);
+
+        // Cargar Citas
+        const appointmentsResponse = await api.get('/appointments');
+        
+        const loadedEvents = appointmentsResponse.data.map(app => ({
+          id: app.id,
+          title: app.patient ? `${app.patient.name} ${app.patient.lastName}` : 'Paciente',
+          // 🔧 AHORA ES SIMPLE: El backend manda "2025-10-20 08:00:00" (sin Z)
+          // El navegador lo entiende como hora local automáticamente.
+          start: new Date(app.start),
+          end: new Date(app.end),
+          description: app.description,
+        }));
+        setEvents(loadedEvents);
+
+      } catch (error) {
+        console.error("Error cargando datos:", error);
+        showNotification('error', 'Error al conectar con el servidor');
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const showNotification = (type, message) => {
-    setNotification({ type, message, id: Date.now() }); // id único para forzar re-render
+    setNotification({ type, message, id: Date.now() });
   };
 
   const handleSelectEvent = event => setSelectedEvent(event);
   const closeDetailModal = () => setSelectedEvent(null);
   const closeCreateModal = () => setSlotInfo(null);
-
   const handleSelectSlot = info => setSlotInfo(info);
 
   const handleSaveEvent = (newEvent) => {
-    try {
-      setEvents(prev => [...prev, newEvent]);
-      setSlotInfo(null);
-      showNotification('success', 'Cita guardada correctamente');
-    } catch (error) {
-      showNotification('error', 'No se pudo guardar la cita');
-    }
+    setEvents(prev => [...prev, newEvent]);
+    setSlotInfo(null);
   };
 
   const handleDeleteEvent = (eventId) => {
-    try {
-      setEvents(prev => prev.filter(ev => ev.id !== eventId));
-      setSelectedEvent(null);
-      showNotification('success', 'Cita eliminada correctamente');
-    } catch (error) {
-      showNotification('error', 'No se pudo eliminar la cita');
-    }
+    setEvents(prev => prev.filter(ev => ev.id !== eventId));
+    setSelectedEvent(null);
   };
 
   return (
@@ -100,17 +100,16 @@ export default function Calendario() {
         max={new Date(2025, 0, 1, 19, 0)}
       />
 
-      {/* Modal de detalle */}
       {selectedEvent && (
         <AppointmentDetailModal
           event={selectedEvent}
           onClose={closeDetailModal}
           onDelete={handleDeleteEvent}
           calendarRef={calendarRef}
+          showNotification={showNotification}
         />
       )}
 
-      {/* Modal de crear cita */}
       {slotInfo && (
         <CreateAppointmentModal
           slotInfo={slotInfo}
@@ -120,7 +119,6 @@ export default function Calendario() {
         />
       )}
 
-      {/* Modal de notificaciones universal */}
       {notification && (
         <NotificationModal
           key={notification.id} 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Select from 'react-select';
 import NotificationModal from './NotificationModal';
+import api from '../scripts/axiosConfig';
 
 export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, onSave }) {
   const [selectedPaciente, setSelectedPaciente] = useState(null);
@@ -16,9 +17,14 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
       const end = new Date(start);
       end.setHours(end.getHours() + 1);
 
+      // Formato seguro para el input (YYYY-MM-DDTHH:mm)
       const toLocalDatetime = (date) => {
-        const tzOffset = date.getTimezoneOffset() * 60000;
-        return new Date(date - tzOffset).toISOString().slice(0, 16);
+        const pad = (n) => n < 10 ? '0' + n : n;
+        return date.getFullYear() + '-' + 
+               pad(date.getMonth() + 1) + '-' + 
+               pad(date.getDate()) + 'T' + 
+               pad(date.getHours()) + ':' + 
+               pad(date.getMinutes());
       };
 
       setStartTime(toLocalDatetime(start));
@@ -26,7 +32,6 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
     }
   }, [slotInfo]);
 
-  // Cierra el modal si se hace click afuera
   const handleClickOutside = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       onClose();
@@ -40,41 +45,55 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
 
   if (!slotInfo) return null;
 
-  // Función para mostrar notificación
   const showNotification = (type, message) => {
     setNotification({ show: true, type, message });
-    setTimeout(() => setNotification({ show: false, type, message: '' }), 2000); // dura 2 segundos
+    setTimeout(() => setNotification({ show: false, type, message: '' }), 3000);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!selectedPaciente) {
       showNotification('error', 'Seleccione un paciente');
       return;
     }
 
     try {
-      // Guardamos la cita
-      onSave({
-        id: Math.random(),
-        title: selectedPaciente.label,
-        start: new Date(startTime),
-        end: new Date(endTime),
-        description,
-      });
+      // 1. Enviamos string limpio al backend
+      const payload = {
+        patientId: selectedPaciente.value,
+        start: startTime.replace('T', ' '),
+        end: endTime.replace('T', ' '),
+        description: description,
+      };
 
-      // Mostramos notificación de éxito
+      const response = await api.post('/appointments', payload);
+      const createdApp = response.data;
+
+      // 🔧 CORRECCIÓN: Limpiamos la Z de la respuesta también
+      const startString = createdApp.start.toString().replace('Z', '').replace('T', ' ');
+      const endString = createdApp.end.toString().replace('Z', '').replace('T', ' ');
+
+      const newEvent = {
+        id: createdApp.id,
+        title: selectedPaciente.label, 
+        start: new Date(startString), 
+        end: new Date(endString),
+        description: createdApp.description,
+      };
+
+      onSave(newEvent);
       showNotification('success', 'Cita guardada correctamente');
 
-      // Cerramos el modal después de 500ms para que se vea la animación
       setTimeout(() => {
         onClose();
+        setSelectedPaciente(null);
+        setDescription('');
       }, 500);
 
-      // Limpiar campos
-      setSelectedPaciente(null);
-      setDescription('');
-    } catch {
-      showNotification('error', 'No se pudo guardar la cita');
+    } catch (error) {
+      console.error(error);
+      const msg = error.response?.data?.message;
+      const displayMsg = Array.isArray(msg) ? msg[0] : (msg || 'Error al guardar la cita');
+      showNotification('error', displayMsg);
     }
   };
 
@@ -83,11 +102,7 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
   return (
     <>
       <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/10 backdrop-brightness-90">
-        {/* Modal */}
-        <div
-          ref={modalRef}
-          className="bg-[#fbf8fc] rounded-lg p-6 w-[400px] max-w-full shadow-xl"
-        >
+        <div ref={modalRef} className="bg-[#fbf8fc] rounded-lg p-6 w-[400px] max-w-full shadow-xl">
           <h2 className='text-center text-xl font-semibold mb-5'>Crear nueva cita</h2>
 
           <label className="block mb-2 text-sm font-medium">Paciente:</label>
@@ -96,7 +111,7 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
             value={selectedPaciente}
             onChange={setSelectedPaciente}
             isSearchable
-            placeholder="Seleccione o escriba el nombre..."
+            placeholder="Seleccione..."
             className="mb-4 text-sm"
           />
 
@@ -120,28 +135,21 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Escribe la descripción de la cita..."
+            placeholder="Detalles..."
             className="w-full border rounded px-3 py-2 mb-5 text-sm"
           />
 
           <div className="flex justify-end gap-3">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 bg-[#db0000] hover:bg-[#940808] rounded-md text-white font-medium transition"
-            >
+            <button onClick={onClose} className="px-4 py-2 bg-[#db0000] hover:bg-[#940808] rounded-md text-white font-medium">
               Cancelar
             </button>
-            <button
-              onClick={handleSave}
-              className="px-4 py-2 bg-[#1D6BAC] hover:bg-[#52a3de] rounded-md text-white font-medium transition"
-            >
+            <button onClick={handleSave} className="px-4 py-2 bg-[#1D6BAC] hover:bg-[#52a3de] rounded-md text-white font-medium">
               Guardar
             </button>
           </div>
         </div>
       </div>
 
-      {/* Notificación */}
       {notification.show && (
         <NotificationModal type={notification.type} message={notification.message} />
       )}

@@ -1,56 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch, FaPlus, FaUser } from "react-icons/fa";
 import CreatePatientModal from "../modals/CreatePatientModal";
 import { useNavigate } from "react-router-dom";
+import api from "../scripts/axiosConfig";
 
 export default function ClinicalNotes() {
   const navigate = useNavigate();
-  const [patients, setPatients] = useState([
-  { id: 1, name: "Astrid Violeta", lastname: "Ayala Ayala", email: "astridayala@gmail.com", phone: "+(503) 5588-9966" },
-  { id: 2, name: "Jaime Roberto", lastname: "Lazo Fermán", email: "jaimelazo@gmail.com", phone: "+(503) 6012-3344" },
-  { id: 3, name: "Daniela María", lastname: "Guardado Vásquez", email: "danielaguardado@gmail.com", phone: "+(503) 7123-4567" },
-  { id: 4, name: "Luis Enrique", lastname: "Mendoza Ramírez", email: "luismendoza@gmail.com", phone: "+(503) 7890-1122" },
-  { id: 5, name: "Gabriela Sofía", lastname: "Hernández Campos", email: "gabriela.hernandez@gmail.com", phone: "+(503) 7456-9988" },
-  { id: 6, name: "Carlos Alberto", lastname: "Pineda López", email: "carlospineda@gmail.com", phone: "+(503) 6345-2211" },
-  { id: 7, name: "María Fernanda", lastname: "Cañas de Rivas", email: "mariafcanas@gmail.com", phone: "+(503) 7845-6677" },
-  { id: 8, name: "Ricardo José", lastname: "Flores Arévalo", email: "ricardoflores@gmail.com", phone: "+(503) 7755-4433" },
-  { id: 9, name: "Paola Beatriz", lastname: "Velásquez Torres", email: "paolavelasquez@gmail.com", phone: "+(503) 7988-2200" },
-  { id: 10, name: "Jorge Andrés", lastname: "Gómez Aguirre", email: "jorgegomez@gmail.com", phone: "+(503) 6001-8899" },
-  { id: 11, name: "Andrea Carolina", lastname: "Santos Portillo", email: "andreasantos@gmail.com", phone: "+(503) 7234-1100" },
-  { id: 12, name: "Diego Armando", lastname: "Martínez Serrano", email: "diegomartinez@gmail.com", phone: "+(503) 7312-5566" },
-  { id: 13, name: "Patricia Elena", lastname: "Mejía Contreras", email: "patriciamejia@gmail.com", phone: "+(503) 7544-8899" },
-  { id: 14, name: "Juan Pablo", lastname: "Orellana Amaya", email: "juanporellana@gmail.com", phone: "+(503) 7987-6655" },
-  { id: 15, name: "Carolina Isabel", lastname: "Sánchez Molina", email: "carosanchez@gmail.com", phone: "+(503) 7322-4488" },
-  { id: 16, name: "Oscar Mauricio", lastname: "Cruz Villalta", email: "oscarcruz@gmail.com", phone: "+(503) 7455-3322" },
-  { id: 17, name: "Sofía Alejandra", lastname: "Perdomo Chicas", email: "sofiaperdomo@gmail.com", phone: "+(503) 7894-5566" },
-  { id: 18, name: "David Esteban", lastname: "Zelaya Romero", email: "davidzelaya@gmail.com", phone: "+(503) 7012-3344" },
-  { id: 19, name: "Marisol Teresa", lastname: "López Herrera", email: "marisollopez@gmail.com", phone: "+(503) 7655-9988" },
-  { id: 20, name: "Fernando José", lastname: "Rivera Escobar", email: "fernandorivera@gmail.com", phone: "+(503) 7211-8899" },
-  { id: 21, name: "Claudia Patricia", lastname: "Castillo Barrera", email: "claudiacastillo@gmail.com", phone: "+(503) 7345-6677" },
-  { id: 22, name: "Alejandro Daniel", lastname: "García Mejía", email: "alegarcia@gmail.com", phone: "+(503) 7567-4433" },
-  { id: 23, name: "Valeria Nicole", lastname: "Cordero Menjívar", email: "valeriacordero@gmail.com", phone: "+(503) 7009-2244" },
-  { id: 24, name: "Kevin Eduardo", lastname: "Rivas Sorto", email: "kevinrivas@gmail.com", phone: "+(503) 7456-9933" },
-  { id: 25, name: "Diana Carolina", lastname: "Bonilla Fuentes", email: "dianabonilla@gmail.com", phone: "+(503) 7344-2299" },
-  { id: 26, name: "Manuel Antonio", lastname: "Hernández Álvarez", email: "manuelhernandez@gmail.com", phone: "+(503) 7666-5511" },
-  { id: 27, name: "Isabel Cristina", lastname: "Arévalo Domínguez", email: "isabelarevalo@gmail.com", phone: "+(503) 7112-3344" },
-  { id: 28, name: "Rodrigo Rafael", lastname: "Guevara Quintanilla", email: "rodrigoguevara@gmail.com", phone: "+(503) 7890-2255" },
-  { id: 29, name: "Mónica Beatriz", lastname: "Cabrera López", email: "monicacabrera@gmail.com", phone: "+(503) 7321-1199" },
-  { id: 30, name: "Ernesto Javier", lastname: "Peña Cornejo", email: "ernestopena@gmail.com", phone: "+(503) 7555-6677" }
-]);
-
-
+  
+  // 1. Iniciamos con array vacío
+  const [patients, setPatients] = useState([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // 2. Cargar pacientes desde el Backend
+  useEffect(() => {
+    const fetchPatients = async () => {
+        try {
+            const response = await api.get('/patients');
+            
+            // Mapeamos para mantener compatibilidad
+            const formattedPatients = response.data.map(p => ({
+                ...p,
+                lastname: p.lastName // Creamos la propiedad lastname minúscula
+            }));
+            
+            setPatients(formattedPatients);
+        } catch (error) {
+            console.error("Error al cargar pacientes:", error);
+        }
+    };
+
+    fetchPatients();
+  }, []);
+
+  // Al crear un paciente, lo agregamos a la lista localmente
   const handleCreatePatient = (newPatient) => {
     setPatients([...patients, newPatient]);
   };
 
-  // Filtrar pacientes según el término de búsqueda (name o lastname)
-  const filteredPatients = patients.filter(
-    (p) =>
+  // Filtrar Y ORDENAR pacientes alfabéticamente
+  const filteredPatients = patients
+    .filter((p) =>
       `${p.name} ${p.lastname}`.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    )
+    .sort((a, b) => {
+      // Usamos localeCompare para ordenar correctamente strings con acentos
+      const nameA = `${a.name} ${a.lastname}`.toLowerCase();
+      const nameB = `${b.name} ${b.lastname}`.toLowerCase();
+      return nameA.localeCompare(nameB);
+    });
 
   return (
     <div className="flex flex-col h-full px-3 py-3 md:px-2 gap-0.5">
@@ -100,7 +98,7 @@ export default function ClinicalNotes() {
                   </div> {person.name} {person.lastname} 
                 </td> 
                 <td className="px-6 py-1">
-                  {person.email}
+                  {person.email || '-'}
                 </td> 
                 <td className="px-6 py-1">
                   {person.phone}
@@ -110,7 +108,7 @@ export default function ClinicalNotes() {
             {filteredPatients.length === 0 && (
               <tr>
                 <td colSpan={3} className="text-center py-4 text-gray-500">
-                  No se encontraron pacientes
+                  {patients.length === 0 ? "Cargando o no hay pacientes..." : "No se encontraron coincidencias"}
                 </td>
               </tr>
             )}

@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import NotificationModal from "./NotificationModal";
+import api from "../scripts/axiosConfig";
 
 export default function CreatePatientModal({ isOpen, onClose, onSave }) {
   const [formData, setFormData] = useState({
     name: "",
-    lastname: "",
+    lastname: "", // En el form usamos 'lastname', pero al enviar lo cambiaremos a 'lastName'
     phone: "",
     email: "",
     birthDate: "",
@@ -32,6 +33,7 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Validaciones del frontend (rápidas)
   const validateForm = () => {
     const { name, lastname, birthDate, gender, email, phone } = formData;
 
@@ -48,11 +50,11 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
         return "El celular debe ser válido de El Salvador +(503) XXXXXXXX.";
     }
 
-
-    return null; // Todo bien
+    return null; 
   };
 
-  const handleSubmit = (e) => {
+  // --- CONEXIÓN CON BACKEND ---
+  const handleSubmit = async (e) => { // ⬅️ Ahora es async
     e.preventDefault();
     const error = validateForm();
 
@@ -61,25 +63,51 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
       return;
     }
 
-    // Guardar paciente
-    onSave(formData);
-    setNotification({ type: "success", message: "Paciente creado correctamente" });
+    try {
+        // 1. Preparamos el payload para que coincida con el DTO del Backend
+        const payload = {
+            name: formData.name,
+            lastName: formData.lastname, // Backend espera "lastName" (camelCase)
+            phone: formData.phone,
+            email: formData.email || undefined, // Si está vacío, enviamos undefined
+            birthDate: formData.birthDate, // "YYYY-MM-DD" funciona bien con el backend
+            gender: formData.gender,
+            address: formData.address || undefined
+        };
 
-    // Limpiar formulario
-    setFormData({
-      name: "",
-      lastname: "",
-      phone: "",
-      email: "",
-      birthDate: "",
-      gender: "",
-      address: "",
-    });
+        // 2. Enviamos al Backend
+        const response = await api.post('/patients', payload);
+        const newPatient = response.data;
 
-    // Cerrar modal después de un pequeño delay
-    setTimeout(() => {
-      onClose();
-    }, 1200);
+        // 3. Notificamos al padre y mostramos éxito
+        // Mapeamos de regreso lastName a lastname para que el frontend no se rompa
+        onSave({ ...newPatient, lastname: newPatient.lastName });
+        
+        setNotification({ type: "success", message: "Paciente creado correctamente" });
+
+        // Limpiar formulario
+        setFormData({
+            name: "",
+            lastname: "",
+            phone: "",
+            email: "",
+            birthDate: "",
+            gender: "",
+            address: "",
+        });
+
+        // Cerrar modal
+        setTimeout(() => {
+            onClose();
+        }, 1200);
+
+    } catch (err) {
+        console.error(err);
+        // Manejo de errores del backend
+        const msg = err.response?.data?.message;
+        const displayMsg = Array.isArray(msg) ? msg[0] : (msg || 'Error al crear paciente');
+        setNotification({ type: "error", message: displayMsg });
+    }
   };
 
   return (
@@ -109,7 +137,7 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
                 />
               </div>
               <div className="w-1/2">
-                <label className="block mb-2 text-sm font-medium"><span className="text-red-600">*</span>:</label>
+                <label className="block mb-2 text-sm font-medium">Apellidos <span className="text-red-600">*</span>:</label>
                 <input
                   type="text"
                   name="lastname"

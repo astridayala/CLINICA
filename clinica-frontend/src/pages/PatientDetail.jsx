@@ -1,177 +1,236 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaTrash, FaEdit, FaFilePdf, FaPlus, FaSave } from "react-icons/fa";
 import CreateTreatmentModal from "../modals/CreateTreatmentModal";
 import CreateProcedureModal from "../modals/CreateProcedureModal";
+import CreateConditionModal from "../modals/CreateConditionModal";
 import NotificationModal from "../modals/NotificationModal";
+import api from "../scripts/axiosConfig"; 
 
 export default function PatientDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  //Datos de ejemplo (luego puedes cargarlos desde Firebase/DB)
-  const patients = [
-    {
-      id: 1,
-      name: "Astrid Violeta",
-      lastname: "Ayala Ayala",
-      email: "astridayala@gmail.com",
-      phone: "+(503) 5588-9966",
-      birthdate: "06/10/2004",
-      gender: "Femenino",
-      age: 20,
-      address: "km 12 ½ carretera al Puerto de La Libertad, calle nueva a Comasagua, Santa Tecla, La Libertad",
-      conditions: ["Diabetes","Hipertensión","Alergia a la penicilina","Cirugía de apendicitis (2018)"],
-      treatments: [
-        {
-          name: "Ortodoncia",
-          start: "10/02/2025",
-          status: "Activo",
-          procedures: [
-            { id: 1, date: "01/02/2025", proc: "Evaluación inicial", payments: [{ id: 101, amount: 20, date: "01/02/2025" }] },
-            { id: 2, date: "05/02/2025", proc: "Toma de radiografías", payments: [{ id: 102, amount: 25, date: "05/02/2025" }] },
-            { id: 3, date: "10/02/2025", proc: "Colocación de brackets", payments: [{ id: 103, amount: 50, date: "10/02/2025" }] },
-            { id: 4, date: "15/02/2025", proc: "Ajuste inicial", payments: [{ id: 104, amount: 30, date: "15/02/2025" }] },
-            { id: 5, date: "20/02/2025", proc: "Cambio de hules", payments: [{ id: 105, amount: 20, date: "20/02/2025" }] },
-            { id: 6, date: "25/02/2025", proc: "Cambio de cable", payments: [{ id: 106, amount: 30, date: "25/02/2025" }] },
-            { id: 7, date: "01/03/2025", proc: "Revisión de alineación", payments: [{ id: 107, amount: 15, date: "01/03/2025" }] },
-            { id: 8, date: "05/03/2025", proc: "Ajuste de brackets", payments: [{ id: 108, amount: 20, date: "05/03/2025" }] },
-            { id: 9, date: "10/03/2025", proc: "Colocación de ligaduras", payments: [{ id: 109, amount: 15, date: "10/03/2025" }] },
-            { id: 10, date: "15/03/2025", proc: "Revisión general", payments: [{ id: 110, amount: 20, date: "15/03/2025" }] },
-            { id: 11, date: "20/03/2025", proc: "Cambio de hules", payments: [{ id: 111, amount: 20, date: "20/03/2025" }] },
-            { id: 12, date: "25/03/2025", proc: "Ajuste de alambres", payments: [{ id: 112, amount: 30, date: "25/03/2025" }] },
-            { id: 13, date: "01/04/2025", proc: "Revisión de mordida", payments: [{ id: 113, amount: 25, date: "01/04/2025" }] },
-            { id: 14, date: "05/04/2025", proc: "Pulido y limpieza", payments: [{ id: 114, amount: 15, date: "05/04/2025" }] },
-            { id: 15, date: "10/04/2025", proc: "Cierre de espacios", payments: [{ id: 115, amount: 40, date: "10/04/2025" }] },
-          ],
-          total: 400, // suma de todos los procedimientos (puedes ajustar)
-          paid: 350 // suma de los pagos hasta ahora
-        },
-        {
-          name: "Endodoncia - 4-6",
-          start: "13/01/2025",
-          status: "Referido",
-          procedures: [
-            { id: 16, date: "13/01/2025", proc: "Evaluación inicial", payments: [{ id: 201, amount: 30, date: "13/01/2025" }] },
-            { id: 17, date: "15/01/2025", proc: "Radiografía", payments: [{ id: 202, amount: 20, date: "15/01/2025" }] },
-            { id: 18, date: "17/01/2025", proc: "Aislamiento y acceso", payments: [{ id: 203, amount: 25, date: "17/01/2025" }] },
-            { id: 19, date: "19/01/2025", proc: "Limpieza de conductos", payments: [{ id: 204, amount: 30, date: "19/01/2025" }] },
-            { id: 20, date: "21/01/2025", proc: "Conformación de conductos", payments: [{ id: 205, amount: 35, date: "21/01/2025" }] },
-            { id: 21, date: "23/01/2025", proc: "Obturación parcial", payments: [{ id: 206, amount: 40, date: "23/01/2025" }] },
-            { id: 22, date: "25/01/2025", proc: "Obturación final", payments: [{ id: 207, amount: 50, date: "25/01/2025" }] },
-            { id: 23, date: "27/01/2025", proc: "Restauración provisional", payments: [{ id: 208, amount: 20, date: "27/01/2025" }] },
-            { id: 24, date: "29/01/2025", proc: "Control y revisión", payments: [{ id: 209, amount: 15, date: "29/01/2025" }] },
-            { id: 25, date: "31/01/2025", proc: "Toma de radiografía final", payments: [{ id: 210, amount: 20, date: "31/01/2025" }] },
-            { id: 26, date: "02/02/2025", proc: "Colocación de restauración definitiva", payments: [{ id: 211, amount: 30, date: "02/02/2025" }] },
-            { id: 27, date: "04/02/2025", proc: "Pulido final", payments: [{ id: 212, amount: 15, date: "04/02/2025" }] },
-            { id: 28, date: "06/02/2025", proc: "Revisión de mordida", payments: [{ id: 213, amount: 20, date: "06/02/2025" }] },
-            { id: 29, date: "08/02/2025", proc: "Ajuste final", payments: [{ id: 214, amount: 25, date: "08/02/2025" }] },
-            { id: 30, date: "10/02/2025", proc: "Limpieza final", payments: [{ id: 215, amount: 30, date: "10/02/2025" }] },
-          ],
-          total: 600,
-          paid: 400
-        },
-      ],
-    },
-  ];
+  const [patientData, setPatientData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const patient = patients.find((p) => p.id.toString() === id);
-    if (!patient) return <div className="p-6">Paciente no encontrado</div>;
+  // Estados de UI
+  const [selectedTreatmentIndex, setSelectedTreatmentIndex] = useState(0);
+  const [showTreatmentModal, setShowTreatmentModal] = useState(false);
+  const [showProcedureModal, setShowProcedureModal] = useState(false);
+  const [showConditionModal, setShowConditionModal] = useState(false);
+  
+  // Estado para el texto de las notas
+  const [notes, setNotes] = useState("");
+  const [notification, setNotification] = useState({ visible: false, type: "", message: "" });
 
-    const [selectedTreatmentIndex, setSelectedTreatmentIndex] = useState(0);
-    const [showTreatmentModal, setShowTreatmentModal] = useState(false);
-    const [patientData, setPatientData] = useState(patient);
-    const [showProcedureModal, setShowProcedureModal] = useState(false);
-    const selectedTreatment = patientData.treatments[selectedTreatmentIndex] || null;
-    const [notes, setNotes] = useState(patientData.notes || "");
-    const [notification, setNotification] = useState({ visible: false, type: "", message: "" });
-    const totalPaid = selectedTreatment.procedures.reduce(
-      (acc, proc) => acc + proc.payments.reduce((sum, pay) => sum + pay.amount, 0), 0
-    );
-    const remaining = selectedTreatment.total - totalPaid;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const patientRes = await api.get(`/patients/${id}`);
+        const rawPatient = patientRes.data;
 
-    const handleAddTreatment = (newTreatment) => {
-      setPatientData((prev) => ({
-        ...prev,
-        treatments: [...prev.treatments, newTreatment],
-      }));
-    };
-    // Función para asignar color según estado
-    const statusColor = (status) => {
-      switch(status){
-        case "Activo": return "bg-green-400 text-white";
-        case "Referido": return "bg-blue-400 text-white";
-        case "Finalizado": return "bg-red-400 text-white";
-        default: return "";
-      }
-    }
-    const handleAddProcedure = (newProcedure) => {
-      setPatientData((prev) => {
-        const updatedTreatments = [...prev.treatments];
-        updatedTreatments[selectedTreatmentIndex] = {
-          ...updatedTreatments[selectedTreatmentIndex],
-          procedures: [...updatedTreatments[selectedTreatmentIndex].procedures, newProcedure],
+        let recordData = null;
+        let conditionsList = [];
+        let treatmentsList = [];
+
+        const recordId = typeof rawPatient.medicalRecord === 'object' ? rawPatient.medicalRecord?.id : rawPatient.medicalRecord;
+
+        if (recordId) {
+          try {
+            const recordRes = await api.get(`/medical-record/${recordId}`);
+            recordData = recordRes.data;
+
+            conditionsList = recordData.conditions?.map(item => item.condition?.name) || [];
+            
+            // --- MAPEO DE TRATAMIENTOS ---
+            treatmentsList = recordData.treatments?.map(t => ({
+              ...t, 
+              name: t.treatmentType?.name || t.name || "Sin nombre",
+              start: t.start || t.createdAt || t.date, 
+              status: t.status,
+              // Mapeo robusto del total
+              total: parseFloat(t.total || t.totalPrice || t.price || 0),
+              
+              procedures: t.procedures?.map(p => ({
+                ...p,
+                proc: p.description || p.proc, 
+                payment: p.payment || null 
+              })) || []
+            })) || [];
+
+          } catch (err) {
+            console.error("Error cargando historial:", err);
+          }
+        }
+
+        const formattedData = {
+          id: rawPatient.id,
+          name: rawPatient.name,
+          lastname: rawPatient.lastName,
+          email: rawPatient.email || "No registrado",
+          phone: rawPatient.phone,
+          birthdate: rawPatient.birthDate ? new Date(rawPatient.birthDate).toLocaleDateString() : "",
+          gender: rawPatient.gender,
+          age: calculateAge(rawPatient.birthDate),
+          address: rawPatient.address || "",
+          conditions: conditionsList,
+          treatments: treatmentsList,
+          notes: recordData?.notes || "", // 👈 Cargamos las notas desde la BD
+          medicalRecordId: recordData?.id 
         };
-        return { ...prev, treatments: updatedTreatments };
-      });
+
+        setPatientData(formattedData);
+        setNotes(formattedData.notes); // 👈 Inicializamos el textarea
+
+      } catch (error) {
+        console.error("Error general:", error);
+      } finally {
+        setLoading(false);
+      }
     };
-    const handleSaveNotes = () => {
-      // Guardar notas en patientData
-      setPatientData((prev) => ({
+
+    fetchData();
+  }, [id]);
+
+  const calculateAge = (birthDate) => {
+    if (!birthDate) return 0;
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return age;
+  };
+
+  // --- CÁLCULOS FINANCIEROS ---
+  const selectedTreatment = patientData?.treatments[selectedTreatmentIndex] || null;
+
+  const totalPaid = selectedTreatment?.procedures?.reduce((acc, proc) => {
+    const amount = proc.payment ? parseFloat(proc.payment.amount) : 0;
+    return acc + amount;
+  }, 0) || 0;
+  
+  const treatmentTotal = selectedTreatment ? selectedTreatment.total : 0;
+  const remaining = treatmentTotal - totalPaid;
+
+  // --- HANDLERS ---
+
+  const handleAddTreatment = (newTreatment) => {
+    setPatientData((prev) => ({
+      ...prev,
+      treatments: [...prev.treatments, {
+          ...newTreatment,
+          total: parseFloat(newTreatment.total || newTreatment.totalPrice || 0),
+          procedures: [] 
+      }],
+    }));
+  };
+
+  const handleAddProcedure = (newProcedure) => {
+    setPatientData((prev) => {
+      const updatedTreatments = prev.treatments.map((t, index) => {
+        if (index === selectedTreatmentIndex) {
+          return {
+            ...t,
+            procedures: [
+              ...(t.procedures || []), 
+              newProcedure
+            ]
+          };
+        }
+        return t;
+      });
+      return { ...prev, treatments: updatedTreatments };
+    });
+  };
+
+  const handleAddCondition = (newConditionName) => {
+    setPatientData((prev) => ({
         ...prev,
-        notes: notes,
-      }));
+        conditions: [...prev.conditions, newConditionName]
+    }));
+  };
 
-      // Mostrar notificación
-      setNotification({
-        visible: true,
-        type: "success",
-        message: "Notas guardadas correctamente",
-      });
-    };
+  // 👇 NUEVA FUNCIÓN PARA GUARDAR NOTAS EN EL BACKEND
+  const handleSaveNotes = async () => {
+    if (!patientData?.medicalRecordId) {
+        setNotification({ visible: true, type: "error", message: "Error: No hay historial médico asociado" });
+        return;
+    }
 
-    const closeNotification = () => {
-      setNotification({ visible: false, type: "", message: "" });
-    };
+    try {
+        // Petición PATCH para actualizar solo el campo 'notes'
+        await api.patch(`/medical-record/${patientData.medicalRecordId}`, {
+            notes: notes
+        });
 
+        // Actualizamos estado local
+        setPatientData((prev) => ({ ...prev, notes: notes }));
+        setNotification({ visible: true, type: "success", message: "Notas guardadas correctamente" });
+    } catch (error) {
+        console.error("Error guardando notas:", error);
+        setNotification({ visible: true, type: "error", message: "Error al guardar las notas" });
+    }
+  };
+
+  const statusColor = (status) => {
+    const baseClasses = "flex items-center justify-center h-full w-full"; 
+    const statusName = status?.name || status || ""; 
+    
+    switch(statusName){
+      case "Activo": return `${baseClasses} bg-green-400 text-white`;
+      case "Referido": return `${baseClasses} bg-blue-400 text-white`;
+      case "Finalizado": return `${baseClasses} bg-red-400 text-white`;
+      default: return `${baseClasses} bg-gray-300`;
+    }
+  };
+
+  const closeNotification = () => {
+    setNotification({ visible: false, type: "", message: "" });
+  };
+
+  if (loading) return <div className="p-6">Cargando información...</div>;
+  if (!patientData) return <div className="p-6">Paciente no encontrado</div>;
 
   return (
     <div className="flex flex-col h-full px-3 py-3 md:px-2">
       <div className="mb-2 flex h-11 items-center justify-between rounded-md p-3">
-        <h2 className="text-xl font-bold">{patient.name} {patient.lastname}</h2>
+        <h2 className="text-xl font-bold">{patientData.name} {patientData.lastname}</h2>
         <div className="flex items-center gap-2">
             <button className="bg-[#3CB4C0] p-2 rounded-md text-white w-11 h-11 flex items-center justify-center">
               <FaFilePdf className="text-lg" />
             </button>
-            <button className="bg-[#2F45FF] gap-2 p-2 rounded-md text-white w-auto h-11 flex items-center justify-center px-4">
+            {/*<button className="bg-[#2F45FF] gap-2 p-2 rounded-md text-white w-auto h-11 flex items-center justify-center px-4">
               <FaEdit className="text-lg" />
               <h2 className="text-md">Editar</h2>
-            </button>
+            </button>*/}
             <button className="bg-[#FF2323] p-2 rounded-md text-white w-11 h-11 flex items-center justify-center">
               <FaTrash className="text-lg"/>
             </button>
           </div>
       </div>
-      <div className="flex-grow p-3 rounded-md grid grid-cols-3 bg-[#F7F2FA] overflow-auto gap-1">
-        {/* Columna 1: Información del paciente */}
-        <div className="p-2 border-e-2 border-[#dad9de]">
-          <h3 className="font-bold mb-1 text-[17px]">
-            Información del paciente
-          </h3>
+
+      <div className="flex-grow p-3 rounded-md grid grid-cols-3 bg-[#F7F2FA] overflow-hidden gap-1">
+        
+        {/* Columna 1 */}
+        <div className="p-2 border-e-2 border-[#dad9de] overflow-y-auto">
+          <h3 className="font-bold mb-1 text-[17px]">Información del paciente</h3>
           <div className="flex flex-col gap-2 text-[15px] pb-6 pl-3">
-            <p><strong>Nombres:</strong> {patient.name}</p>
-            <p><strong>Apellidos:</strong> {patient.lastname}</p>
-            <p><strong>Celular:</strong> {patient.phone}</p>
-            <p><strong>Correo electrónico:</strong> {patient.email}</p>
-            <p><strong>Fecha de nacimiento:</strong> {patient.birthdate}</p>
-            <p><strong>Género:</strong> {patient.gender}</p>
-            <p><strong>Edad:</strong> {patient.age} años</p>
-            <p><strong>Dirección:</strong> {patient.address}</p>
+            <p><strong>Nombres:</strong> {patientData.name}</p>
+            <p><strong>Apellidos:</strong> {patientData.lastname}</p>
+            <p><strong>Celular:</strong> {patientData.phone}</p>
+            <p><strong>Correo electrónico:</strong> {patientData.email}</p>
+            <p><strong>Fecha de nacimiento:</strong> {patientData.birthdate}</p>
+            <p><strong>Género:</strong> {patientData.gender}</p>
+            <p><strong>Edad:</strong> {patientData.age} años</p>
+            <p><strong>Dirección:</strong> {patientData.address}</p>
           </div>
           <div>
             <div className="pb-2 flex justify-between items-center">
               <h3 className="font-bold mb-2 text-[17px]">Notas adicionales</h3>
-              <button className="bg-[#1D6BAC] hover:bg-[#52a3de] text-white px-2 py-1 rounded-md gap-2 w-auto h-7 flex items-center justify-center"
+              <button 
+                className="bg-[#1D6BAC] hover:bg-[#52a3de] text-white px-2 py-1 rounded-md gap-2 w-auto h-7 flex items-center justify-center transition" 
                 onClick={handleSaveNotes}
               >
                 <FaSave />
@@ -180,124 +239,206 @@ export default function PatientDetail() {
             </div>
             <textarea
               className="w-full text-[14px] h-32 p-2 border rounded-md resize-none bg-white focus:outline-none focus:ring-2 focus:ring-[#1D6BAC]"
-              placeholder="Escribe aquí observaciones del paciente..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
+              placeholder="Escribe aquí las notas del historial..."
             ></textarea>
           </div>
         </div>
 
-        {/* Columna 2: Tratamientos */}
-        <div className="p-2 border-e-2 border-[#dad9de]">
-          <div className="pb-6">
-            <h3 className="font-bold mb-1 text-[17px]">
-              Antecedentes médicos, patológicos y quirúrgicos
-            </h3>
-            <table className="w-full text-sm rounded-md overflow-hidden">
-              <tbody className="text-[15px]">
-                {patient.conditions.map((cond, i) => (
-                  <tr key={i}>
-                    <td className="text-md pl-3 px-4 py-1.5 border-[#dad9de] border-y-2"> 
-                      {cond}
-                      </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Columna 2 */}
+        <div className="p-2 border-e-2 border-[#dad9de] flex flex-col h-full overflow-hidden">
+          
+          {/* ANTECEDENTES */}
+          <div className="pb-6 flex-shrink-0">
+            <div className="flex justify-between items-center mb-1">
+                <h3 className="font-bold text-[17px]">Antecedentes médicos</h3>
+                <button 
+                  className="bg-[#1D6BAC] hover:bg-[#52a3de] text-white px-2 py-1 rounded-md gap-1 w-auto h-7 flex items-center justify-center"
+                  onClick={() => {
+                    if (patientData.medicalRecordId) {
+                        setShowConditionModal(true);
+                    } else {
+                        alert("Error: Historial médico no encontrado.");
+                    }
+                  }}
+                >
+                  <FaPlus />
+                </button>
+            </div>
+            
+            <div className="overflow-y-auto max-h-[115px]"> 
+              <table className="w-full text-sm rounded-md overflow-hidden">
+                <tbody className="text-[15px]">
+                  {patientData.conditions && patientData.conditions.length > 0 ? (
+                      patientData.conditions.map((cond, i) => (
+                      <tr key={i}>
+                        <td className="text-md pl-3 px-4 py-1.5 border-[#dad9de] border-y-2">{cond}</td>
+                      </tr>
+                      ))
+                  ) : (
+                      <tr><td className="pl-3 text-gray-500 italic">Sin antecedentes</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
           
-          <div className="w-full">
-            <div className="pb-2 flex justify-between items-center">
+          {/* TRATAMIENTOS */}
+          <div className="w-full flex flex-col flex-grow min-h-0">
+            <div className="pb-2 flex justify-between items-center flex-shrink-0">
               <h3 className="font-bold text-[17px]">Tratamientos</h3>
               <button className="bg-[#1D6BAC] hover:bg-[#2c88cb] text-white px-2 py-1 rounded-md gap-1 w-auto h-7 flex items-center justify-center"
-                onClick={() => setShowTreatmentModal(true)}
+                onClick={() => {
+                    if (patientData.medicalRecordId) {
+                        setShowTreatmentModal(true);
+                    } else {
+                        alert("Error: No se encontró el historial médico.");
+                    }
+                }}
               >
                 <FaPlus />
               </button>
             </div>
-            <table className="w-full text-sm rounded-md overflow-hidden">
-              <thead className="uppercase text-sm">
-                <tr className="">
-                  <th className="px-4 py-1.5 text-left">Tratamiento</th>
-                  <th className="px-4 py-1.5 text-left">Fecha inicio</th>
-                  <th className="px-4 py-1.5 text-left">Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {patientData.treatments.map((t, i) => (
-                  <tr
-                    key={i}
-                    className={`border-[#dad9de] hover:bg-[#8EC3EB] border-y-2 cursor-pointer ${selectedTreatmentIndex === i ? "bg-[#8EC3EB]" : ""}`}
-                    onClick={() => setSelectedTreatmentIndex(i)}
-                  >
-                    <td className="px-4 py-1.5">{t.name}</td>
-                    <td className="px-4 py-1.5">{t.start}</td>
-                    <td className={`px-4 py-1.5 rounded-lg font-bold flex items-center justify-center text-md ${statusColor(t.status)}`}>{t.status}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            
+            <div className="overflow-y-auto flex-grow">
+                <table className="w-full text-sm rounded-md overflow-hidden table-fixed">
+                <thead className="uppercase text-sm sticky top-0 bg-[#F7F2FA] z-10">
+                    <tr>
+                    <th className="px-4 py-1.5 text-center w-1/2">Tratamiento</th>
+                    <th className="px-4 py-1.5 text-center w-1/4">Fecha inicio</th>
+                    <th className="px-4 py-1.5 text-center w-1/4">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {patientData.treatments && patientData.treatments.length > 0 ? (
+                        patientData.treatments.map((t, i) => {
+                            const statusName = t.status?.name || t.status || "Desconocido";
+
+                            return (
+                                <tr
+                                    key={t.id || i}
+                                    className={`border-[#dad9de] hover:bg-[#8EC3EB] border-y-2 cursor-pointer ${selectedTreatmentIndex === i ? "bg-[#8EC3EB]" : ""}`}
+                                    onClick={() => setSelectedTreatmentIndex(i)}
+                                >
+                                    <td className="px-4 py-1.5 truncate text-center" title={t.name}>{t.name}</td>
+                                    <td className="px-4 py-1.5 text-center">
+                                        {t.start ? new Date(t.start).toLocaleDateString() : "-"}
+                                    </td>
+                                    <td className="px-4 py-1.5 text-center">
+                                        <div className={`rounded-lg font-bold text-md ${statusColor(statusName)}`}>
+                                            {statusName}
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })
+                    ) : (
+                        <tr>
+                            <td colSpan={3} className="px-4 text-[15px] text-left text-gray-500 italic pl-3">
+                                Sin tratamientos
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+                </table>
+            </div>
           </div>
         </div>
 
-        {/* Columna 3: Procedimientos y pagos */}
-        <div className="flex flex-col p-2">
-          <div className="pb-2 flex justify-between items-center">
+        {/* Columna 3 */}
+        <div className="flex flex-col p-2 overflow-hidden h-full">
+          <div className="pb-2 flex justify-between items-center flex-shrink-0">
             <h3 className="font-bold text-[17px]">Control de procedimientos</h3>
             <button className="bg-[#1D6BAC] hover:bg-[#52a3de] text-white px-2 py-1 rounded-md gap-1 w-auto h-7 flex items-center justify-center"
-              onClick={() => setShowProcedureModal(true)}
-              >
+              onClick={() => {
+                  if (selectedTreatment) {
+                      setShowProcedureModal(true);
+                  } else {
+                      alert("Selecciona un tratamiento activo primero.");
+                  }
+              }}
+            >
               <FaPlus />
             </button>
           </div>
           {selectedTreatment && (
             <>
-              <div className="flex-1 overflow-y-auto max-h-[450px]">
+              <div className="flex-grow overflow-y-auto min-h-0">
                 <table className="w-full text-sm rounded-md border-collapse">
                   <thead className="uppercase text-sm sticky top-0 bg-[#F7F2FA] z-10">
                     <tr>
-                      <th className="px-4 py-1.5 text-left">Fecha</th>
-                      <th className="px-4 py-1.5 text-left">Procedimiento</th>
-                      <th className="px-4 py-1.5 text-left">Abono</th>
+                      <th className="px-4 py-1.5 text-center">Fecha</th>
+                      <th className="px-4 py-1.5 text-center">Procedimiento</th>
+                      <th className="px-4 py-1.5 text-center">Abono</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedTreatment.procedures.map((proc) => (
-                      <tr key={proc.id} className="border-[#dad9de] border-y-2">
-                        <td className="px-4 py-1.5">{proc.date}</td>
-                        <td className="px-4 py-1.5">{proc.proc}</td>
-                        <td className="px-4 py-1.5 justify-center flex">
-                          ${proc.payments.reduce((sum, pay) => sum + pay.amount, 0)}
-                        </td>
-                      </tr>
-                    ))}
+                      {selectedTreatment.procedures && selectedTreatment.procedures.length > 0 ? (
+                          selectedTreatment.procedures.map((proc) => {
+                              const abono = proc.payment ? parseFloat(proc.payment.amount) : 0;
+                              const description = proc.proc || proc.description || "Procedimiento";
+
+                              return (
+                                  <tr key={proc.id} className="border-[#dad9de] border-y-2">
+                                      <td className="px-4 py-1.5 text-center">
+                                          {proc.date ? new Date(proc.date).toLocaleDateString() : "-"}
+                                      </td>
+                                      <td className="px-4 py-1.5 text-center">{description}</td>
+                                      <td className="px-4 py-1.5 text-center">${abono.toFixed(2)}</td>
+                                  </tr>
+                              );
+                          })
+                      ) : (
+                          <tr>
+                              <td colSpan={3} className="px-4 py-2 text-left text-[15px] text-gray-500 italic">
+                                  Sin procedimientos registrados
+                              </td>
+                          </tr>
+                      )}
                   </tbody>
                 </table>
               </div>
 
-              <div className="mt-3 pt-2 sticky bottom-0">
+              <div className="mt-3 pt-2 flex-shrink-0 sticky bottom-0 bg-[#F7F2FA]">
                 <div className="flex flex-col items-end gap-1 text-sm">
-                  <p><strong>Abono Total:</strong> ${totalPaid}</p>
-                  <p><strong>Restante:</strong> ${remaining}</p>
-                  <p><strong>Total presupuesto:</strong> ${selectedTreatment.total}</p>
+                  <p><strong>Abono Total:</strong> ${totalPaid.toFixed(2)}</p>
+                  <p><strong>Restante:</strong> ${remaining.toFixed(2)}</p>
+                  <p><strong>Total presupuesto:</strong> ${treatmentTotal.toFixed(2)}</p>
                 </div>
               </div>
             </>
           )}
         </div>
       </div>
-        {showTreatmentModal && (
+
+      {/* MODALES */}
+      
+      {showTreatmentModal && patientData.medicalRecordId && (
         <CreateTreatmentModal
+          medicalRecordId={patientData.medicalRecordId}
           onClose={() => setShowTreatmentModal(false)}
           onSave={handleAddTreatment}
         />
-      )} 
-      {showProcedureModal && (
+      )}
+      
+      {showProcedureModal && selectedTreatment && (
         <CreateProcedureModal
+          treatmentId={selectedTreatment.id}
           onClose={() => setShowProcedureModal(false)}
           onSave={handleAddProcedure}
         />
       )}
+
+      {showConditionModal && patientData.medicalRecordId && (
+        <CreateConditionModal
+          medicalRecordId={patientData.medicalRecordId}
+          onClose={() => setShowConditionModal(false)}
+          onSave={handleAddCondition}
+          existingConditions={patientData.conditions} // 👈 Pasamos condiciones existentes
+        />
+      )}
+
       {notification.visible && (
         <NotificationModal
           type={notification.type}

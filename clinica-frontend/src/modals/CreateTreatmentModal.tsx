@@ -1,49 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import NotificationModal from "./NotificationModal";
+import api from "../scripts/axiosConfig"; // ⬅️ Verifica tu ruta de axios
 
-export default function CreateTreatmentModal({ onClose, onSave }) {
-  const dentalTreatments = [
-    { id: 1, name: "Limpieza dental profesional" },
-    { id: 2, name: "Blanqueamiento dental" },
-    { id: 3, name: "Empaste dental (restauración)" },
-    { id: 4, name: "Extracción de muela" },
-    { id: 5, name: "Ortodoncia (brackets)" },
-    { id: 6, name: "Implante dental" },
-    { id: 7, name: "Endodoncia (tratamiento de conducto)" },
-    { id: 8, name: "Carillas dentales" },
-    { id: 9, name: "Prótesis dental (dentaduras)" },
-    { id: 10, name: "Selladores de fosas y fisuras" },
-  ];
-
-  const dentalOptions = dentalTreatments.map((t) => ({
-    value: t.id,
-    label: t.name,
-  }));
-
+export default function CreateTreatmentModal({ medicalRecordId, onClose, onSave }) {
+  // Estado para las opciones dinámicas
+  const [dentalOptions, setDentalOptions] = useState([]);
+  
   const [treatmentType, setTreatmentType] = useState(null);
   const [totalPrice, setTotalPrice] = useState("");
   const [notification, setNotification] = useState({ show: false, type: "", message: "" });
+
+  // 1. Cargar Tipos de Tratamiento desde el Backend
+  useEffect(() => {
+    const fetchTreatmentTypes = async () => {
+      try {
+        const response = await api.get('/treatments-types');
+        // Mapeamos para que el Select entienda los datos
+        const options = response.data.map(type => ({
+          value: type.id,
+          label: type.name
+        }));
+        setDentalOptions(options);
+      } catch (error) {
+        console.error("Error cargando tipos de tratamientos:", error);
+      }
+    };
+    fetchTreatmentTypes();
+  }, []);
 
   const showNotification = (type, message) => {
     setNotification({ show: true, type, message });
     setTimeout(() => setNotification({ show: false, type, message: '' }), 1500);
   };
 
-  const handleSave = () => {
+  // 2. Guardar Tratamiento en Backend
+  const handleSave = async () => {
     if (!treatmentType || !totalPrice) {
       showNotification("error", "Debe seleccionar un tratamiento y asignar precio");
       return;
     }
 
     try {
+      // Payload según tu DTO CreateTreatmentDto
+      const payload = {
+        medicalRecordId: medicalRecordId,
+        treatmentTypeId: treatmentType.value,
+        totalPrice: parseFloat(totalPrice)
+      };
+
+      const response = await api.post('/treatments', payload);
+      
+      // Formatear respuesta para actualizar la vista localmente sin recargar
+      // Asumimos que el backend devuelve el objeto creado con sus relaciones o al menos los IDs
       const newTreatment = {
-        name: treatmentType.label,
-        start: new Date().toLocaleDateString("es-ES"),
-        status: "Activo", // estado predeterminado
-        procedures: [],
+        id: response.data.id,
+        name: treatmentType.label, // Usamos el label del select para mostrar nombre inmediato
+        start: response.data.createdAt || new Date().toISOString(), // Fecha creación del backend
+        status: "Activo", // El backend asigna 'Activo' por defecto
         total: parseFloat(totalPrice),
-        paid: 0,
+        procedures: [], // Array vacío inicial
+        paid: 0
       };
 
       onSave(newTreatment);
@@ -52,7 +69,9 @@ export default function CreateTreatmentModal({ onClose, onSave }) {
       setTimeout(() => {
         onClose();
       }, 1000);
-    } catch {
+
+    } catch (error) {
+      console.error(error);
       showNotification("error", "Error al crear tratamiento");
     }
   };
@@ -75,6 +94,7 @@ export default function CreateTreatmentModal({ onClose, onSave }) {
             placeholder="Selecciona un tratamiento"
             onChange={(selectedOption) => setTreatmentType(selectedOption)}
             className="mb-4 text-sm"
+            noOptionsMessage={() => "No hay tipos disponibles"}
           />
 
           <label className="block mb-2 text-sm font-medium">Precio total ($):</label>

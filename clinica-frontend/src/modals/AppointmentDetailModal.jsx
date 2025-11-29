@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
+import api from '../scripts/axiosConfig';
 
-export default function AppointmentDetailModal({ event, onClose, onDelete, calendarRef }) {
+export default function AppointmentDetailModal({ event, onClose, onDelete, calendarRef, showNotification }) {
   const modalRef = useRef(null);
   const [modalPos, setModalPos] = useState({ top: 0, left: 0 });
 
@@ -14,20 +15,17 @@ export default function AppointmentDetailModal({ event, onClose, onDelete, calen
     const calendarRect = calendarRef.current.getBoundingClientRect();
 
     const modalWidth = 220;
-    const modalHeight = 150; // más alto para botones
+    const modalHeight = 150;
     const offset = 2;
 
-    // Posición inicial pegada al evento
     let left = eventRect.right - calendarRect.left + offset;
     let top = eventRect.top - calendarRect.top + offset;
 
-    // Ajustar si se sale a la derecha
     if (left + modalWidth > calendarRect.width) {
       left = eventRect.left - calendarRect.left - modalWidth - offset;
       if (left < 0) left = 0;
     }
 
-    // Ajustar si se sale abajo
     if (top + modalHeight > calendarRect.height) {
       top = eventRect.top - calendarRect.top - modalHeight - offset;
       if (top < 0) top = 0;
@@ -36,7 +34,7 @@ export default function AppointmentDetailModal({ event, onClose, onDelete, calen
     setModalPos({ top, left });
   }, [event, calendarRef]);
 
-  // Cerrar al hacer click afuera
+  // Cerrar al hacer click fuera
   useEffect(() => {
     const handleClickOutside = e => {
       if (modalRef.current && !modalRef.current.contains(e.target)) onClose();
@@ -46,6 +44,23 @@ export default function AppointmentDetailModal({ event, onClose, onDelete, calen
   }, [onClose]);
 
   if (!event) return null;
+
+  const handleDelete = async () => {
+    try {
+      await api.delete(`/appointments/${event.id}`);
+      
+      onDelete?.(event.id);
+      onClose();
+      
+      if (showNotification) {
+        showNotification('success', 'Cita eliminada correctamente');
+      }
+    } catch (error) {
+      console.error(error);
+      const msg = error.response?.data?.message || 'Error al eliminar la cita';
+      if (showNotification) showNotification('error', msg);
+    }
+  };
 
   return (
     <div
@@ -64,10 +79,7 @@ export default function AppointmentDetailModal({ event, onClose, onDelete, calen
       <div className="flex justify-between gap-2">
         <button
           className="flex-1 px-2 py-1 bg-[#db0000] hover:bg-[#940808] text-white rounded-md transition"
-          onClick={() => {
-            onDelete?.(event.id);
-            onClose();
-          }}
+          onClick={handleDelete}
         >
           Eliminar
         </button>

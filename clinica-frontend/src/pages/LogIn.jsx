@@ -7,6 +7,7 @@ import NotificationModal from '../modals/NotificationModal';
 const API_URL = import.meta.env.VITE_API_URL;
 const LOGIN_URL = `${API_URL}/auth/login`; 
 
+//LogIn Component
 function LogIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

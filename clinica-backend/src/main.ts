@@ -16,9 +16,7 @@ async function bootstrap() {
   // Habilita CORS para permitir solicitudes desde los sitios de clientes
   app.enableCors({
      origin: [
-      'http://localhost:5173',              
-      'https://medicloudsv.vercel.app',
-      'https://clinica-olxz.onrender.com'     
+      'http://localhost:5173',                   
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
@@ -67,6 +65,16 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`Servidor iniciado en: http://localhost:${port}`);
   console.log(`Documentación Swagger: http://localhost:${port}/api/docs`);
+}
+if (!process.env.VERCEL) {
+  bootstrap();
+}
+export default async function handler(req, res) {
+  const app = await NestFactory.create(AppModule);
+  app.enableCors(); // Importante: Habilitar CORS también aquí
+  await app.init();
+  const instance = app.getHttpAdapter().getInstance();
+  return instance(req, res);
 }
 
 bootstrap();

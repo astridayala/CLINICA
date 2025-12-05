@@ -7,7 +7,7 @@ import { join } from 'path';
 
 /**
  * Función principal para iniciar la aplicación
- * Configura middleware, Swagger y levanta el servidor
+ * Configura middleware, Swagger y levanta el servidor.
  */
 async function bootstrap() {
   // Crea la aplicación NestJS

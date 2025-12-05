@@ -1,8 +1,8 @@
-import { MedicalRecord } from "src/medical_record/medical_record.entity";
-import { TreatmentType } from "src/treatments_types/treatment_type.entity";
+import { MedicalRecord } from "../medical_record/medical_record.entity";
+import { TreatmentType } from "../treatments_types/treatment_type.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Procedure } from "src/procedures/procedure.entity";
-import { TreatmentStatus } from "src/treatment_statuses/treatment_status.entity";
+import { Procedure } from "../procedures/procedure.entity";
+import { TreatmentStatus } from "../treatment_statuses/treatment_status.entity";
 
 /**
  * Entidad tratamientos

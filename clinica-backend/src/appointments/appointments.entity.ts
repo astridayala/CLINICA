@@ -1,5 +1,5 @@
-import { Patient } from "src/patients/patient.entity";
-import { User } from "src/users/users.entity";
+import { Patient } from "../patients/patient.entity";
+import { User } from "../users/users.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 /**

@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Patient } from './patient.entity';
 import { Repository } from 'typeorm';
 import { CreatePatientDto } from './dto/create-patient.dto';
-import { MedicalRecordService } from 'src/medical_record/medical_record.service';
+import { MedicalRecordService } from '../medical_record/medical_record.service';
 import { UpdatePatientDto } from './dto/update-patient.dto';
-import { User } from '../users/users.entity'; // IMPORTANTE: Importar entidad User
+import { User } from '../users/users.entity';
 
 @Injectable()
 export class PatientsService {

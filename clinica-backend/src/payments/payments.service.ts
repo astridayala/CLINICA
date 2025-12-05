@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Payment } from './payment.entity';
 import { Repository } from 'typeorm';
 import { CreatePaymentsDto } from './dto/create-payments.dto';
-import { Procedure } from 'src/procedures/procedure.entity';
+import { Procedure } from '../procedures/procedure.entity';
 
 /**
  * Servicio para gestionar los pagos

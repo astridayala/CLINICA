@@ -3,7 +3,7 @@ import { PatientsService } from './patients.service';
 import { PatientsController } from './patients.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Patient } from './patient.entity';
-import { MedicalRecordModule } from 'src/medical_record/medical_record.module';
+import { MedicalRecordModule } from '../medical_record/medical_record.module';
 
 /**
  * Modulo de pacientes

@@ -1,5 +1,5 @@
-import { Payment } from "src/payments/payment.entity";
-import { Treatment } from "src/treatments/treatment.entity";
+import { Payment } from "../payments/payment.entity";
+import { Treatment } from "../treatments/treatment.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('procedure')

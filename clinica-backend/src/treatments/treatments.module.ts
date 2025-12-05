@@ -3,7 +3,7 @@ import { TreatmentsService } from './treatments.service';
 import { TreatmentsController } from './treatments.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Treatment } from './treatment.entity';
-import { TreatmentStatus } from 'src/treatment_statuses/treatment_status.entity';
+import { TreatmentStatus } from '../treatment_statuses/treatment_status.entity';
 
 /**
  * Modulo para los tratamientos

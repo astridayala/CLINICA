@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Treatment } from "src/treatments/treatment.entity";
+import { Treatment } from "../treatments/treatment.entity";
 
 /**
  * Entidad Tipos de Tratamientos

@@ -1,5 +1,5 @@
 import { Exclude } from "class-transformer";
-import { Patient } from "src/patients/patient.entity";
+import { Patient } from "../patients/patient.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 /**

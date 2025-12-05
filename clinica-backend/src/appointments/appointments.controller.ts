@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/common/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentsDto } from './dto/appointments.dto';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/users/users.entity';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../users/users.entity';
 
 @ApiTags('appointments')
 @ApiBearerAuth()

@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { MedicalRecordCondition } from "src/medical_record_conditions/medical_record_condition.entity";
+import { MedicalRecordCondition } from "../medical_record_conditions/medical_record_condition.entity";
 
 /**
  * Entidad Historial Medico

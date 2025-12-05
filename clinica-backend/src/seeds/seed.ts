@@ -1,7 +1,7 @@
 import dataSource from '../data_source/data_source';
-import { Condition } from 'src/conditions/condition.entity';
-import { TreatmentType } from 'src/treatments_types/treatment_type.entity';
-import { TreatmentStatus } from 'src/treatment_statuses/treatment_status.entity';
+import { Condition } from '../conditions/condition.entity';
+import { TreatmentType } from '../treatments_types/treatment_type.entity';
+import { TreatmentStatus } from '../treatment_statuses/treatment_status.entity';
 
 async function main() {
   console.log('Iniciando proceso de seeding...');

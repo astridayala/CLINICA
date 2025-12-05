@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Treatment } from './treatment.entity';
 import { Repository } from 'typeorm';
 import { CreateTreatmentDto } from './dto/create-treatment.dto';
-import { TreatmentStatus } from 'src/treatment_statuses/treatment_status.entity';
+import { TreatmentStatus } from '../treatment_statuses/treatment_status.entity';
 import { UpdateTreatmentDto } from './dto/update-treatment.dto';
 
 /**

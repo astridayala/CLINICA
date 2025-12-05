@@ -631,14 +631,59 @@ export default function PatientDetail() {
       </div>
 
       {/* MODALES */}
-      {showTreatmentModal && patientData.medicalRecordId && <CreateTreatmentModal medicalRecordId={patientData.medicalRecordId} onClose={() => setShowTreatmentModal(false)} onSave={handleAddTreatment} />}
-      {showProcedureModal && selectedTreatment && <CreateProcedureModal treatmentId={selectedTreatment.id} onClose={() => setShowProcedureModal(false)} onSave={handleAddProcedure} />}
-      {showConditionModal && patientData.medicalRecordId && <CreateConditionModal medicalRecordId={patientData.medicalRecordId} onClose={() => setShowConditionModal(false)} onSave={handleAddCondition} existingConditions={patientData.conditions} />}
-      {showEditPatientModal && <EditPatientModal isOpen={showEditPatientModal} onClose={() => setShowEditPatientModal(false)} onSave={handlePatientUpdate} patientData={patientData} />}
-      {showStatusModal && treatmentToEditStatus && <ChangeStatusModal isOpen={showStatusModal} onClose={() => setShowStatusModal(false)} treatmentId={treatmentToEditStatus.id} currentStatus={treatmentToEditStatus.status} onSave={handleStatusUpdated} />}
+      {showTreatmentModal && patientData.medicalRecordId && (
+        <CreateTreatmentModal 
+            medicalRecordId={patientData.medicalRecordId} 
+            onClose={() => setShowTreatmentModal(false)} 
+            onSave={handleAddTreatment} 
+        />
+      )}
+      
+      {showProcedureModal && selectedTreatment && (
+        <CreateProcedureModal 
+            treatmentId={selectedTreatment.id} 
+            onClose={() => setShowProcedureModal(false)} 
+            onSave={handleAddProcedure} 
+        />
+      )}
+
+      {showConditionModal && patientData.medicalRecordId && (
+        <CreateConditionModal 
+            isOpen={showConditionModal} 
+            medicalRecordId={patientData.medicalRecordId} 
+            onClose={() => setShowConditionModal(false)} 
+            onSave={handleAddCondition} 
+            existingConditions={patientData.conditions} 
+        />
+      )}
+
+      {showEditPatientModal && (
+        <EditPatientModal 
+            isOpen={showEditPatientModal} 
+            onClose={() => setShowEditPatientModal(false)} 
+            onSave={handlePatientUpdate} 
+            patientData={patientData} 
+        />
+      )}
+
+      {showStatusModal && treatmentToEditStatus && (
+        <ChangeStatusModal 
+            isOpen={showStatusModal} 
+            onClose={() => setShowStatusModal(false)} 
+            treatmentId={treatmentToEditStatus.id} 
+            currentStatus={treatmentToEditStatus.status} 
+            onSave={handleStatusUpdated} 
+        />
+      )}
       
       {/* Modal de Notificación simple */}
-      {notification.visible && <NotificationModal type={notification.type} message={notification.message} onClose={closeNotification} />}
+      {notification.visible && (
+        <NotificationModal 
+            type={notification.type} 
+            message={notification.message} 
+            onClose={closeNotification} 
+        />
+      )}
       
       {/* MODAL DE CONFIRMACIÓN */}
       <ConfirmationModal 

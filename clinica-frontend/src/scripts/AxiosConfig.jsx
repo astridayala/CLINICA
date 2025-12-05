@@ -23,5 +23,5 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
+//exportar la instancia
 export default api;

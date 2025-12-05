@@ -203,9 +203,12 @@ export default function PatientDetail() {
     });
   };
 
-  const handleAddCondition = () => {
-    window.location.reload(); 
-  };
+  const handleAddCondition = (newConditionObj) => {
+    setPatientData((prev) => ({
+        ...prev,
+        conditions: [...prev.conditions, newConditionObj]
+    }));
+};
 
   const handleSaveNotes = async () => {
     if (!patientData?.medicalRecordId) return;

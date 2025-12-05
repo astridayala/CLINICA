@@ -4,6 +4,8 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentsDto } from './dto/appointments.dto';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/users/users.entity';
 
 @ApiTags('appointments')
 @ApiBearerAuth()
@@ -20,8 +22,8 @@ export class AppointmentsController {
     @Post()
     @ApiOperation({ summary: 'Crea una cita' })
     @ApiResponse({ status: 201, description: 'Cita creada exitosamente' })
-    create(@Body() createAppointmentsDto: CreateAppointmentsDto) {
-        return this.appointmentsService.create(createAppointmentsDto)
+    create(@Body() createAppointmentsDto: CreateAppointmentsDto, @GetUser() user: User) {
+        return this.appointmentsService.create(createAppointmentsDto, user);
     }
 
     /**
@@ -31,8 +33,8 @@ export class AppointmentsController {
     @Get()
     @ApiOperation({ summary: 'Obtener todas las citas' })
     @ApiResponse({ status: 200, description: 'Lista de citas' })
-    findAll() {
-        return this.appointmentsService.findAll()
+    findAll(@GetUser() user: User) {
+        return this.appointmentsService.findAll(user);
     }
 
     /**
@@ -44,16 +46,16 @@ export class AppointmentsController {
     @ApiOperation({ summary: 'Obtiene las citas por su ID' })
     @ApiResponse({ status: 200, description: 'Cita obtenida' })
     @ApiResponse({ status: 404, description: 'Cita no encontrada' })
-    findOne(@Param('id') id: string) {
-        return this.appointmentsService.findOne(id)
+    findOne(@Param('id') id: string, @GetUser() user: User) {
+        return this.appointmentsService.findOne(id, user);
     }
 
     @Get('patient/:patientId')
     @ApiOperation({ summary: 'Obtiene las citas de un paciente' })
     @ApiResponse({ status: 200, description: 'Cita obtenida' })
     @ApiResponse({ status: 404, description: 'Cita no encontrada' })
-    appointmentsByPatient(@Param('patientId') patientId: string) {
-        return this.appointmentsService.findByPatient(patientId);
+    findByPatient(@Param('patientId') patientId: string, @GetUser() user: User) {
+        return this.appointmentsService.findByPatient(patientId, user);
     }
 
     /**
@@ -65,7 +67,7 @@ export class AppointmentsController {
     @ApiOperation({ summary: 'Elimina una cita' })
     @ApiResponse({ status: 200, description: 'Cita eliminada' })
     @ApiResponse({ status: 404, description: 'Cita no encontrada' })
-    remove(@Param('id') id: string) {
-        return this.appointmentsService.remove(id)
+    remove(@Param('id') id: string, @GetUser() user: User) {
+        return this.appointmentsService.remove(id, user);
     }
 }

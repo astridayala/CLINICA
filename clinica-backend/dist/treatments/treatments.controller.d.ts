@@ -1,5 +1,6 @@
 import { TreatmentsService } from './treatments.service';
 import { CreateTreatmentDto } from './dto/create-treatment.dto';
+import { UpdateTreatmentDto } from './dto/update-treatment.dto';
 export declare class TreatmentsController {
     private readonly treatmentsService;
     constructor(treatmentsService: TreatmentsService);
@@ -9,4 +10,5 @@ export declare class TreatmentsController {
     remove(id: string): Promise<{
         message: string;
     }>;
+    update(id: string, updateTreatmentDto: UpdateTreatmentDto): Promise<import("./treatment.entity").Treatment>;
 }

@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import NotificationModal from "./NotificationModal";
-import api from "../scripts/axiosConfig"; // ⬅️ Verifica tu ruta de axios
+import api from "../scripts/axiosConfig"; 
 
 export default function CreateTreatmentModal({ medicalRecordId, onClose, onSave }) {
-  // Estado para las opciones dinámicas
   const [dentalOptions, setDentalOptions] = useState([]);
   
   const [treatmentType, setTreatmentType] = useState(null);
   const [totalPrice, setTotalPrice] = useState("");
   const [notification, setNotification] = useState({ show: false, type: "", message: "" });
 
-  // 1. Cargar Tipos de Tratamiento desde el Backend
   useEffect(() => {
     const fetchTreatmentTypes = async () => {
       try {
         const response = await api.get('/treatments-types');
-        // Mapeamos para que el Select entienda los datos
         const options = response.data.map(type => ({
           value: type.id,
           label: type.name
@@ -34,7 +31,15 @@ export default function CreateTreatmentModal({ medicalRecordId, onClose, onSave 
     setTimeout(() => setNotification({ show: false, type, message: '' }), 1500);
   };
 
-  // 2. Guardar Tratamiento en Backend
+  // Helper para fecha local
+  const getLocalDateString = () => {
+    const localDate = new Date();
+    const year = localDate.getFullYear();
+    const month = String(localDate.getMonth() + 1).padStart(2, '0');
+    const day = String(localDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const handleSave = async () => {
     if (!treatmentType || !totalPrice) {
       showNotification("error", "Debe seleccionar un tratamiento y asignar precio");
@@ -42,24 +47,24 @@ export default function CreateTreatmentModal({ medicalRecordId, onClose, onSave 
     }
 
     try {
-      // Payload según tu DTO CreateTreatmentDto
+      const todayString = getLocalDateString();
+
       const payload = {
         medicalRecordId: medicalRecordId,
         treatmentTypeId: treatmentType.value,
-        totalPrice: parseFloat(totalPrice)
+        totalPrice: parseFloat(totalPrice),
+        date: todayString 
       };
 
       const response = await api.post('/treatments', payload);
       
-      // Formatear respuesta para actualizar la vista localmente sin recargar
-      // Asumimos que el backend devuelve el objeto creado con sus relaciones o al menos los IDs
       const newTreatment = {
         id: response.data.id,
-        name: treatmentType.label, // Usamos el label del select para mostrar nombre inmediato
-        start: response.data.createdAt || new Date().toISOString(), // Fecha creación del backend
-        status: "Activo", // El backend asigna 'Activo' por defecto
+        name: treatmentType.label, 
+        start: todayString, 
+        status: "Activo",
         total: parseFloat(totalPrice),
-        procedures: [], // Array vacío inicial
+        procedures: [], 
         paid: 0
       };
 
@@ -72,7 +77,9 @@ export default function CreateTreatmentModal({ medicalRecordId, onClose, onSave 
 
     } catch (error) {
       console.error(error);
-      showNotification("error", "Error al crear tratamiento");
+      const msg = error.response?.data?.message;
+      const displayMsg = Array.isArray(msg) ? msg[0] : (msg || "Error al crear tratamiento");
+      showNotification("error", displayMsg);
     }
   };
 
@@ -123,7 +130,6 @@ export default function CreateTreatmentModal({ medicalRecordId, onClose, onSave 
         </div>
       </div>
 
-      {/* Notificación */}
       {notification.show && (
         <NotificationModal type={notification.type} message={notification.message} />
       )}

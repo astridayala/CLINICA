@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Appointment = void 0;
 const patient_entity_1 = require("../patients/patient.entity");
+const users_entity_1 = require("../users/users.entity");
 const typeorm_1 = require("typeorm");
 let Appointment = class Appointment {
     id;
@@ -18,6 +19,8 @@ let Appointment = class Appointment {
     start;
     end;
     description;
+    doctor;
+    doctorId;
     createdAt;
 };
 exports.Appointment = Appointment;
@@ -26,22 +29,55 @@ __decorate([
     __metadata("design:type", String)
 ], Appointment.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => patient_entity_1.Patient, patient => patient.appointments),
+    (0, typeorm_1.ManyToOne)(() => patient_entity_1.Patient, patient => patient.appointments, { onDelete: 'CASCADE' }),
     (0, typeorm_1.JoinColumn)({ name: 'patient_id' }),
     __metadata("design:type", patient_entity_1.Patient)
 ], Appointment.prototype, "patient", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'start_time', type: 'date' }),
-    __metadata("design:type", Date)
+    (0, typeorm_1.Column)({
+        type: 'timestamp',
+        transformer: {
+            to: (value) => value,
+            from: (value) => {
+                if (!value)
+                    return value;
+                const date = new Date(value);
+                const pad = (n) => n < 10 ? '0' + n : n;
+                return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+            }
+        }
+    }),
+    __metadata("design:type", String)
 ], Appointment.prototype, "start", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'end_time', type: 'date' }),
-    __metadata("design:type", Date)
+    (0, typeorm_1.Column)({
+        type: 'timestamp',
+        transformer: {
+            to: (value) => value,
+            from: (value) => {
+                if (!value)
+                    return value;
+                const date = new Date(value);
+                const pad = (n) => n < 10 ? '0' + n : n;
+                return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+            }
+        }
+    }),
+    __metadata("design:type", String)
 ], Appointment.prototype, "end", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true, name: 'notes' }),
     __metadata("design:type", String)
 ], Appointment.prototype, "description", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => users_entity_1.User, (user) => user.appointments, { eager: false, onDelete: 'CASCADE' }),
+    (0, typeorm_1.JoinColumn)({ name: 'doctorId' }),
+    __metadata("design:type", users_entity_1.User)
+], Appointment.prototype, "doctor", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Appointment.prototype, "doctorId", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)

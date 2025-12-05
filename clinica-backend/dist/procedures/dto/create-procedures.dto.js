@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateProcedureDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
-const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class CreateProcedureDto {
     treatmentId;
@@ -34,9 +33,9 @@ __decorate([
         example: '2025-08-21',
     }),
     (0, class_validator_1.IsNotEmpty)({ message: 'La fecha de pago es requerida' }),
-    (0, class_validator_1.IsDate)({ message: 'La fecha del procedimiento debe ser una fecha válida' }),
-    (0, class_transformer_1.Type)(() => Date),
-    __metadata("design:type", Date)
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(/^\d{4}-\d{2}-\d{2}$/, { message: 'La fecha debe tener el formato YYYY-MM-DD' }),
+    __metadata("design:type", String)
 ], CreateProcedureDto.prototype, "date", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),

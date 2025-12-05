@@ -2,6 +2,7 @@ import { MedicalRecord } from './medical_record.entity';
 import { Repository } from 'typeorm';
 import { CreateMedicalRecordDto } from './dto/create-medical_record.dto';
 import { Patient } from 'src/patients/patient.entity';
+import { UpdateMedicalRecordDto } from './dto/update-medical_record.dto';
 export declare class MedicalRecordService {
     private medicalRecordRepository;
     private patientRepository;
@@ -9,4 +10,5 @@ export declare class MedicalRecordService {
     create(createMedicalRecordDto: CreateMedicalRecordDto): Promise<MedicalRecord>;
     findOne(id: string): Promise<MedicalRecord>;
     findAll(): Promise<MedicalRecord[]>;
+    update(id: string, updateMedicalRecordDto: UpdateMedicalRecordDto): Promise<MedicalRecord>;
 }

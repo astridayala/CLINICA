@@ -10,8 +10,7 @@ export default function Layout() {
      * Función para cerrar la sesión (Logout).
      */
     const handleSignOut = () => {
-        // 1. Eliminar la clave del token del almacenamiento local
-        // ¡Debe coincidir con la clave que guardamos en LogIn.jsx!
+        // 1. Eliminar el token de acceso del almacenamiento local
         localStorage.removeItem('accessToken'); 
         
         // 2. Redirigir al usuario a la ruta de login ('/')

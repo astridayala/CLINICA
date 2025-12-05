@@ -5,7 +5,7 @@ import api from "../scripts/axiosConfig";
 export default function CreatePatientModal({ isOpen, onClose, onSave }) {
   const [formData, setFormData] = useState({
     name: "",
-    lastname: "", // En el form usamos 'lastname', pero al enviar lo cambiaremos a 'lastName'
+    lastname: "", 
     phone: "",
     email: "",
     birthDate: "",
@@ -33,28 +33,24 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Validaciones del frontend (rápidas)
+  // Validaciones del frontend
   const validateForm = () => {
-    const { name, lastname, birthDate, gender, email, phone } = formData;
+    const { name, lastname, birthDate, gender, email } = formData;
 
     if (!name.trim()) return "El nombre es requerido.";
     if (!lastname.trim()) return "El apellido es requerido.";
     if (!birthDate.trim()) return "La fecha de nacimiento es requerida.";
     if (!gender.trim()) return "El género es requerido.";
-
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!email.trim()) {
+        return "El correo electrónico es requerido.";
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return "El email no es válido.";
     }
-
-    if (phone && !/^\+\(503\)\s\d{8}$/.test(phone)) {
-        return "El celular debe ser válido de El Salvador +(503) XXXXXXXX.";
-    }
-
     return null; 
   };
 
-  // --- CONEXIÓN CON BACKEND ---
-  const handleSubmit = async (e) => { // ⬅️ Ahora es async
+  const handleSubmit = async (e) => { 
     e.preventDefault();
     const error = validateForm();
 
@@ -64,28 +60,23 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
     }
 
     try {
-        // 1. Preparamos el payload para que coincida con el DTO del Backend
         const payload = {
             name: formData.name,
-            lastName: formData.lastname, // Backend espera "lastName" (camelCase)
+            lastName: formData.lastname,
             phone: formData.phone,
-            email: formData.email || undefined, // Si está vacío, enviamos undefined
-            birthDate: formData.birthDate, // "YYYY-MM-DD" funciona bien con el backend
+            email: formData.email,
+            birthDate: formData.birthDate,
             gender: formData.gender,
             address: formData.address || undefined
         };
 
-        // 2. Enviamos al Backend
         const response = await api.post('/patients', payload);
         const newPatient = response.data;
 
-        // 3. Notificamos al padre y mostramos éxito
-        // Mapeamos de regreso lastName a lastname para que el frontend no se rompa
         onSave({ ...newPatient, lastname: newPatient.lastName });
         
         setNotification({ type: "success", message: "Paciente creado correctamente" });
 
-        // Limpiar formulario
         setFormData({
             name: "",
             lastname: "",
@@ -96,14 +87,12 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
             address: "",
         });
 
-        // Cerrar modal
         setTimeout(() => {
             onClose();
         }, 1200);
 
     } catch (err) {
         console.error(err);
-        // Manejo de errores del backend
         const msg = err.response?.data?.message;
         const displayMsg = Array.isArray(msg) ? msg[0] : (msg || 'Error al crear paciente');
         setNotification({ type: "error", message: displayMsg });
@@ -112,7 +101,6 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
 
   return (
     <>
-      {/* MODAL */}
       <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/10 backdrop-brightness-90">
         <div
           ref={modalRef}
@@ -123,6 +111,7 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Fila 1: Nombres y Apellidos */}
             <div className="flex gap-3">
               <div className="w-1/2">
                 <label className="block mb-2 text-sm font-medium">Nombres <span className="text-red-600">*</span>:</label>
@@ -150,6 +139,7 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
               </div>
             </div>
 
+            {/* Fila 2: Fecha y Género */}
             <div className="flex gap-3">
               <div className="w-1/2">
                 <label className="block mb-2 text-sm font-medium">Fecha de nacimiento<span className="text-red-600">*</span>:</label>
@@ -180,21 +170,21 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
               </div>
             </div>
 
+            {/* Fila 3: Celular y Correo */}
             <div className="flex gap-3">
               <div className="w-1/2">
-                <label className="block mb-2 text-sm font-medium">Celular<span className="text-red-600">*</span>:</label>
+                <label className="block mb-2 text-sm font-medium">Celular:</label>
                 <input
                   type="text"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="+(503) XXXXXXXX"
+                  placeholder="Celular (Opcional)"
                   className="w-full border rounded px-3 py-2 text-sm"
-                  required
                 />
               </div>
               <div className="w-1/2">
-                <label className="block mb-2 text-sm font-medium">Correo Electrónico:</label>
+                <label className="block mb-2 text-sm font-medium">Correo Electrónico <span className="text-red-600">*</span>:</label>
                 <input
                   type="email"
                   name="email"
@@ -202,10 +192,12 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full border rounded px-3 py-2 text-sm"
+                  required 
                 />
               </div>
             </div>
 
+            {/* Fila 4: Dirección */}
             <div>
               <label className="block mb-2 text-sm font-medium">Dirección:</label>
               <textarea
@@ -237,7 +229,6 @@ export default function CreatePatientModal({ isOpen, onClose, onSave }) {
         </div>
       </div>
 
-      {/* NOTIFICACIÓN */}
       {notification && (
         <NotificationModal
           type={notification.type}

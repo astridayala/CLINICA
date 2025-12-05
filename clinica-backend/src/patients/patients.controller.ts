@@ -1,9 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
+import { UpdatePatientDto } from './dto/update-patient.dto';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/users/users.entity';
 
 /**
  * Controlador de pacientes
@@ -17,6 +20,17 @@ export class PatientsController {
     constructor(private readonly patientsService: PatientsService) {}
 
     /**
+     * Obtiene todos los pacientes
+     * @returns Lista de todos los pacientes
+     */
+    @Get()
+    @ApiOperation({ summary: 'Obtener todos los pacientes' })
+    @ApiResponse({ status: 200, description: 'Lista de pacientes obtenida exitosamente' })
+    findAll(@GetUser() user:User) {
+        return this.patientsService.findAll(user);
+    }
+
+    /**
      * Crea un nuevo paciente
      * @param createPatientDto - Datos del paciente a crear
      * @returns El paciente creado
@@ -24,19 +38,8 @@ export class PatientsController {
     @Post()
     @ApiOperation({ summary: 'Crear un nuevo paciente' })
     @ApiResponse({ status: 201, description: 'Paciente creado existosamente' })
-    create(@Body() createPatientDto: CreatePatientDto) {
-        return this.patientsService.create(createPatientDto);
-    }
-
-    /**
-     * Obtiene todos los pacientes
-     * @returns Lista de todos los pacientes
-     */
-    @Get()
-    @ApiOperation({ summary: 'Obtener todos los pacientes' })
-    @ApiResponse({ status: 200, description: 'Lista de pacientes obtenida exitosamente' })
-    findAll() {
-        return this.patientsService.findAll();
+    create(@Body() createPatientDto: CreatePatientDto, @GetUser() user:User) {
+        return this.patientsService.create(createPatientDto, user);
     }
 
     /**
@@ -48,7 +51,28 @@ export class PatientsController {
     @ApiOperation({ summary: 'Obtener un paciente por ID' })
     @ApiResponse({ status: 200, description: 'Paciente obtenido exitosamente' })
     @ApiResponse({ status: 404, description: 'Paciente no encontrado' })
-    findOne(@Param('id') id: string) {
-        return this.patientsService.findOne(id)
+    findOne(
+        @Param('id', ParseUUIDPipe) id: string, // Valida que sea un UUID válido
+        @GetUser() user: User,
+    ) {
+        return this.patientsService.findOne(id, user);
+    }
+
+    @Patch(':id')
+    @ApiResponse({ status: 200, description: 'Paciente actualizado exitosamente' })
+    @ApiResponse({ status: 404, description: 'Paciente no encontrado' })    
+    update(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() updatePatientDto: UpdatePatientDto,
+        @GetUser() user: User,
+    ) {
+        return this.patientsService.update(id, updatePatientDto, user);
+    }
+
+    @Delete(':id')
+    @ApiResponse({ status: 200, description: 'Paciente eliminado exitosamente' })
+    @ApiResponse({ status: 404, description: 'Paciente no encontrado' })
+    remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.patientsService.remove(id);
     }
 }

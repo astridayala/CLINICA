@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import NotificationModal from "./NotificationModal";
-import api from "../scripts/axiosConfig"; // Asegúrate de que esta ruta sea correcta
+import api from "../scripts/axiosConfig";
 
 export default function CreateConditionModal({ medicalRecordId,existingConditions = [], onClose, onSave }) {
   const [conditionsList, setConditionsList] = useState([]);
@@ -14,9 +14,6 @@ export default function CreateConditionModal({ medicalRecordId,existingCondition
     const fetchConditions = async () => {
       try {
         const response = await api.get('/conditions');
-        
-        // Mapeamos la respuesta para react-select
-        // Value se queda tal cual (UUID string)
         const options = response.data.map(c => ({
           value: c.id,
           label: c.name
@@ -49,7 +46,6 @@ export default function CreateConditionModal({ medicalRecordId,existingCondition
     setIsSaving(true);
 
     try {
-      // CORRECCIÓN: Enviamos los IDs directos (UUIDs son strings), NO usamos Number()
       const payload = {
         medicalRecordId: medicalRecordId,
         conditionId: selectedCondition.value
@@ -57,10 +53,8 @@ export default function CreateConditionModal({ medicalRecordId,existingCondition
 
       console.log("Enviando payload:", payload);
 
-      // Hacemos la petición POST
+      // Petición POST
       await api.post('/medical-record-conditions', payload);
-
-      // Actualizamos la vista del padre visualmente
       onSave(selectedCondition.label);
       
       showNotification("success", "Padecimiento agregado correctamente");
@@ -71,13 +65,10 @@ export default function CreateConditionModal({ medicalRecordId,existingCondition
 
     } catch (error) {
       console.error("Error al guardar la condición:", error);
-
-      // Intentamos obtener el mensaje específico del error "Bad Request"
       let errorMsg = "Error al guardar el padecimiento";
       if (error.response && error.response.data && error.response.data.message) {
-         const serverMsg = error.response.data.message;
-         // Si el servidor devuelve un array de errores, mostramos el primero
-         errorMsg = Array.isArray(serverMsg) ? serverMsg[0] : serverMsg;
+        const serverMsg = error.response.data.message;
+        errorMsg = Array.isArray(serverMsg) ? serverMsg[0] : serverMsg;
       }
 
       showNotification("error", errorMsg);

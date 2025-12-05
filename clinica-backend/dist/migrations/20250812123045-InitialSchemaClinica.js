@@ -39,7 +39,8 @@ class InitialSchemaClinica20250812123045 {
         await queryRunner.query(`
       CREATE TABLE "medical_record" (
         "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-        "createdAt" TIMESTAMP NOT NULL DEFAULT now()
+        "notes" TEXT, 
+        "created_at" TIMESTAMP NOT NULL DEFAULT now()
       );
     `);
         await queryRunner.query(`
@@ -53,8 +54,23 @@ class InitialSchemaClinica20250812123045 {
         "gender" "patient_gender_enum" NOT NULL,
         "address" TEXT,
         "medicalRecordId" uuid UNIQUE,
-        "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
-        CONSTRAINT "FK_patient_medicalRecord" FOREIGN KEY ("medicalRecordId") REFERENCES "medical_record" ("id") ON DELETE CASCADE
+        "doctorId" uuid,
+        "created_at" TIMESTAMP NOT NULL DEFAULT now(),
+        CONSTRAINT "FK_patient_medicalRecord" FOREIGN KEY ("medicalRecordId") REFERENCES "medical_record" ("id") ON DELETE CASCADE,
+        CONSTRAINT "FK_patient_user" FOREIGN KEY ("doctorId") REFERENCES "user" ("id") ON DELETE CASCADE
+      );
+    `);
+        await queryRunner.query(`
+      CREATE TABLE "appointment" (
+        "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+        "patient_id" uuid,
+        "start" TIMESTAMP NOT NULL,
+        "end" TIMESTAMP NOT NULL,
+        "notes" VARCHAR,
+        "doctorId" uuid,
+        "created_at" TIMESTAMP NOT NULL DEFAULT now(),
+        CONSTRAINT "FK_appointment_patient" FOREIGN KEY ("patient_id") REFERENCES "patient" ("id") ON DELETE CASCADE,
+        CONSTRAINT "FK_appointment_user" FOREIGN KEY ("doctorId") REFERENCES "user" ("id") ON DELETE CASCADE
       );
     `);
         await queryRunner.query(`
@@ -72,9 +88,8 @@ class InitialSchemaClinica20250812123045 {
         "medical_record_id" uuid NOT NULL,
         "treatment_type_id" uuid NOT NULL,
         "totalPrice" DECIMAL(10,2) NOT NULL,
-        "startDate" DATE NOT NULL,
         "status_id" uuid NOT NULL,
-        "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
+        "created_at" TIMESTAMP NOT NULL DEFAULT now(),
         CONSTRAINT "FK_treatment_medical_record" FOREIGN KEY ("medical_record_id") REFERENCES "medical_record" ("id") ON DELETE CASCADE,
         CONSTRAINT "FK_treatment_type" FOREIGN KEY ("treatment_type_id") REFERENCES "treatment_type" ("id"),
         CONSTRAINT "FK_treatment_status" FOREIGN KEY ("status_id") REFERENCES "treatment_status" ("id")
@@ -86,7 +101,7 @@ class InitialSchemaClinica20250812123045 {
         "treatment_id" uuid NOT NULL,
         "date" DATE NOT NULL,
         "description" TEXT NOT NULL,
-        "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
+        "created_at" TIMESTAMP NOT NULL DEFAULT now(),
         CONSTRAINT "FK_procedure_treatment" FOREIGN KEY ("treatment_id") REFERENCES "treatment" ("id") ON DELETE CASCADE
       );
     `);
@@ -96,7 +111,7 @@ class InitialSchemaClinica20250812123045 {
         "procedure_id" uuid UNIQUE,
         "date" DATE NOT NULL,
         "amount" DECIMAL(10,2) NOT NULL,
-        "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
+        "created_at" TIMESTAMP NOT NULL DEFAULT now(),
         CONSTRAINT "FK_payment_procedure" FOREIGN KEY ("procedure_id") REFERENCES "procedure" ("id") ON DELETE CASCADE
       );
     `);
@@ -105,22 +120,26 @@ class InitialSchemaClinica20250812123045 {
         await queryRunner.query(`CREATE INDEX "IDX_patient_name" ON "patient" ("name");`);
         await queryRunner.query(`CREATE INDEX "IDX_patient_lastName" ON "patient" ("lastName");`);
         await queryRunner.query(`CREATE INDEX "IDX_patient_email" ON "patient" ("email");`);
-        await queryRunner.query(`CREATE INDEX "IDX_patient_createdAt" ON "patient" ("createdAt");`);
+        await queryRunner.query(`CREATE INDEX "IDX_patient_created_at" ON "patient" ("created_at");`);
         await queryRunner.query(`CREATE INDEX "IDX_treatment_status" ON "treatment" ("status_id");`);
-        await queryRunner.query(`CREATE INDEX "IDX_treatment_startDate" ON "treatment" ("startDate");`);
-        await queryRunner.query(`CREATE INDEX "IDX_treatment_createdAt" ON "treatment" ("createdAt");`);
+        await queryRunner.query(`CREATE INDEX "IDX_treatment_created_at" ON "treatment" ("created_at");`);
         await queryRunner.query(`CREATE INDEX "IDX_procedure_date" ON "procedure" ("date");`);
-        await queryRunner.query(`CREATE INDEX "IDX_procedure_createdAt" ON "procedure" ("createdAt");`);
+        await queryRunner.query(`CREATE INDEX "IDX_procedure_created_at" ON "procedure" ("created_at");`);
         await queryRunner.query(`CREATE INDEX "IDX_payment_date" ON "payment" ("date");`);
+        await queryRunner.query(`CREATE INDEX "IDX_appointment_start" ON "appointment" ("start");`);
+        await queryRunner.query(`CREATE INDEX "IDX_appointment_doctor" ON "appointment" ("doctorId");`);
+        await queryRunner.query(`CREATE INDEX "IDX_appointment_patient" ON "appointment" ("patient_id");`);
     }
     async down(queryRunner) {
+        await queryRunner.query(`DROP INDEX IF EXISTS "IDX_appointment_patient";`);
+        await queryRunner.query(`DROP INDEX IF EXISTS "IDX_appointment_doctor";`);
+        await queryRunner.query(`DROP INDEX IF EXISTS "IDX_appointment_start";`);
         await queryRunner.query(`DROP INDEX IF EXISTS "IDX_payment_date";`);
-        await queryRunner.query(`DROP INDEX IF EXISTS "IDX_procedure_createdAt";`);
+        await queryRunner.query(`DROP INDEX IF EXISTS "IDX_procedure_created_at";`);
         await queryRunner.query(`DROP INDEX IF EXISTS "IDX_procedure_date";`);
-        await queryRunner.query(`DROP INDEX IF EXISTS "IDX_treatment_createdAt";`);
-        await queryRunner.query(`DROP INDEX IF EXISTS "IDX_treatment_startDate";`);
+        await queryRunner.query(`DROP INDEX IF EXISTS "IDX_treatment_created_at";`);
         await queryRunner.query(`DROP INDEX IF EXISTS "IDX_treatment_status";`);
-        await queryRunner.query(`DROP INDEX IF EXISTS "IDX_patient_createdAt";`);
+        await queryRunner.query(`DROP INDEX IF EXISTS "IDX_patient_created_at";`);
         await queryRunner.query(`DROP INDEX IF EXISTS "IDX_patient_email";`);
         await queryRunner.query(`DROP INDEX IF EXISTS "IDX_patient_lastName";`);
         await queryRunner.query(`DROP INDEX IF EXISTS "IDX_patient_name";`);
@@ -130,6 +149,7 @@ class InitialSchemaClinica20250812123045 {
         await queryRunner.query(`DROP TABLE "procedure";`);
         await queryRunner.query(`DROP TABLE "treatment";`);
         await queryRunner.query(`DROP TABLE "medical_record_condition";`);
+        await queryRunner.query(`DROP TABLE "appointment";`);
         await queryRunner.query(`DROP TABLE "patient";`);
         await queryRunner.query(`DROP TABLE "medical_record";`);
         await queryRunner.query(`DROP TABLE "treatment_type";`);

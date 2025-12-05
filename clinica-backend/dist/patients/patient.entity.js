@@ -13,6 +13,7 @@ exports.Patient = void 0;
 const typeorm_1 = require("typeorm");
 const medical_record_entity_1 = require("../medical_record/medical_record.entity");
 const appointments_entity_1 = require("../appointments/appointments.entity");
+const users_entity_1 = require("../users/users.entity");
 let Patient = class Patient {
     id;
     name;
@@ -24,6 +25,8 @@ let Patient = class Patient {
     address;
     medicalRecord;
     appointments;
+    doctor;
+    doctorId;
     createdAt;
 };
 exports.Patient = Patient;
@@ -67,9 +70,17 @@ __decorate([
     __metadata("design:type", medical_record_entity_1.MedicalRecord)
 ], Patient.prototype, "medicalRecord", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => appointments_entity_1.Appointment, appointment => appointment.patient),
+    (0, typeorm_1.OneToMany)(() => appointments_entity_1.Appointment, appointment => appointment.patient, { cascade: true }),
     __metadata("design:type", Array)
 ], Patient.prototype, "appointments", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => users_entity_1.User, (user) => user.patients, { eager: false, onDelete: 'CASCADE' }),
+    __metadata("design:type", users_entity_1.User)
+], Patient.prototype, "doctor", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Patient.prototype, "doctorId", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)

@@ -7,11 +7,16 @@ const swagger_1 = require("@nestjs/swagger");
 const path_1 = require("path");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
-    app.enableCors();
+    app.enableCors({
+        origin: 'http://localhost:5173',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        credentials: true,
+    });
     app.useGlobalPipes(new common_1.ValidationPipe({
         transform: true,
         whitelist: true,
         forbidNonWhitelisted: true,
+        disableErrorMessages: false,
     }));
     app.useStaticAssets((0, path_1.join)(__dirname, '..', 'public'));
     const config = new swagger_1.DocumentBuilder()

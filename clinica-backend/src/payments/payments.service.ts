@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Payment } from './payment.entity';
 import { Repository } from 'typeorm';
 import { CreatePaymentsDto } from './dto/create-payments.dto';
+import { Procedure } from 'src/procedures/procedure.entity';
 
 /**
  * Servicio para gestionar los pagos
@@ -12,7 +13,10 @@ import { CreatePaymentsDto } from './dto/create-payments.dto';
 export class PaymentsService {
     constructor(
         @InjectRepository(Payment)
-        private paymentsRepository: Repository<Payment>
+        private paymentsRepository: Repository<Payment>,
+
+        @InjectRepository(Procedure)
+    private proceduresRepository: Repository<Procedure>,
     ) {}
 
     /**
@@ -23,25 +27,22 @@ export class PaymentsService {
     async create(createPaymentsDto: CreatePaymentsDto): Promise<Payment> {
         const { procedureId, date, amount } = createPaymentsDto;
 
-        const [year, month, day] = date.split('/').map(Number);
-
-        if (
-            isNaN(year) || isNaN(month) || isNaN(day) ||
-            year < 1900 || month < 1 || month > 12 || day < 1 || day > 31
-        ) {
-            throw new Error('La fecha contiene valores inválidos');
-        }
-
-        const paymentDate = new Date(year, month - 1, day);
-
-        const newPayment = this.paymentsRepository.create({
-            date: paymentDate,
-            amount,
-            procedure: { id: procedureId }
+        const procedure = await this.proceduresRepository.findOne({
+            where: { id: procedureId },
         });
 
-        return this.paymentsRepository.save(newPayment);
-}
+        if (!procedure) {
+        throw new NotFoundException('El procedimiento no existe');
+        }
+
+        const payment = this.paymentsRepository.create({
+            date: date, 
+            amount: amount,
+            procedure: procedure,
+        });
+
+        return await this.paymentsRepository.save(payment);
+    }
     
 
     /**

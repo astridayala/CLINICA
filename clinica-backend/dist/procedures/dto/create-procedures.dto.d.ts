@@ -1,5 +1,5 @@
 export declare class CreateProcedureDto {
     treatmentId: string;
-    date: Date;
+    date: string;
     description?: string;
 }

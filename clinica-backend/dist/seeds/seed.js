@@ -1,46 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const bcrypt = require("bcrypt");
 const data_source_1 = require("../data_source/data_source");
-const users_entity_1 = require("../users/users.entity");
 const condition_entity_1 = require("../conditions/condition.entity");
 const treatment_type_entity_1 = require("../treatments_types/treatment_type.entity");
 const treatment_status_entity_1 = require("../treatment_statuses/treatment_status.entity");
-const patient_entity_1 = require("../patients/patient.entity");
 async function main() {
     console.log('Iniciando proceso de seeding...');
     try {
         await data_source_1.default.initialize();
         console.log('Conexión a la base de datos establecida');
-        const adminPassword = await bcrypt.hash('astri10', 10);
-        const doctorPassword = await bcrypt.hash('gus712026', 10);
-        console.log('Creando usuarios iniciales...');
-        await data_source_1.default.getRepository(users_entity_1.User).save([
-            {
-                name: 'Astrid Ayala',
-                email: 'astriayala06@gmail.com',
-                password: adminPassword,
-                role: 'admin',
-            },
-            {
-                name: 'Gustavo Ayala',
-                email: 'gustavo.ayala2200@gmail.com',
-                password: doctorPassword,
-                role: 'doctor',
-            }
-        ]);
-        console.log('Usuarios creados');
-        console.log('Creando paciente...');
-        await data_source_1.default.getRepository(patient_entity_1.Patient).save({
-            name: 'Astrid Violeta',
-            lastName: 'Ayala Ayala',
-            phone: '+50323568953',
-            email: 'astriayala06@gmail.com',
-            birthDate: new Date('2004-10-06'),
-            gender: 'femenino',
-            address: 'B° Morazán, Calle Zeledón, Cuyultitán, La Paz Oeste, La Paz'
-        });
-        console.log('Paciente creado');
         console.log('Creando condiciones...');
         await data_source_1.default.getRepository(condition_entity_1.Condition).save([
             { name: 'Diabetes' },

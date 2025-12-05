@@ -10,7 +10,6 @@ import { CreateTreatmentStatusDto } from './dto/create-treatment_statuses.dto';
 @ApiBearerAuth()
 @Controller('treatment-statuses')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('admin')
 export class TreatmentStatusesController {
     constructor(private readonly treatmentStatusesService: TreatmentStatusesService) {}
 

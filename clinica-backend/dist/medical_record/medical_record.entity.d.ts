@@ -4,6 +4,7 @@ import { Treatment } from "src/treatments/treatment.entity";
 export declare class MedicalRecord {
     id: string;
     patient: Patient;
+    notes: string;
     conditions: MedicalRecordCondition[];
     treatments: Treatment[];
     createdAt: Date;

@@ -28,10 +28,10 @@ __decorate([
     __metadata("design:type", String)
 ], CreatePaymentsDto.prototype, "procedureId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '2025/09/14', description: 'Fecha del pago en formato YYYY/MM/DD' }),
+    (0, swagger_1.ApiProperty)({ example: '2025-09-14', description: 'Fecha del pago en formato YYYY-MM-DD' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'La fecha es requerida' }),
-    (0, class_validator_1.Matches)(/^\d{4}\/\d{2}\/\d{2}$/, {
-        message: 'La fecha debe tener el formato YYYY/MM/DD',
+    (0, class_validator_1.Matches)(/^\d{4}-\d{2}-\d{2}$/, {
+        message: 'La fecha debe tener el formato YYYY-MM-DD',
     }),
     __metadata("design:type", String)
 ], CreatePaymentsDto.prototype, "date", void 0);

@@ -1,6 +1,6 @@
 export declare class CreateAppointmentsDto {
     patientId: string;
-    start: Date;
-    end: Date;
+    start: string;
+    end: string;
     description?: string;
 }

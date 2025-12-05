@@ -45,9 +45,15 @@ let TreatmentsService = class TreatmentsService {
         return await this.treatmentRepository.find({
             relations: [
                 'medicalRecord',
-                'treatmentType'
+                'treatmentType',
+                'status',
             ],
-            order: { createdAt: 'DESC' },
+            order: {
+                status: {
+                    orderPriority: 'ASC'
+                },
+                createdAt: 'DESC'
+            },
         });
     }
     async findOne(id) {
@@ -57,7 +63,8 @@ let TreatmentsService = class TreatmentsService {
                 'medicalRecord',
                 'treatmentType',
                 'procedures',
-                'procedures.payment'
+                'procedures.payment',
+                'status',
             ],
         });
         if (!treatment) {
@@ -71,6 +78,19 @@ let TreatmentsService = class TreatmentsService {
             throw new common_1.NotFoundException(`El tratamiento con id ${id} no existe`);
         }
         return { message: `El tratamiento con id ${id} fue eliminado correctamente` };
+    }
+    async update(id, updateTreatmentDto) {
+        const treatment = await this.findOne(id);
+        if (updateTreatmentDto.statusId) {
+            const newStatus = await this.treatmentStatusRepository.findOne({
+                where: { id: updateTreatmentDto.statusId }
+            });
+            if (!newStatus) {
+                throw new common_1.NotFoundException(`El estado con id ${updateTreatmentDto.statusId} no existe`);
+            }
+            treatment.status = newStatus;
+        }
+        return this.treatmentRepository.save(treatment);
     }
 };
 exports.TreatmentsService = TreatmentsService;

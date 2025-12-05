@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MedicalRecordCondition } from './medical_record_condition.entity';
 import { Repository } from 'typeorm';
@@ -23,6 +23,17 @@ export class MedicalRecordConditionsService {
     async create(createMedicalRecordConditionDto: CreateMedicalRecordConditionDto): Promise<MedicalRecordCondition> {
         const { medicalRecordId, conditionId } = createMedicalRecordConditionDto;
 
+        const existing = await this.medicalRecordConditionRepository.findOne({
+            where: {
+                medicalRecord: { id: medicalRecordId },
+                condition: { id: conditionId }
+            }
+        });
+
+        if (existing) {
+            throw new ConflictException('Este padecimiento ya está registrado en el historial del paciente');
+        }
+        
         const newMedicalRecordCondition = this.medicalRecordConditionRepository.create({
             medicalRecord: { id: medicalRecordId },
             condition: { id: conditionId },

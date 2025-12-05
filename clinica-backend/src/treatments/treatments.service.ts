@@ -4,6 +4,7 @@ import { Treatment } from './treatment.entity';
 import { Repository } from 'typeorm';
 import { CreateTreatmentDto } from './dto/create-treatment.dto';
 import { TreatmentStatus } from 'src/treatment_statuses/treatment_status.entity';
+import { UpdateTreatmentDto } from './dto/update-treatment.dto';
 
 /**
  * Servicio para gestionar los tratamientos de los pacientes
@@ -53,9 +54,15 @@ export class TreatmentsService {
         return await this.treatmentRepository.find({
             relations: [
                 'medicalRecord',
-                'treatmentType'
+                'treatmentType',
+                'status',
             ],
-            order: { createdAt: 'DESC' },
+            order: { 
+                status: {
+                    orderPriority: 'ASC'
+                },
+                createdAt: 'DESC' 
+            },
         });
     }
 
@@ -71,7 +78,8 @@ export class TreatmentsService {
                 'medicalRecord',
                 'treatmentType',
                 'procedures',
-                'procedures.payment'
+                'procedures.payment',
+                'status',
             ],
         });
 
@@ -95,5 +103,25 @@ export class TreatmentsService {
         }
 
         return { message: `El tratamiento con id ${id} fue eliminado correctamente` }
+    }
+
+    /**
+     * Actualiza un tratamiento (ej. cambiar estado)
+     */
+    async update(id: string, updateTreatmentDto: UpdateTreatmentDto): Promise<Treatment> {
+        const treatment = await this.findOne(id); 
+
+        if (updateTreatmentDto.statusId) {
+            const newStatus = await this.treatmentStatusRepository.findOne({
+                where: { id: updateTreatmentDto.statusId }
+            });
+
+            if (!newStatus) {
+                throw new NotFoundException(`El estado con id ${updateTreatmentDto.statusId} no existe`);
+            }
+            
+            treatment.status = newStatus;
+        }        
+        return this.treatmentRepository.save(treatment);
     }
 }

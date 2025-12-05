@@ -8,11 +8,10 @@ export default function NotificationModal({ type, message, onClose }) {
     const timer = setTimeout(() => {
       setVisible(false);
       onClose?.(); 
-    }, 1000); // Duración de la notificación en ms
+    }, 1000); 
     return () => clearTimeout(timer);
   }, [message, onClose]);
 
-  // Icono según tipo
   const icon = type === 'success'
     ? (
       <svg className="w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,7 +24,6 @@ export default function NotificationModal({ type, message, onClose }) {
       </svg>
     );
 
-  // Color del fondo según tipo
   const bgColor = type === 'success' ? 'bg-green-100 border-green-500' : 'bg-red-100 border-red-500';
 
   return (

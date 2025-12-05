@@ -14,6 +14,7 @@ const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class CreateMedicalRecordDto {
     patientId;
+    notes;
 }
 exports.CreateMedicalRecordDto = CreateMedicalRecordDto;
 __decorate([
@@ -24,4 +25,14 @@ __decorate([
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], CreateMedicalRecordDto.prototype, "patientId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Notas adicionales del historial médico',
+        example: 'Paciente con antecedentes de alergia a la penicilina...',
+        required: false
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateMedicalRecordDto.prototype, "notes", void 0);
 //# sourceMappingURL=create-medical_record.dto.js.map

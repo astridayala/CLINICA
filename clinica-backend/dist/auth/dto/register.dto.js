@@ -16,6 +16,7 @@ class RegisterDto {
     email;
     name;
     password;
+    role;
 }
 exports.RegisterDto = RegisterDto;
 __decorate([
@@ -37,4 +38,10 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'La contraseña es requerida' }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "password", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'admin', description: 'Rol del usuario (admin o doctor)' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'El rol es requerido' }),
+    (0, class_validator_1.IsEnum)(['admin', 'doctor'], { message: 'El rol debe ser admin o doctor' }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "role", void 0);
 //# sourceMappingURL=register.dto.js.map

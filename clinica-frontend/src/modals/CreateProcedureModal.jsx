@@ -1,33 +1,31 @@
 import React, { useState } from "react";
 import NotificationModal from "./NotificationModal";
-import api from "../scripts/axiosConfig"; // ⬅️ Importamos axios
+import api from "../scripts/axiosConfig";
 
 export default function CreateProcedureModal({ treatmentId, onClose, onSave }) {
   const [procedureName, setProcedureName] = useState("");
   const [paymentAmount, setPaymentAmount] = useState("");
   
-  // Estado para manejar la carga y notificaciones
   const [isSaving, setIsSaving] = useState(false);
   const [notification, setNotification] = useState({ show: false, type: "", message: "" });
 
-  // Función auxiliar para formatear fecha a YYYY/MM/DD (Requerido por tu DTO de Pagos)
-  const formatDateForPayment = (dateObj) => {
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getDate()).padStart(2, '0');
-    return `${year}/${month}/${day}`;
+  // Función para obtener la fecha local EXACTA
+  const getLocalDateString = () => {
+    const localDate = new Date();
+    const year = localDate.getFullYear();
+    const month = String(localDate.getMonth() + 1).padStart(2, '0');
+    const day = String(localDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   const showNotification = (type, message) => {
     setNotification({ show: true, type, message });
-    // Si es error cerramos la notificación rápido, si es éxito esperamos al cierre del modal
     if (type === 'error') {
         setTimeout(() => setNotification({ show: false, type: "", message: "" }), 2500);
     }
   };
 
   const handleSave = async () => {
-    // 1. Validaciones básicas
     if (!procedureName.trim() || !paymentAmount) {
       showNotification("error", "Debes ingresar una descripción y un abono");
       return;
@@ -41,13 +39,12 @@ export default function CreateProcedureModal({ treatmentId, onClose, onSave }) {
     setIsSaving(true);
 
     try {
-      const today = new Date();
+      const todayString = getLocalDateString();
 
       // --- PASO 1: Crear el Procedimiento ---
-      // Tu Backend espera: treatmentId, date (Date obj), description
       const procedurePayload = {
         treatmentId: treatmentId,
-        date: today, 
+        date: todayString, 
         description: procedureName
       };
 
@@ -55,24 +52,21 @@ export default function CreateProcedureModal({ treatmentId, onClose, onSave }) {
       const createdProcedure = procResponse.data;
 
       // --- PASO 2: Crear el Pago asociado ---
-      // Tu Backend espera: procedureId, date (String YYYY/MM/DD), amount (number)
       const paymentPayload = {
         procedureId: createdProcedure.id,
-        date: formatDateForPayment(today),
+        date: todayString,
         amount: parseFloat(paymentAmount)
       };
 
       const payResponse = await api.post('/payments', paymentPayload);
       const createdPayment = payResponse.data;
 
-      // --- PASO 3: Actualizar la vista ---
-      // Construimos el objeto completo para que la tabla lo lea sin recargar
-      // Nota: Tu backend ahora usa relación 1 a 1 ("payment" singular)
+      // --- PASO 3: Actualizar vista ---
       const fullData = {
         ...createdProcedure,
-        payment: createdPayment, // Adjuntamos el pago recién creado
-        // Mapeo extra para compatibilidad con la tabla si fuera necesario:
-        proc: createdProcedure.description // La tabla a veces usa .proc o .description
+        date: todayString,
+        payment: createdPayment, 
+        proc: createdProcedure.description 
       };
 
       onSave(fullData);
@@ -85,10 +79,8 @@ export default function CreateProcedureModal({ treatmentId, onClose, onSave }) {
 
     } catch (error) {
       console.error("Error al guardar:", error);
-      // Intentamos leer el mensaje de error del backend (class-validator)
       const msg = error.response?.data?.message;
       const displayMsg = Array.isArray(msg) ? msg[0] : (msg || "Error al guardar el procedimiento");
-      
       showNotification("error", displayMsg);
     } finally {
       setIsSaving(false);

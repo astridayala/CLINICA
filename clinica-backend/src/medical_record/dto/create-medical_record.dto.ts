@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsUUID } from "class-validator";
+import { IsOptional, IsString, IsUUID } from "class-validator";
 
 /**
  * DTO para la creación de historiales medicos
@@ -12,4 +12,13 @@ export class CreateMedicalRecordDto {
     })
     @IsUUID()
     patientId: string;
+
+    @ApiProperty({
+        description: 'Notas adicionales del historial médico',
+        example: 'Paciente con antecedentes de alergia a la penicilina...',
+        required: false
+    })
+    @IsOptional()
+    @IsString()
+    notes?: string;
 }

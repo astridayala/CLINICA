@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateAppointmentsDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
-const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class CreateAppointmentsDto {
     patientId;
@@ -27,29 +26,23 @@ __decorate([
     __metadata("design:type", String)
 ], CreateAppointmentsDto.prototype, "patientId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '2025-09-03 10:00',
-        description: 'Fecha y hora de inicio (YYYY-MM-DD HH:mm, 24h)',
-    }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'La fecha y hora de inicio son obligatorias' }),
-    (0, class_validator_1.Matches)(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La fecha debe tener el formato YYYY-MM-DD HH:mm en 24 horas' }),
-    (0, class_transformer_1.Type)(() => Date),
-    __metadata("design:type", Date)
+    (0, swagger_1.ApiProperty)({ example: '2025-09-03 10:00', description: 'YYYY-MM-DD HH:mm' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'La fecha de inicio es obligatoria' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/, { message: 'El formato debe ser YYYY-MM-DD HH:mm' }),
+    __metadata("design:type", String)
 ], CreateAppointmentsDto.prototype, "start", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '2025-09-03 11:00',
-        description: 'Fecha y hora de fin (YYYY-MM-DD HH:mm, 24h)',
-    }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'La fecha y hora de fin son obligatorias' }),
-    (0, class_validator_1.Matches)(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La fecha debe tener el formato YYYY-MM-DD HH:mm en 24 horas' }),
-    (0, class_transformer_1.Type)(() => Date),
-    __metadata("design:type", Date)
+    (0, swagger_1.ApiProperty)({ example: '2025-09-03 11:00', description: 'YYYY-MM-DD HH:mm' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'La fecha de fin es obligatoria' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/, { message: 'El formato debe ser YYYY-MM-DD HH:mm' }),
+    __metadata("design:type", String)
 ], CreateAppointmentsDto.prototype, "end", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, swagger_1.ApiProperty)({ example: 'Retiro de brackets', description: 'Informacion adicional necesaria' }),
-    (0, class_validator_1.IsString)({ message: 'La dirección debe ser una cadena de texto' }),
+    (0, swagger_1.ApiProperty)({ example: 'Limpieza dental', description: 'Descripción' }),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateAppointmentsDto.prototype, "description", void 0);
 //# sourceMappingURL=appointments.dto.js.map

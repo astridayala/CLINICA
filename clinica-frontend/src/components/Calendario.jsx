@@ -38,8 +38,6 @@ export default function Calendario() {
         const loadedEvents = appointmentsResponse.data.map(app => ({
           id: app.id,
           title: app.patient ? `${app.patient.name} ${app.patient.lastName}` : 'Paciente',
-          // 🔧 AHORA ES SIMPLE: El backend manda "2025-10-20 08:00:00" (sin Z)
-          // El navegador lo entiende como hora local automáticamente.
           start: new Date(app.start),
           end: new Date(app.end),
           description: app.description,
@@ -75,7 +73,7 @@ export default function Calendario() {
   };
 
   return (
-    <div ref={calendarRef} className="h-full p-4 relative">
+    <div ref={calendarRef} className="h-full p-4 relative text-[15px]">
       <Calendar
         localizer={localizer}
         events={events}
@@ -93,7 +91,7 @@ export default function Calendario() {
         components={{
           toolbar: CustomToolbar,
           event: ({ event }) => (
-            <div data-id={event.id} className="cursor-pointer truncate px-1">{event.title}</div>
+            <div data-id={event.id} className="cursor-pointer truncate px-1 text-[14px]">{event.title}</div>
           )
         }}
         min={new Date(2025, 0, 1, 7, 0)}

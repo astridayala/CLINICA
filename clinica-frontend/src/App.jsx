@@ -6,27 +6,32 @@ import LogIn from './pages/LogIn'
 import Agenda from './pages/Agenda'
 import PatientDetail from './pages/PatientDetail'
 import ProtectedRoute from './scripts/ProtectedRoute.jsx'
+import AdminDashboard from './admin/AdminDashboard.jsx' // <--- Importa tu Admin
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 1. Ruta de Acceso Público: LogIn */}
+        {/* RUTA PÚBLICA */}
         <Route path="/" element={<LogIn />} />
           
-          {/* 2. Nivel de Protección: Todas las rutas aquí dentro están protegidas */}
-        <Route element={<ProtectedRoute />}>
-          {/* 3. Nivel de Layout: Aplica el layout a todas las rutas protegidas */}
+        {/* --- ZONA DE DOCTORES --- */}
+        <Route element={<ProtectedRoute allowedRoles={['doctor']} />}>
             <Route element={<Layout />}> 
-            <Route path="/agenda" element={<Agenda />} />
-            <Route path="/clinicalNotes" element={<ClinicalNotes />} />
-            <Route path="/patients/:id" element={<PatientDetail />} />
+                <Route path="/agenda" element={<Agenda />} />
+                <Route path="/clinicalNotes" element={<ClinicalNotes />} />
+                <Route path="/patients/:id" element={<PatientDetail />} />
+            </Route>
         </Route>
 
+        {/* --- ZONA DE ADMIN --- */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+             <Route path="/admin" element={<AdminDashboard />} />
         </Route>
+
       </Routes>
-</BrowserRouter>
-)
+    </BrowserRouter>
+  )
 }
 
 export default App

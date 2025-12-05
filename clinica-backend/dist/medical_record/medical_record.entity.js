@@ -17,6 +17,7 @@ const treatment_entity_1 = require("../treatments/treatment.entity");
 let MedicalRecord = class MedicalRecord {
     id;
     patient;
+    notes;
     conditions;
     treatments;
     createdAt;
@@ -27,10 +28,14 @@ __decorate([
     __metadata("design:type", String)
 ], MedicalRecord.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => patient_entity_1.Patient, patient => patient.medicalRecord),
+    (0, typeorm_1.OneToOne)(() => patient_entity_1.Patient, patient => patient.medicalRecord, { onDelete: 'CASCADE' }),
     (0, typeorm_1.JoinColumn)({ name: 'patient_id' }),
     __metadata("design:type", patient_entity_1.Patient)
 ], MedicalRecord.prototype, "patient", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], MedicalRecord.prototype, "notes", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => medical_record_condition_entity_1.MedicalRecordCondition, mrc => mrc.medicalRecord, { cascade: true }),
     __metadata("design:type", Array)

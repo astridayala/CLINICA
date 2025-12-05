@@ -8,7 +8,7 @@ export default function SideNav({ onSignOut }) {
         <div className='mb-2 flex items-center justify-center rounded-md bg-[#F7F2FA] p-4 md:h-40'>
             <img 
                 className='md:w-40'
-                src="/logo-clinica.png" 
+                src="/logo-mediCloud.png" 
                 alt="Logo Clinica" 
                 />
         </div>

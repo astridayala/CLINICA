@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsUUID } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Matches } from "class-validator";
 
 /**
  * DTO para la creación de tratamientos
@@ -30,12 +30,9 @@ export class CreateTreatmentDto {
     @IsNotEmpty({ message: 'El precio es requerido' })
     totalPrice: number;
 
-    /**@ApiProperty({
-        description: 'ID del estado de tratamiento',
-        example: '550e8400-e29b-41d4-a716-446655440222'
-    })
-    @IsUUID()
-    @IsNotEmpty({ message: 'El estado del tratamiento es requerido' })
-    statusId: string;
-    */
+    @IsOptional()
+    @ApiProperty({ example: '2025-12-02', description: 'Fecha de inicio (YYYY-MM-DD)' })
+    @IsString()
+    @Matches(/^\d{4}-\d{2}-\d{2}$/, { message: 'Formato YYYY-MM-DD requerido' })
+    date?: string;
 }

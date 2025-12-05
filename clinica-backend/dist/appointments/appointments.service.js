@@ -22,47 +22,64 @@ let AppointmentsService = class AppointmentsService {
     constructor(appointmentsRepository) {
         this.appointmentsRepository = appointmentsRepository;
     }
-    async create(createAppointmentsDto) {
+    async create(createAppointmentsDto, user) {
         const { patientId, start, end, description } = createAppointmentsDto;
         const newAppointment = this.appointmentsRepository.create({
             patient: { id: patientId },
+            doctor: user,
             start,
             end,
             description
         });
         return this.appointmentsRepository.save(newAppointment);
     }
-    async findAll() {
-        return await this.appointmentsRepository.find({
+    async findAll(user) {
+        const query = {
             relations: ['patient'],
             order: { start: 'ASC' }
-        });
+        };
+        if (user.role !== 'admin') {
+            query.where = { doctor: { id: user.id } };
+        }
+        return await this.appointmentsRepository.find(query);
     }
-    async findOne(id) {
-        const appointment = await this.appointmentsRepository.findOne({
+    async findOne(id, user) {
+        const query = {
             where: { id },
             relations: ['patient']
-        });
+        };
+        if (user.role !== 'admin') {
+            query.where.doctor = { id: user.id };
+        }
+        const appointment = await this.appointmentsRepository.findOne(query);
         if (!appointment) {
-            throw new common_1.NotFoundException('Cita no encontrada');
+            throw new common_1.NotFoundException('Cita no encontrada o no tienes acceso a ella');
         }
         return appointment;
     }
-    async findByPatient(patientId) {
-        const appointments = await this.appointmentsRepository.find({
+    async findByPatient(patientId, user) {
+        const query = {
             where: { patient: { id: patientId } },
             relations: ['patient'],
             order: { start: 'ASC' }
-        });
+        };
+        if (user.role !== 'admin') {
+            query.where.doctor = { id: user.id };
+        }
+        const appointments = await this.appointmentsRepository.find(query);
         if (!appointments || appointments.length === 0) {
-            throw new common_1.NotFoundException(`No se encontraron citas para el paciente con id ${patientId}`);
+            return [];
         }
         return appointments;
     }
-    async remove(id) {
-        const appointment = await this.appointmentsRepository.delete(id);
-        if (appointment.affected === 0) {
-            throw new common_1.NotFoundException(`La cita con ${id} fue eliminada correctamente`);
+    async remove(id, user) {
+        const whereCondition = { id };
+        if (user.role !== 'admin') {
+            whereCondition.doctor = { id: user.id };
+        }
+        const result = await this.appointmentsRepository.delete(whereCondition);
+        if (result.affected === 0) {
+            throw new common_1.NotFoundException(`La cita con ID ${id} no existe o no tienes permiso para eliminarla`);
         }
         return { message: `La cita con id ${id}, fue eliminada correctamente` };
     }

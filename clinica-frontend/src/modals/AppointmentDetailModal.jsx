@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import api from '../scripts/axiosConfig';
+import dayjs from 'dayjs'; // Importamos dayjs
 
 export default function AppointmentDetailModal({ event, onClose, onDelete, calendarRef, showNotification }) {
   const modalRef = useRef(null);
@@ -71,10 +72,11 @@ export default function AppointmentDetailModal({ event, onClose, onDelete, calen
         left: modalPos.left
       }}
     >
-      <h3 className="font-semibold text-lg mb-1">{event.title}</h3>
+      <h3 className="font-semibold text-lg mb-1 text-[15px]">{event.title}</h3>
       <p className="mb-1 text-md">{event.description}</p>
-      <p className="mb-1"><strong>Inicio:</strong> {event.start.toLocaleString()}</p>
-      <p className="mb-2"><strong>Fin:</strong> {event.end.toLocaleString()}</p>
+      
+      <p className="mb-1"><strong>Inicio:</strong> {dayjs(event.start).format('DD/MM/YYYY, HH:mm')}</p>
+      <p className="mb-2"><strong>Fin:</strong> {dayjs(event.end).format('DD/MM/YYYY, HH:mm')}</p>
 
       <div className="flex justify-between gap-2">
         <button

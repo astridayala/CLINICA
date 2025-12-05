@@ -20,9 +20,9 @@ export class CreateProcedureDto {
         example: '2025-08-21',
     })
     @IsNotEmpty({ message: 'La fecha de pago es requerida' })
-    @IsDate({ message: 'La fecha del procedimiento debe ser una fecha válida' })
-    @Type(() => Date)
-    date: Date;
+    @IsString()
+    @Matches(/^\d{4}-\d{2}-\d{2}$/, { message: 'La fecha debe tener el formato YYYY-MM-DD' })
+    date: string;
 
     @IsOptional()
     @ApiProperty({

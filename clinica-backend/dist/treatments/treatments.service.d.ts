@@ -2,6 +2,7 @@ import { Treatment } from './treatment.entity';
 import { Repository } from 'typeorm';
 import { CreateTreatmentDto } from './dto/create-treatment.dto';
 import { TreatmentStatus } from 'src/treatment_statuses/treatment_status.entity';
+import { UpdateTreatmentDto } from './dto/update-treatment.dto';
 export declare class TreatmentsService {
     private treatmentRepository;
     private treatmentStatusRepository;
@@ -12,4 +13,5 @@ export declare class TreatmentsService {
     remove(id: string): Promise<{
         message: string;
     }>;
+    update(id: string, updateTreatmentDto: UpdateTreatmentDto): Promise<Treatment>;
 }

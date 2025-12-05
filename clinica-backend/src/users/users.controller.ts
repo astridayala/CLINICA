@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Request, Param } from '@nestjs/common';
+import { Controller, Get, UseGuards, Request, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
@@ -54,5 +54,15 @@ export class UsersController {
     @ApiResponse({ status: 403, description: 'Acceso denegado' })
     findOne(@Param('id') id: string) {
         return this.usersService.findOne(id);
+    }
+
+    @Delete(':id')
+    @Roles('admin')
+    @ApiOperation({ summary: 'Eliminar un usuario por ID (solo admin)' })
+    @ApiResponse({ status: 200, description: 'Usuario eliminado exitosamente' })
+    @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+    @ApiResponse({ status: 403, description: 'Acceso denegado' })
+    remove(@Param('id', ParseUUIDPipe) id: string) {
+        return this.usersService.remove(id);
     }
 }

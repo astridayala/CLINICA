@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Matches } from "class-validator";
-import { CreateDateColumn } from "typeorm";
+import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
 
 /**
  * DTO para la creación de pacientes
@@ -19,26 +18,23 @@ export class CreatePatientDto {
     lastName: string;
 
     @IsOptional()
-    @ApiProperty({
-        example: '+(503) 23568956',
-        description: 'Celular del paciente en formato +(503) 23568956',
+    @ApiProperty({ 
+        example: '7777-7777', 
+        description: 'Celular del paciente (texto libre)', 
     })
-    @Matches(/^\+\(503\)\s\d{8}$/, {
-        message: 'El celular debe tener el formato +(503) 12345678',
-    })
+    @IsString({ message: 'El celular debe ser una cadena de texto' })
     phone?: string;
 
-
-    @IsOptional()
     @ApiProperty({ example: 'astriayala@gmail.com', description: 'Email del paciente' })
     @IsEmail({}, { message: 'Debe proporcionar un email válido' })
-    email?: string
+    @IsNotEmpty({ message: 'El email es requerido' })
+    email: string;
 
     @ApiProperty({ example: '2000-12-31', description: 'Fecha de nacimiento (YYYY-MM-DD)' })
     @IsNotEmpty({ message: 'La fecha de nacimiento es requerida' })
-    @IsDate({ message: 'La fecha de nacimiento debe ser una fecha válida' })
-    @Type(() => Date)  
-    birthDate: Date;
+    @IsString()
+    @Matches(/^\d{4}-\d{2}-\d{2}$/, { message: 'La fecha debe tener el formato YYYY-MM-DD' })
+    birthDate: string;
 
     @ApiProperty({
         example: 'femenino',
@@ -50,7 +46,7 @@ export class CreatePatientDto {
     gender: string
 
     @IsOptional()
-    @ApiProperty({ example: 'km 12 ½ carretera al Puerto de La Libertad, calle nueva a Comasagua, Santa Tecla, La Libertad', description: 'Dirección del paciente' })
+    @ApiProperty({ example: 'km 12 ½ carretera al Puerto de La Libertad...', description: 'Dirección del paciente' })
     @IsString({ message: 'La dirección debe ser una cadena de texto' })
     address?: string
 }

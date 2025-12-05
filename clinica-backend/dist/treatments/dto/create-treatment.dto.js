@@ -16,6 +16,7 @@ class CreateTreatmentDto {
     medicalRecordId;
     treatmentTypeId;
     totalPrice;
+    date;
 }
 exports.CreateTreatmentDto = CreateTreatmentDto;
 __decorate([
@@ -45,4 +46,11 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'El precio es requerido' }),
     __metadata("design:type", Number)
 ], CreateTreatmentDto.prototype, "totalPrice", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, swagger_1.ApiProperty)({ example: '2025-12-02', description: 'Fecha de inicio (YYYY-MM-DD)' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(/^\d{4}-\d{2}-\d{2}$/, { message: 'Formato YYYY-MM-DD requerido' }),
+    __metadata("design:type", String)
+], CreateTreatmentDto.prototype, "date", void 0);
 //# sourceMappingURL=create-treatment.dto.js.map

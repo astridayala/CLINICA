@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { MedicalRecord } from "src/medical_record/medical_record.entity";
 import { Appointment } from "src/appointments/appointments.entity";
+import { User } from "src/users/users.entity";
 
 /**
  * Entidad Paciente
@@ -38,8 +39,14 @@ export class Patient {
     @OneToOne(() => MedicalRecord, record => record.patient, { cascade:true })
     medicalRecord: MedicalRecord;
     
-    @OneToMany(() => Appointment, appointment => appointment.patient)
+    @OneToMany(() => Appointment, appointment => appointment.patient, { cascade: true })
     appointments: Appointment[];
+
+    @ManyToOne(() => User, (user) => user.patients, { eager: false, onDelete: 'CASCADE' })
+    doctor: User;
+    
+    @Column({ nullable: true })
+    doctorId: string;
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;

@@ -33,6 +33,9 @@ let UsersController = class UsersController {
     findOne(id) {
         return this.usersService.findOne(id);
     }
+    remove(id) {
+        return this.usersService.remove(id);
+    }
 };
 exports.UsersController = UsersController;
 __decorate([
@@ -66,6 +69,18 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, roles_decorator_1.Roles)('admin'),
+    (0, swagger_1.ApiOperation)({ summary: 'Eliminar un usuario por ID (solo admin)' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Usuario eliminado exitosamente' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Usuario no encontrado' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Acceso denegado' }),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "remove", null);
 exports.UsersController = UsersController = __decorate([
     (0, swagger_1.ApiTags)('users'),
     (0, swagger_1.ApiBearerAuth)(),

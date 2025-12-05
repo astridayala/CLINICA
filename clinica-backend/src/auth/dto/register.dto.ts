@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from "class-validator";
 
 /**
  * DTO para registro de usuarios
@@ -21,4 +21,9 @@ export class RegisterDto {
     @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })
     @IsNotEmpty({ message: 'La contraseña es requerida' })
     password: string;
+
+    @ApiProperty({ example: 'admin', description: 'Rol del usuario (admin o doctor)' })
+    @IsNotEmpty({ message: 'El rol es requerido' }) 
+    @IsEnum(['admin', 'doctor'], { message: 'El rol debe ser admin o doctor' })
+    role: string;
 }

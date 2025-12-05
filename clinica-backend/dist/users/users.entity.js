@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const class_transformer_1 = require("class-transformer");
+const patient_entity_1 = require("../patients/patient.entity");
 const typeorm_1 = require("typeorm");
 let User = class User {
     id;
@@ -18,6 +19,8 @@ let User = class User {
     name;
     role;
     password;
+    patients;
+    appointments;
     createdAt;
 };
 exports.User = User;
@@ -46,6 +49,14 @@ __decorate([
     (0, class_transformer_1.Exclude)(),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => patient_entity_1.Patient, (patient) => patient.doctor),
+    __metadata("design:type", Array)
+], User.prototype, "patients", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => patient_entity_1.Patient, (patient) => patient.doctor),
+    __metadata("design:type", Array)
+], User.prototype, "appointments", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)

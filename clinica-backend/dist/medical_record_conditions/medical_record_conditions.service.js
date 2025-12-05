@@ -24,6 +24,15 @@ let MedicalRecordConditionsService = class MedicalRecordConditionsService {
     }
     async create(createMedicalRecordConditionDto) {
         const { medicalRecordId, conditionId } = createMedicalRecordConditionDto;
+        const existing = await this.medicalRecordConditionRepository.findOne({
+            where: {
+                medicalRecord: { id: medicalRecordId },
+                condition: { id: conditionId }
+            }
+        });
+        if (existing) {
+            throw new common_1.ConflictException('Este padecimiento ya está registrado en el historial del paciente');
+        }
         const newMedicalRecordCondition = this.medicalRecordConditionRepository.create({
             medicalRecord: { id: medicalRecordId },
             condition: { id: conditionId },

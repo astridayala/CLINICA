@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { TreatmentsService } from './treatments.service';
 import { CreateTreatmentDto } from './dto/create-treatment.dto';
+import { UpdateTreatmentDto } from './dto/update-treatment.dto';
 
 @ApiTags('treatments')
 @ApiBearerAuth()
@@ -59,5 +60,13 @@ export class TreatmentsController {
     @ApiResponse({ status: 404, description: 'Tratamiento no encontrado' })
     remove(@Param('id') id: string) {
         return this.treatmentsService.remove(id)
+    }
+
+    @Patch(':id')
+    update(
+        @Param('id', ParseUUIDPipe) id: string, 
+        @Body() updateTreatmentDto: UpdateTreatmentDto
+    ) {
+        return this.treatmentsService.update(id, updateTreatmentDto);
     }
 }

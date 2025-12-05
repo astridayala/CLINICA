@@ -25,8 +25,11 @@ let PatientsService = class PatientsService {
         this.patientsRepository = patientsRepository;
         this.medicalRecordService = medicalRecordService;
     }
-    async create(createPatientDto) {
-        const newPatient = this.patientsRepository.create(createPatientDto);
+    async create(createPatientDto, user) {
+        const newPatient = this.patientsRepository.create({
+            ...createPatientDto,
+            doctor: user,
+        });
         const savedPatient = await this.patientsRepository.save(newPatient);
         const medicalRecord = await this.medicalRecordService.create({
             patientId: savedPatient.id,
@@ -36,15 +39,47 @@ let PatientsService = class PatientsService {
             medicalRecordId: medicalRecord.id,
         };
     }
-    async findAll() {
-        return this.patientsRepository.find();
+    async findAll(user) {
+        const queryOptions = {
+            relations: ['medicalRecord'],
+        };
+        if (user.role !== 'admin') {
+            queryOptions.where = {
+                doctor: { id: user.id }
+            };
+        }
+        return this.patientsRepository.find(queryOptions);
     }
-    async findOne(id) {
-        const patient = await this.patientsRepository.findOne({ where: { id } });
+    async findOne(id, user) {
+        const whereCondition = { id };
+        if (user.role !== 'admin') {
+            whereCondition.doctor = { id: user.id };
+        }
+        const patient = await this.patientsRepository.findOne({
+            where: whereCondition,
+            relations: ['medicalRecord'],
+        });
         if (!patient) {
-            throw new common_1.NotFoundException(`El paciente con ID ${id} no encontrado`);
+            throw new common_1.NotFoundException(`Paciente no encontrado o no tiene acceso a él.`);
         }
         return patient;
+    }
+    async update(id, updatePatientDto, user) {
+        await this.findOne(id, user);
+        const patientToUpdate = await this.patientsRepository.preload({
+            id: id,
+            ...updatePatientDto,
+        });
+        if (!patientToUpdate) {
+            throw new common_1.NotFoundException(`El paciente con ID ${id} no encontrado`);
+        }
+        return this.patientsRepository.save(patientToUpdate);
+    }
+    async remove(id) {
+        const patient = await this.patientsRepository.findOne({ where: { id } });
+        if (!patient)
+            throw new common_1.NotFoundException('Paciente no encontrado');
+        await this.patientsRepository.remove(patient);
     }
 };
 exports.PatientsService = PatientsService;

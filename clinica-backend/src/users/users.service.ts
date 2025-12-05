@@ -1,19 +1,50 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 /**
  * Servicio para gestionar usuarios
  * Proporcionas métodos para creat, buscar y actualizar usuarios
  */
 @Injectable()
-export class UsersService {
+export class UsersService implements OnModuleInit {
     constructor(
       @InjectRepository(User)
-      private usersRepository: Repository<User>,  
+      private usersRepository: Repository<User>,
+      private configService: ConfigService,  
     ) {}
+
+    async onModuleInit() {
+        await this.seedAdminUser();
+    }
+
+    async seedAdminUser() {
+        const adminEmail = this.configService.get<string>('DEFAULT_ADMIN_EMAIL');
+        const adminPassword = this.configService.get<string>('DEFAULT_ADMIN_PASSWORD');
+        
+        const adminExists = await this.usersRepository.findOne({ where: { email: adminEmail } });
+
+        if (!adminExists) {
+            console.log('No se encontró administrador. Creando admin por defecto...');
+            
+            const hashedPassword = await bcrypt.hash(adminPassword, 10);
+            
+            const newAdmin = this.usersRepository.create({
+                name: 'Administrador Principal',
+                email: adminEmail,
+                password: hashedPassword,
+                role: 'admin',
+            });
+
+            await this.usersRepository.save(newAdmin);
+            console.log('Admin por defecto creado exitosamente.');
+        } else {
+            console.log('El administrador ya existe.');
+        }
+    }
 
     /**
      * Crea un nuevo usuario
@@ -21,7 +52,6 @@ export class UsersService {
      * @returns El usuario creado
      */
     async create(userData: Partial<User>): Promise<User> {
-        //Encripta la contraseña antes de guardarla
         const hashedPassword = await bcrypt.hash(userData.password!, 10)
 
         const newUser = this.usersRepository.create({
@@ -62,6 +92,13 @@ export class UsersService {
      */
     async findAll(): Promise<User[]> {
         return this.usersRepository.find();
+    }
+
+    async remove(id: string): Promise<void> {
+        const result = await this.usersRepository.delete(id);
+        if (result.affected === 0) {
+            throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+        }
     }
 
 }

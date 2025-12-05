@@ -16,7 +16,6 @@ exports.TreatmentStatusesController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
-const roles_decorator_1 = require("../common/decorators/roles.decorator");
 const roles_guard_1 = require("../common/guards/roles.guard");
 const treatment_statuses_service_1 = require("./treatment_statuses.service");
 const create_treatment_statuses_dto_1 = require("./dto/create-treatment_statuses.dto");
@@ -81,7 +80,6 @@ exports.TreatmentStatusesController = TreatmentStatusesController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Controller)('treatment-statuses'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('admin'),
     __metadata("design:paramtypes", [treatment_statuses_service_1.TreatmentStatusesService])
 ], TreatmentStatusesController);
 //# sourceMappingURL=treatment_statuses.controller.js.map

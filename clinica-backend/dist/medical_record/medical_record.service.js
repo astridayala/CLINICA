@@ -67,6 +67,11 @@ let MedicalRecordService = class MedicalRecordService {
         }
         return medicalRecord;
     }
+    async update(id, updateMedicalRecordDto) {
+        const record = await this.findOne(id);
+        this.medicalRecordRepository.merge(record, updateMedicalRecordDto);
+        return this.medicalRecordRepository.save(record);
+    }
 };
 exports.MedicalRecordService = MedicalRecordService;
 exports.MedicalRecordService = MedicalRecordService = __decorate([

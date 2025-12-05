@@ -17,25 +17,28 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const payment_entity_1 = require("./payment.entity");
 const typeorm_2 = require("typeorm");
+const procedure_entity_1 = require("../procedures/procedure.entity");
 let PaymentsService = class PaymentsService {
     paymentsRepository;
-    constructor(paymentsRepository) {
+    proceduresRepository;
+    constructor(paymentsRepository, proceduresRepository) {
         this.paymentsRepository = paymentsRepository;
+        this.proceduresRepository = proceduresRepository;
     }
     async create(createPaymentsDto) {
         const { procedureId, date, amount } = createPaymentsDto;
-        const [year, month, day] = date.split('/').map(Number);
-        if (isNaN(year) || isNaN(month) || isNaN(day) ||
-            year < 1900 || month < 1 || month > 12 || day < 1 || day > 31) {
-            throw new Error('La fecha contiene valores inválidos');
-        }
-        const paymentDate = new Date(year, month - 1, day);
-        const newPayment = this.paymentsRepository.create({
-            date: paymentDate,
-            amount,
-            procedure: { id: procedureId }
+        const procedure = await this.proceduresRepository.findOne({
+            where: { id: procedureId },
         });
-        return this.paymentsRepository.save(newPayment);
+        if (!procedure) {
+            throw new common_1.NotFoundException('El procedimiento no existe');
+        }
+        const payment = this.paymentsRepository.create({
+            date: date,
+            amount: amount,
+            procedure: procedure,
+        });
+        return await this.paymentsRepository.save(payment);
     }
     async findAll() {
         return this.paymentsRepository.find();
@@ -61,6 +64,8 @@ exports.PaymentsService = PaymentsService;
 exports.PaymentsService = PaymentsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(payment_entity_1.Payment)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(procedure_entity_1.Procedure)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], PaymentsService);
 //# sourceMappingURL=payments.service.js.map

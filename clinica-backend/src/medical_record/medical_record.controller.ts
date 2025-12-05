@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { MedicalRecordService } from './medical_record.service';
 import { CreateMedicalRecordDto } from './dto/create-medical_record.dto';
+import { UpdateMedicalRecordDto } from './dto/update-medical_record.dto';
 
 /**
  * Controlador para los historiales medicos
@@ -50,5 +51,10 @@ export class MedicalRecordController {
     @ApiResponse({ status: 404, description: 'Historial Medico no encontrado' })
     findOne(@Param('id') id: string) {
         return this.medicalRecordService.findOne(id);
+    }
+
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateMedicalRecordDto: UpdateMedicalRecordDto) {
+        return this.medicalRecordService.update(id, updateMedicalRecordDto);
     }
 }

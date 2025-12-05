@@ -19,6 +19,7 @@ const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const roles_guard_1 = require("../common/guards/roles.guard");
 const treatments_service_1 = require("./treatments.service");
 const create_treatment_dto_1 = require("./dto/create-treatment.dto");
+const update_treatment_dto_1 = require("./dto/update-treatment.dto");
 let TreatmentsController = class TreatmentsController {
     treatmentsService;
     constructor(treatmentsService) {
@@ -35,6 +36,9 @@ let TreatmentsController = class TreatmentsController {
     }
     remove(id) {
         return this.treatmentsService.remove(id);
+    }
+    update(id, updateTreatmentDto) {
+        return this.treatmentsService.update(id, updateTreatmentDto);
     }
 };
 exports.TreatmentsController = TreatmentsController;
@@ -75,6 +79,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], TreatmentsController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_treatment_dto_1.UpdateTreatmentDto]),
+    __metadata("design:returntype", void 0)
+], TreatmentsController.prototype, "update", null);
 exports.TreatmentsController = TreatmentsController = __decorate([
     (0, swagger_1.ApiTags)('treatments'),
     (0, swagger_1.ApiBearerAuth)(),

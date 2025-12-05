@@ -1,10 +1,7 @@
-import * as bcrypt from 'bcrypt';
 import dataSource from '../data_source/data_source';
-import { User } from 'src/users/users.entity';
 import { Condition } from 'src/conditions/condition.entity';
 import { TreatmentType } from 'src/treatments_types/treatment_type.entity';
 import { TreatmentStatus } from 'src/treatment_statuses/treatment_status.entity';
-import { Patient } from 'src/patients/patient.entity';
 
 async function main() {
   console.log('Iniciando proceso de seeding...');
@@ -13,38 +10,6 @@ async function main() {
     await dataSource.initialize();
     console.log('Conexión a la base de datos establecida');
     
-    const adminPassword = await bcrypt.hash('astri10', 10);
-    const doctorPassword = await bcrypt.hash('gus712026', 10);
-    
-    console.log('Creando usuarios iniciales...');
-    await dataSource.getRepository(User).save([
-      {
-        name: 'Astrid Ayala',
-        email: 'astriayala06@gmail.com',
-        password: adminPassword,
-        role: 'admin',
-      },
-      {
-        name: 'Gustavo Ayala',
-        email: 'gustavo.ayala2200@gmail.com',
-        password: doctorPassword,
-        role: 'doctor',
-      }
-    ]);
-    console.log('Usuarios creados');
-
-    console.log('Creando paciente...');
-    await dataSource.getRepository(Patient).save({
-      name: 'Astrid Violeta',
-      lastName: 'Ayala Ayala',
-      phone: '+50323568953',
-      email: 'astriayala06@gmail.com',
-      birthDate: new Date('2004-10-06'),
-      gender: 'femenino',
-      address: 'B° Morazán, Calle Zeledón, Cuyultitán, La Paz Oeste, La Paz'
-    });
-    console.log('Paciente creado');
-
     console.log('Creando condiciones...');
     await dataSource.getRepository(Condition).save([
       { name: 'Diabetes' },

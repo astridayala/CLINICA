@@ -19,6 +19,7 @@ const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const roles_guard_1 = require("../common/guards/roles.guard");
 const medical_record_service_1 = require("./medical_record.service");
 const create_medical_record_dto_1 = require("./dto/create-medical_record.dto");
+const update_medical_record_dto_1 = require("./dto/update-medical_record.dto");
 let MedicalRecordController = class MedicalRecordController {
     medicalRecordService;
     constructor(medicalRecordService) {
@@ -32,6 +33,9 @@ let MedicalRecordController = class MedicalRecordController {
     }
     findOne(id) {
         return this.medicalRecordService.findOne(id);
+    }
+    update(id, updateMedicalRecordDto) {
+        return this.medicalRecordService.update(id, updateMedicalRecordDto);
     }
 };
 exports.MedicalRecordController = MedicalRecordController;
@@ -62,6 +66,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], MedicalRecordController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_medical_record_dto_1.UpdateMedicalRecordDto]),
+    __metadata("design:returntype", void 0)
+], MedicalRecordController.prototype, "update", null);
 exports.MedicalRecordController = MedicalRecordController = __decorate([
     (0, swagger_1.ApiTags)('medical_record'),
     (0, swagger_1.ApiBearerAuth)(),

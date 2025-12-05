@@ -1,5 +1,6 @@
 import { Exclude } from "class-transformer";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Patient } from "src/patients/patient.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 /**
  * Entidad Usuario
@@ -25,9 +26,15 @@ export class User {
     role: string;
 
     @Column()
-    @Exclude() //Excluye este campo al serializar la entidad
+    @Exclude()
     password: string;
 
+    @OneToMany(() => Patient, (patient) => patient.doctor)
+    patients: Patient[];
+
+    @OneToMany(() => Patient, (patient) => patient.doctor)
+    appointments: Patient[];
+    
     @CreateDateColumn()
     createdAt: Date;
 }

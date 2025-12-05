@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreatePatientDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
-const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class CreatePatientDto {
     name;
@@ -38,26 +37,24 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)({
-        example: '+(503) 23568956',
-        description: 'Celular del paciente en formato +(503) 23568956',
+        example: '7777-7777',
+        description: 'Celular del paciente (texto libre)',
     }),
-    (0, class_validator_1.Matches)(/^\+\(503\)\s\d{8}$/, {
-        message: 'El celular debe tener el formato +(503) 12345678',
-    }),
+    (0, class_validator_1.IsString)({ message: 'El celular debe ser una cadena de texto' }),
     __metadata("design:type", String)
 ], CreatePatientDto.prototype, "phone", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)({ example: 'astriayala@gmail.com', description: 'Email del paciente' }),
     (0, class_validator_1.IsEmail)({}, { message: 'Debe proporcionar un email válido' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'El email es requerido' }),
     __metadata("design:type", String)
 ], CreatePatientDto.prototype, "email", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: '2000-12-31', description: 'Fecha de nacimiento (YYYY-MM-DD)' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'La fecha de nacimiento es requerida' }),
-    (0, class_validator_1.IsDate)({ message: 'La fecha de nacimiento debe ser una fecha válida' }),
-    (0, class_transformer_1.Type)(() => Date),
-    __metadata("design:type", Date)
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(/^\d{4}-\d{2}-\d{2}$/, { message: 'La fecha debe tener el formato YYYY-MM-DD' }),
+    __metadata("design:type", String)
 ], CreatePatientDto.prototype, "birthDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
@@ -71,7 +68,7 @@ __decorate([
 ], CreatePatientDto.prototype, "gender", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, swagger_1.ApiProperty)({ example: 'km 12 ½ carretera al Puerto de La Libertad, calle nueva a Comasagua, Santa Tecla, La Libertad', description: 'Dirección del paciente' }),
+    (0, swagger_1.ApiProperty)({ example: 'km 12 ½ carretera al Puerto de La Libertad...', description: 'Dirección del paciente' }),
     (0, class_validator_1.IsString)({ message: 'La dirección debe ser una cadena de texto' }),
     __metadata("design:type", String)
 ], CreatePatientDto.prototype, "address", void 0);

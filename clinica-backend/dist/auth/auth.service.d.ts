@@ -12,6 +12,8 @@ export declare class AuthService {
             email: string;
             name: string;
             role: string;
+            patients: import("../patients/patient.entity").Patient[];
+            appointments: import("../patients/patient.entity").Patient[];
             createdAt: Date;
         };
         access_token: string;

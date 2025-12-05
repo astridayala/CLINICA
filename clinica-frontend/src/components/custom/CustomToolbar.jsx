@@ -3,7 +3,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export default function CustomToolbar({ label, onNavigate, onView }) {
   return (
-    <div className="flex justify-between items-center mb-4">
+    <div className="flex justify-between items-center mb-4 text-[15px]">
       {/* Navegación */}
       <div className="flex items-center gap-2">
         <button

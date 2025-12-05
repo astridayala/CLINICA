@@ -1,16 +1,21 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
-const ProtectedRoute = () => {
-    // La clave debe coincidir con la clave que se guarda en LogIn.jsx
-    const isAuthenticated = localStorage.getItem('accessToken'); 
+const ProtectedRoute = ({ allowedRoles }) => {
+    const isAuthenticated = localStorage.getItem('accessToken');
+    const userRole = localStorage.getItem('userRole'); 
 
-    // 2. Si no está autenticado, redirige al / (que es tu LogIn)
+    // 1. Si no hay token, fuera.
     if (!isAuthenticated) {
         return <Navigate to="/" replace />;
     }
 
-    // 3. Si está autenticado, renderiza el contenido anidado de la ruta (el <Outlet />)
+    // 2. Si se requieren roles específicos y el usuario NO tiene ese rol
+    if (allowedRoles && !allowedRoles.includes(userRole)) {
+        return <Navigate to="/" replace />;
+    }
+
+    // 3. Si tiene token y el rol correcto, pasa.
     return <Outlet />;
 };
 

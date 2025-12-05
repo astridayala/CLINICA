@@ -18,10 +18,9 @@ export default function ClinicalNotes() {
         try {
             const response = await api.get('/patients');
             
-            // Mapeamos para mantener compatibilidad
             const formattedPatients = response.data.map(p => ({
                 ...p,
-                lastname: p.lastName // Creamos la propiedad lastname minúscula
+                lastname: p.lastName 
             }));
             
             setPatients(formattedPatients);
@@ -33,7 +32,6 @@ export default function ClinicalNotes() {
     fetchPatients();
   }, []);
 
-  // Al crear un paciente, lo agregamos a la lista localmente
   const handleCreatePatient = (newPatient) => {
     setPatients([...patients, newPatient]);
   };
@@ -44,7 +42,6 @@ export default function ClinicalNotes() {
       `${p.name} ${p.lastname}`.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
-      // Usamos localeCompare para ordenar correctamente strings con acentos
       const nameA = `${a.name} ${a.lastname}`.toLowerCase();
       const nameB = `${b.name} ${b.lastname}`.toLowerCase();
       return nameA.localeCompare(nameB);

@@ -4,6 +4,7 @@ import { MedicalRecord } from './medical_record.entity';
 import { Repository } from 'typeorm';
 import { CreateMedicalRecordDto } from './dto/create-medical_record.dto';
 import { Patient } from 'src/patients/patient.entity';
+import { UpdateMedicalRecordDto } from './dto/update-medical_record.dto';
 
 /**
  * Servicio para gestionar los historiales medicos
@@ -25,11 +26,9 @@ export class MedicalRecordService {
      * @param createMedicalRecordDto - Datos del historial medico a crear
      */
     async create(createMedicalRecordDto: CreateMedicalRecordDto): Promise<MedicalRecord> {
-        //revisar si existe el cliente
         const patient = await this.patientRepository.findOneBy({
             id: createMedicalRecordDto.patientId
         })
-        //valida si existe, sino manda un error
         if(!patient) throw new NotFoundException('Paciente no encontrado')
 
         const newMedicalRecord = this.medicalRecordRepository.create({
@@ -82,5 +81,11 @@ export class MedicalRecordService {
         }
 
         return medicalRecord;
+    }
+
+    async update(id: string, updateMedicalRecordDto: UpdateMedicalRecordDto): Promise<MedicalRecord> {
+        const record = await this.findOne(id); 
+        this.medicalRecordRepository.merge(record, updateMedicalRecordDto);
+        return this.medicalRecordRepository.save(record);
     }
 }

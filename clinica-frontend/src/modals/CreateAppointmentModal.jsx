@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Select from 'react-select';
+import dayjs from 'dayjs'; 
+import { FaCalendarAlt } from "react-icons/fa"; // Importamos el icono de calendario
 import NotificationModal from './NotificationModal';
 import api from '../scripts/axiosConfig';
 
@@ -13,22 +15,10 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
 
   useEffect(() => {
     if (slotInfo?.start) {
-      const start = new Date(slotInfo.start);
-      const end = new Date(start);
-      end.setHours(end.getHours() + 1);
-
-      // Formato seguro para el input (YYYY-MM-DDTHH:mm)
-      const toLocalDatetime = (date) => {
-        const pad = (n) => n < 10 ? '0' + n : n;
-        return date.getFullYear() + '-' + 
-               pad(date.getMonth() + 1) + '-' + 
-               pad(date.getDate()) + 'T' + 
-               pad(date.getHours()) + ':' + 
-               pad(date.getMinutes());
-      };
-
-      setStartTime(toLocalDatetime(start));
-      setEndTime(toLocalDatetime(end));
+      const start = dayjs(slotInfo.start);
+      const end = start.add(1, 'hour');
+      setStartTime(start.format('YYYY-MM-DDTHH:mm'));
+      setEndTime(end.format('YYYY-MM-DDTHH:mm'));
     }
   }, [slotInfo]);
 
@@ -57,7 +47,6 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
     }
 
     try {
-      // 1. Enviamos string limpio al backend
       const payload = {
         patientId: selectedPaciente.value,
         start: startTime.replace('T', ' '),
@@ -68,7 +57,6 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
       const response = await api.post('/appointments', payload);
       const createdApp = response.data;
 
-      // 🔧 CORRECCIÓN: Limpiamos la Z de la respuesta también
       const startString = createdApp.start.toString().replace('Z', '').replace('T', ' ');
       const endString = createdApp.end.toString().replace('Z', '').replace('T', ' ');
 
@@ -99,9 +87,15 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
 
   const pacienteOptions = pacientes.map(p => ({ value: p.id, label: p.nombre }));
 
+  // Función para formatear visualmente DD/MM/YYYY HH:mm
+  const formatDisplayDate = (isoString) => {
+    if (!isoString) return '';
+    return dayjs(isoString).format('DD/MM/YYYY HH:mm');
+  };
+
   return (
     <>
-      <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/10 backdrop-brightness-90">
+      <div className="fixed inset-0 flex justify-center items-center z-[70] bg-black/10 backdrop-brightness-90">
         <div ref={modalRef} className="bg-[#fbf8fc] rounded-lg p-6 w-[400px] max-w-full shadow-xl">
           <h2 className='text-center text-xl font-semibold mb-5'>Crear nueva cita</h2>
 
@@ -113,23 +107,50 @@ export default function CreateAppointmentModal({ slotInfo, pacientes, onClose, o
             isSearchable
             placeholder="Seleccione..."
             className="mb-4 text-sm"
+            styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
           />
 
           <label className="block mb-2 text-sm font-medium">Hora de inicio:</label>
-          <input
-            type="datetime-local"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-            className="w-full border rounded px-3 py-2 mb-3 text-sm"
-          />
+          <div className="relative mb-3">
+            <div className="flex items-center w-full border rounded px-3 py-2 bg-white">
+              <input
+                type="text"
+                readOnly
+                value={formatDisplayDate(startTime)}
+                className="flex-1 text-sm bg-transparent border-none outline-none text-black"
+              />
+              <FaCalendarAlt className="text-gray-500 ml-2" />
+            </div>
+            
+            <input
+              type="datetime-local"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            />
+          </div>
 
           <label className="block mb-2 text-sm font-medium">Hora de fin:</label>
-          <input
-            type="datetime-local"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            className="w-full border rounded px-3 py-2 mb-4 text-sm"
-          />
+          <div className="relative mb-4">
+            {/* Capa VISUAL */}
+            <div className="flex items-center w-full border rounded px-3 py-2 bg-white">
+              <input
+                type="text"
+                readOnly
+                value={formatDisplayDate(endTime)}
+                className="flex-1 text-sm bg-transparent border-none outline-none text-black"
+              />
+              <FaCalendarAlt className="text-gray-500 ml-2" />
+            </div>
+
+            {/* Capa FUNCIONAL */}
+            <input
+              type="datetime-local"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            />
+          </div>
 
           <label className="block mb-2 text-sm font-medium">Descripción:</label>
           <textarea

@@ -14,13 +14,22 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
   // Habilita CORS para permitir solicitudes desde los sitios de clientes
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://localhost:5173', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   
   // Configura validación global de DTOs
   app.useGlobalPipes(new ValidationPipe({
+    // Transforma los datos entrantes (ej: strings a números, si es necesario).
     transform: true,
+    // Si la carga útil (payload) contiene propiedades que no están en el DTO, estas se eliminan.
     whitelist: true,
+    // Si la carga útil contiene propiedades que no están definidas en el DTO, lanza un error.
     forbidNonWhitelisted: true,
+    // Muestra solo los mensajes de error relevantes durante el desarrollo
+    disableErrorMessages: false,
   }));
   
   // Configura archivos estáticos para servir el script de tracking

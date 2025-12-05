@@ -6,7 +6,7 @@ import LogIn from './pages/LogIn'
 import Agenda from './pages/Agenda'
 import PatientDetail from './pages/PatientDetail'
 import ProtectedRoute from './scripts/ProtectedRoute.jsx'
-import AdminDashboard from './admin/AdminDashboard.jsx' // <--- Importa tu Admin
+import AdminDashboard from './admin/AdminDashboard.jsx'
 
 const App = () => {
   return (

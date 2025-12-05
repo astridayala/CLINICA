@@ -1,5 +1,5 @@
-import { Patient } from "src/patients/patient.entity";
-import { User } from "src/users/users.entity";
+import { Patient } from "../patients/patient.entity";
+import { User } from "../users/users.entity";
 export declare class Appointment {
     id: string;
     patient: Patient;

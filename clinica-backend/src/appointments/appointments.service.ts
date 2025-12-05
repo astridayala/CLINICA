@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from './appointments.entity';
 import { Repository } from 'typeorm';
 import { CreateAppointmentsDto } from './dto/appointments.dto';
-import { User } from 'src/users/users.entity';
+import { User } from '../users/users.entity';
 
 /**
  * Servicio para gestionar las citas de los pacientes

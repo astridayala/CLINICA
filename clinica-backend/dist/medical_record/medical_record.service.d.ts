@@ -1,7 +1,7 @@
 import { MedicalRecord } from './medical_record.entity';
 import { Repository } from 'typeorm';
 import { CreateMedicalRecordDto } from './dto/create-medical_record.dto';
-import { Patient } from 'src/patients/patient.entity';
+import { Patient } from '../patients/patient.entity';
 import { UpdateMedicalRecordDto } from './dto/update-medical_record.dto';
 export declare class MedicalRecordService {
     private medicalRecordRepository;

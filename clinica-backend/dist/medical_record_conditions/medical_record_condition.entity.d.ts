@@ -1,5 +1,5 @@
-import { Condition } from "src/conditions/condition.entity";
-import { MedicalRecord } from "src/medical_record/medical_record.entity";
+import { Condition } from "../conditions/condition.entity";
+import { MedicalRecord } from "../medical_record/medical_record.entity";
 export declare class MedicalRecordCondition {
     id: string;
     medicalRecord: MedicalRecord;

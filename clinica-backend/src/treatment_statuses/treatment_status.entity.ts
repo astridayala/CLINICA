@@ -1,4 +1,4 @@
-import { Treatment } from "src/treatments/treatment.entity";
+import { Treatment } from "../treatments/treatment.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 /**

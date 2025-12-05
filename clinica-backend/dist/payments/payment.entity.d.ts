@@ -1,4 +1,4 @@
-import { Procedure } from "src/procedures/procedure.entity";
+import { Procedure } from "../procedures/procedure.entity";
 export declare class Payment {
     id: string;
     procedure: Procedure;

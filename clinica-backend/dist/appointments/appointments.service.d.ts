@@ -1,7 +1,7 @@
 import { Appointment } from './appointments.entity';
 import { Repository } from 'typeorm';
 import { CreateAppointmentsDto } from './dto/appointments.dto';
-import { User } from 'src/users/users.entity';
+import { User } from '../users/users.entity';
 export declare class AppointmentsService {
     private appointmentsRepository;
     constructor(appointmentsRepository: Repository<Appointment>);

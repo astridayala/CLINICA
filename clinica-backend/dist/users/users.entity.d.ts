@@ -1,4 +1,4 @@
-import { Patient } from "src/patients/patient.entity";
+import { Patient } from "../patients/patient.entity";
 export declare class User {
     id: string;
     email: string;

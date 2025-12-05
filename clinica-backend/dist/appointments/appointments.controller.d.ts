@@ -1,6 +1,6 @@
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentsDto } from './dto/appointments.dto';
-import { User } from 'src/users/users.entity';
+import { User } from '../users/users.entity';
 export declare class AppointmentsController {
     private readonly appointmentsService;
     constructor(appointmentsService: AppointmentsService);

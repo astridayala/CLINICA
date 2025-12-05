@@ -17,7 +17,8 @@ async function bootstrap() {
   app.enableCors({
      origin: [
       'http://localhost:5173',              
-      'https://medicloudsv.vercel.app',     
+      'https://medicloudsv.vercel.app',
+      'https://clinica-olxz.onrender.com'     
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,

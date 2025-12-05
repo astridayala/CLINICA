@@ -208,7 +208,7 @@ export default function PatientDetail() {
         ...prev,
         conditions: [...prev.conditions, newConditionObj]
     }));
-};
+  };
 
   const handleSaveNotes = async () => {
     if (!patientData?.medicalRecordId) return;

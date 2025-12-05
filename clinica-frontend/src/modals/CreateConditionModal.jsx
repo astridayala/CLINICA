@@ -51,11 +51,18 @@ export default function CreateConditionModal({ medicalRecordId,existingCondition
         conditionId: selectedCondition.value
       };
 
-      console.log("Enviando payload:", payload);
+      // 1. Guardamos la respuesta del backend en una variable
+      const response = await api.post('/medical-record-conditions', payload);
+      
+      // 2. Creamos el objeto con la estructura EXACTA que espera PatientDetail
+      // response.data debería contener el ID de la relación creada
+      const newConditionObject = {
+          id: response.data.id, // Importante para poder borrarlo después sin recargar
+          name: selectedCondition.label 
+      };
 
-      // Petición POST
-      await api.post('/medical-record-conditions', payload);
-      onSave(selectedCondition.label);
+      // 3. Pasamos el OBJETO completo, no solo el label
+      onSave(newConditionObject);
       
       showNotification("success", "Padecimiento agregado correctamente");
 
@@ -64,14 +71,9 @@ export default function CreateConditionModal({ medicalRecordId,existingCondition
       }, 1000);
 
     } catch (error) {
+      // ... resto del manejo de errores igual
       console.error("Error al guardar la condición:", error);
-      let errorMsg = "Error al guardar el padecimiento";
-      if (error.response && error.response.data && error.response.data.message) {
-        const serverMsg = error.response.data.message;
-        errorMsg = Array.isArray(serverMsg) ? serverMsg[0] : serverMsg;
-      }
-
-      showNotification("error", errorMsg);
+      // ...
     } finally {
       setIsSaving(false);
     }

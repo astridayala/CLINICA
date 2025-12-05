@@ -16,7 +16,8 @@ async function bootstrap() {
   // Habilita CORS para permitir solicitudes desde los sitios de clientes
   app.enableCors({
      origin: [
-      'http://localhost:5173',                   
+      'http://localhost:5173',
+      'https://medicloudsv-backend.vercel.app'                   
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,

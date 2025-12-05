@@ -8,7 +8,7 @@ export default function NotificationModal({ type, message, onClose }) {
     const timer = setTimeout(() => {
       setVisible(false);
       onClose?.(); 
-    }, 1000); 
+    }, 500); 
     return () => clearTimeout(timer);
   }, [message, onClose]);
 

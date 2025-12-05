@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Select from 'react-select';
 import dayjs from 'dayjs'; 
-import { FaCalendarAlt } from "react-icons/fa"; // Importamos el icono de calendario
+import { FaCalendarAlt } from "react-icons/fa";
 import NotificationModal from './NotificationModal';
 import api from '../scripts/axiosConfig';
 
